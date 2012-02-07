@@ -1,8 +1,24 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 \usepackage{ltcadiz}
 \usepackage{listings}
 \lstset{breaklines=true}
+
+\title{Report on OGO 2.2 Softwarespecification assignment 1a}
+\author{
+        Femke Jansen and Lasse Blaauwbroek OGO 2.2 group 6 \\
+                Department of Computer Science\\
+        Technical University Eindhoven\\
+}
+\date{\today}
+
 \begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document presents a formal specification and implementation of assignment 1a of OGO 2.2 Softwarespecification. Also included are the informal requirement of the stakeholder, their judgement about the formal specification and testcases for the implementation.
+\end{abstract}
+
 \section{Informal requirements}
 \paragraph{Input} A simple textfile consisting of real numbers separated with whitespace.
 \paragraph{Output} Given is a sequence of numbers from which some numbers needs to be summed. The indices of the numbers that need to be added are given by the Fibonacci sequence. The output is the result of the sum in flat text.
@@ -56,12 +72,12 @@ We chose to implement the algorithm in the Java programming language, because ev
 
 \begin{lstlisting}[language=java]
 /**
- * This method is an algorithm that gives the sum of the 
- * (real) numbers in a stream. But only the numbers with
- * indices equal to a fibonacci number are used.
+ * This method is an algorithm that gives the sum of
+ * the (real) numbers in a stream. But only the numbers 
+ * with indices equal to a fibonacci number are used.
  *
  * @param stream The stream to take the numbers from
- * @return The sum of the elements in the stream with 
+ * @return The sum of the elements in the stream with
  *         indices equal to a fibonacci number
  */
 public static double fibAlgo(InputStream stream) {
@@ -69,21 +85,21 @@ public static double fibAlgo(InputStream stream) {
     int secondOldFib = 0;
     int firstOldFib = 1;
     int fib = 0;
-    int indice = 0;
+    int index = 0;
     double current;
     double sum = 0;
     while (scanner.hasNextDouble()) {
         current = scanner.nextDouble();
-        if (indice == fib) {
+        if (index == fib) {
             sum += current;
-            if (indice == 1) {
+            if (index == 1) {
                 sum += current;
             }
             fib = secondOldFib + firstOldFib;
             secondOldFib = firstOldFib;
             firstOldFib = fib;
         }
-        indice++;
+        index++;
     }
     return sum;
 }

@@ -30,7 +30,7 @@ The input has $14$ elements, so the following part of the fibonacci sequence is 
 
 This section describes a formal specification adhering to the informal requirements described above.
 
-We first have to define a function  \textit{fib} that returns the $n$'th Fibonacci number. Fibonacci numbers are recursively defined with the two previous Fibonacci numbers.
+We first have to define a function  \textit{fib} that returns the $n$'th Fibonacci number. Fibonacci numbers are recursively defined using the two previous Fibonacci numbers.
 \begin{axdef}
 fib : \nat \fun \nat
 \where
@@ -51,8 +51,9 @@ Last but not least, we need a method that selects the numbers with Fibonacci ind
 \begin{axdef}
 selectfibindices : \power (\seq \real \fun \seq \real)
 \where
-\forall (x,y) : selectfibindices; z :\nat | 1 \leq z \wedge z \leq \# y @ \\
-\t1 fib(z-1)+1 \leq \#x \wedge y(z) = x(fib(z-1)+1)
+\forall (x,y) : selectfibindices; z :\nat | \\
+\t1 1 \leq z \wedge z \leq \# y \wedge fib(z-1)+1 \leq \#x @ \\
+\t1 y(z) = x(fib(z-1)+1)
 \end{axdef}
 
 The real algorithm to take the summation of all numbers with a Fibonacci index is now very straightforward and given below.
