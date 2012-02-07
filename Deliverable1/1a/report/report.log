@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.2.7)  7 FEB 2012 19:44
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.2.7)  7 FEB 2012 19:51
 entering extended mode
 **D:/Documents/OGO*2.2/Repository/Deliverable1/1a/report/report.tex
 ("D:/Documents/OGO 2.2/Repository/Deliverable1/1a/report/report.tex"
@@ -233,7 +233,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 Here is how much of TeX's memory you used:
  2599 strings out of 495273
  31753 string characters out of 3181528
- 161383 words of memory out of 3000000
+ 164383 words of memory out of 3000000
  5798 multiletter control sequences out of 15000+200000
  14964 words of font info for 58 fonts, out of 3000000 for 9000
  54 hyphenation exceptions out of 8191
@@ -248,7 +248,7 @@ sfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
 /cmsl12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.
 pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/
 Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (4 pages, 128272 bytes).
+Output written on report.pdf (4 pages, 128267 bytes).
 PDF statistics:
  55 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
