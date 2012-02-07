@@ -15,13 +15,13 @@ Cubes == { x : powerset natnum | forall y : x | exists z : natnum | y^3 = z }
 |            
 '-------------------------------------------------------------------------
 
-| Input : powerset natnum
+| Input : seq natnum
 
 | Output : natnum
 |
 +-------------------------------------------------------------------------
 |
-| exists X : Cubes [ X subset Input
-|                    all Y : Input \ X | Y notsubset Cubes ]
-| Output = Median(X)
+| exists X : Cubes [ X subset ran Input
+|                    all Y : ran Input \ X | Y notsubset Cubes
+|                    Output = Median(X) ]
 |
