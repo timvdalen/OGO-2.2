@@ -1,0 +1,26 @@
+Cubes == { x : powerset natnum | forall y : x | exists z : natnum | y^3 = z }
+
+.-- Median ---------------------------------------------------------------
+|
+|  s? : powerset natnum
+|  m! : natnum
+|
++-------------------------------------------------------------------------
+|
+| exists a,b | a,b subset of s?
+|            | a union b = s?
+|            | a intersect b = empty
+|            | count a + count b = 0 or absolute (count a + count b) = 1
+|            | forall x : a, y : b | x < m! < y
+|            
+'-------------------------------------------------------------------------
+
+| Input : powerset natnum
+
+| Output : natnum
+|
++-------------------------------------------------------------------------
+|
+| exists X : Cubes | forall x : X | x elementof Input
+| Output = Median(X)
+|
