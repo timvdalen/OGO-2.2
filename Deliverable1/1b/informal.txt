@@ -1,0 +1,3 @@
+Aangeleverd wordt een simpel (ASCII) bestand met door een enkele spatie gescheiden getallen van willekeurige grootte. Er zit geen beperking aan de grootte van het bestand.
+
+Neem uit het bestand alle unieke getallen van de vorm n^3 met n een natuurlijk getal, en selecteer daaruit de lower median. De lower median van een aantal getallen is het getal x dat de bovenste helft van de getallen scheidt van de onderste helft van de getallen. Voor alle getallen in de bovenste helft geldt dat ze groter zijn dan x en voor alle getallen in de onderste helft geldt dat ze kleiner zijn dan x. Bovendien is  het verschil tussen het aantal elementen tussen de onderste en bovenste helft kleiner of gelijk aan één moet zijn.
