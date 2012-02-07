@@ -1,0 +1,2 @@
+Invoer: Reele getallen gescheiden door whiltespace in plattetekst.
+Uitvoer: Gegeven is een reeks getallen waarvan bepaalde getallen bij elkaar opgeteld worden. De indices van de te optellen getallen worden door de rij van Fibonacci aangegeven. De uitvoer is het resultaat van deze som in platte tekst.
