@@ -4,10 +4,14 @@ Locatie: HG 10.61
 Lasse Blauwbroek
 E-mailadres(sen):
 l.blaauwbroek@student.tue.nl
+Telefoonnummer(s):
+Mobiel: 06-31172162
 
 Tim van Dalen
 E-mailadres(sen):
 tim@timvdalen.nl
+Telefoonnummer(s):
+Mobiel: 06-38897557
 
 Femke Jansen
 E-mailadres(sen):
@@ -20,6 +24,9 @@ Mobiel: 06-50973224
 Tony Nan
 E-mailadres(sen):
 t.nan@student.tue.nl
+thnan222@gmail.com
+Telefoonnummer(s):
+Mobiel: 0651303646
 
 Jeroen Peters 
 E-mailadres(sen):
@@ -30,7 +37,7 @@ E-mailadres(sen):
 f.timmers@student.tue.nl
 
 ------------------------------------------------------
-Coördinator:
+Coï¿½rdinator:
 T.A.C. Willemse
 T.A.C.Willemse@tue.nl
 HG 6.76

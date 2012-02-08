@@ -1,0 +1,2 @@
+Z latex tutorial: http://www.cs.york.ac.uk/hise/cadiz/latexmarkuptut.pdf
+Z latex package: ftp://ftp.cs.york.ac.uk/hise_reports/cadiz/ZSTAN/toolkits/ltcadiz.sty

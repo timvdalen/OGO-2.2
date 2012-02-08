@@ -1,2 +1,3 @@
 Invoer: Reele getallen gescheiden door whiltespace in plattetekst.
 Uitvoer: Gegeven is een reeks getallen waarvan bepaalde getallen bij elkaar opgeteld worden. De indices van de te optellen getallen worden door de rij van Fibonacci aangegeven. De uitvoer is het resultaat van deze som in platte tekst.
+Voorbeeld: Invoer: {-5 43 25 -83  67 -97  73  14  -58 25  84   29 81  -54}. De invoer heeft 14 elementen, de volgende gedeelte van de Fibonacci rij wordt dan gebruikt: {0, 1, 1, 2, 3, 5, 8, 13, 21...}. Volgende invoer getallen wordt dus opgeteld: -5, 43, 43, 25, -83, -97, -58, -54. De som wordt dan -186.
