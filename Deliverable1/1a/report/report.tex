@@ -23,8 +23,8 @@ This document presents a formal specification and implementation of assignment 1
 \paragraph{Input} A simple textfile consisting of real numbers separated with whitespace.
 \paragraph{Output} Given is a sequence of numbers from which some numbers needs to be summed. The indices of the numbers that need to be added are given by the Fibonacci sequence. If this indice exists twice in the fibonacci sequence, this number should be summed twice. The output is the result of the sum in flat text.
 \paragraph{Example}
-Input: \{-5.0 43.0 25.0 -83.0 67.0 -97.0\}\\
-The input has $6$ elements, so the following part of the fibonacci sequence is used: $\{0, 1, 1, 2, 3, 5, 8, 13, 21, ...\}$. Using the sequence as indices of the numbers on input, we get the following numbers that need to be summed: \\ \{-5.0, 43.5, 43.5, 25, -83.0, -97.0\}. \\ The summation of these numbers is $73$.
+Input: {-5.0 43.5 25.0 -83.0 67.0 -97.0}\\
+The input has $6$ elements, so the following part of the fibonacci sequence is used: ${0, 1, 1, 2, 3, 5, 8, 13, 21, ...}$. Using the sequence as indices of the numbers on input, we get the following numbers that need to be summed: \\ {-5.0, 43.5, 43.5, 25, -83.0, -97.0}. \\ The summation of these numbers is $73$.
 
 \section{Formal specification}
 
@@ -91,7 +91,7 @@ Expected output: -8596,7134 (test succeeded)
 \section{Implementation}
 We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements.
 
-A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computed in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
+A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computer in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
 
 All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown in appendix \ref{codelisting} and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
 
