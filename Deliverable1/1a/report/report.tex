@@ -44,7 +44,7 @@ Next, we also need a function \textit{sum} that returns the summation of a given
 sum : \power (\seq \real \fun \real)
 \where
 sum(\langle\rangle) = 0 \\
-\forall (x) : \seq \real | \#x > 0 @ sum(x) = sum(\tail x) + \head x
+\forall x : \seq \real | \#x > 0 @ sum(x) = sum(\tail x) + \head x
 \end{axdef}
 
 Last but not least, we need a method that filters certain numbers from a given sequence and places those numbers in a new sequence. This filtering method selects those numbers from the given sequence with an index equal to a Fibonacci number. The idea is that we can use the new sequence by summing it to calculate the output. The details are a bit tricky, because sequences begin numbering with one, and the Fibonacci sequence starts with zero. Therefore, we increment each Fibonacci number with one, and decrement each sequence index by one to get a correct mapping from Fibonacci numbers to indices. The $z$ variable in the specification below filters the right elements from the given sequence. It realizes this by ensuring that the $z$'th element in the new sequence is equal to the element in the first sequence with as index the $z$'th Fibonacci number.
@@ -93,12 +93,12 @@ We chose to implement the algorithm in the Java programming language, because ev
 
 A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computed in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
 
-All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown below and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
+All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown in appendix \ref{codelisting} and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
 
 \appendix
 
 \section{Java implementation listing}
-
+\label{codelisting}
 \begin{lstlisting}[language=java]
 /**
  * This method is an algorithm that gives the sum of
