@@ -88,14 +88,16 @@ This case check whether a longer list with mixed positive, negative and non-inte
 Input \{-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12\} \\
 Expected output: -8596,7134 (test succeeded)
 
-\appendix
-
 \section{Implementation}
-We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements. 
+We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements.
 
 A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computer in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
 
 All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown below and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
+
+\appendix
+
+\section{Java implementation listing}
 
 \begin{lstlisting}[language=java]
 /**
