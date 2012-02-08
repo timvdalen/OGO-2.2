@@ -23,7 +23,7 @@ This document presents a formal specification and implementation of assignment 1
 \paragraph{Input} A simple textfile consisting of real numbers separated with whitespace.
 \paragraph{Output} Given is a sequence of numbers from which some numbers needs to be summed. The indices of the numbers that need to be added are given by the Fibonacci sequence. The output is the result of the sum in flat text.
 \paragraph{Example}
-Input: -5 43 25 -83  67 -97  73  14  -58 25  84   29 81  -54.\\
+Input: \{-5 43 25 -83  67 -97  73  14  -58 25  84   29 81  -54\}\\
 The input has $14$ elements, so the following part of the fibonacci sequence is used: $\{0, 1, 1, 2, 3, 5, 8, 13, 21, ...\}$. Using the sequence as indices of the numbers on input, we get the following numbers that need to be summed: \\ -5, 43, 43, 25, -83, -97, -58, -54. \\ The summation of these numbers is -186.
 
 \section{Formal specification}
@@ -70,22 +70,22 @@ output! = sum(selectfibindices(input?))
 
 \paragraph{Null testcase}
 This case checks whether an empty input creates the correct output. \\
-Input: {} \\
+Input: \{\} \\
 Expected output: 0 (test succeeded).
 
 \paragraph{Double one testcase}
 This case checks whether the number on index one is summed twice. \\
-Input: {0 1} \\
+Input: \{0 1\} \\
 Expected output: 2 (test succeeded)
 
 \paragraph{Negative numbers}
 This case checks whether negative numbers are summed correctly. \\
-Input: {-3 -2 -5 -8 -10} \\
+Input: \{-3 -2 -5 -8 -10\} \\
 Expected output: -20 (test succeeded)
 
 \paragraph{Large mixed list}
 This case check whether a longer list with mixed positive, negative and non-integer numbers are summed correctly. \\
-Input {-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12} \\
+Input \{-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12\} \\
 Expected output: -8596,7134 (test succeeded)
 
 \section{Implementation}
