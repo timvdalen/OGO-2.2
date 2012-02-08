@@ -5,7 +5,7 @@
 
 \title{Report on OGO 2.2 Softwarespecification assignment 1b}
 \author{
-        Tim van Dalen, Tony Nan and Ferry Timmers\\ OGO 2.2 group 6 \\
+        Tim van Dalen, Tony Nan, Ferry Timmers and Sander Breukink\\ OGO 2.2 group 6 \\
                 Department of Computer Science\\
         Technical University Eindhoven\\
 }
@@ -22,7 +22,7 @@ This document presents a formal specification and implementation of assignment 1
 \section{Informal requirements}
 \paragraph{Input} Provided is a simple (ASCII) file with a few numbers separated by a space of arbitrary size. There is no limit to the size of the file, but there has to be at least one number in the file.
 
-\paragraph{Output} Take all unique numbers from the file of the form $n^3$ with $n$ a natural number and select the lower median of these numbers. A number is of the form $n^3$, when the cube'd root of the number is a natural number.
+\paragraph{Output} Take all unique numbers from the file of the form $n^3$ where $n$ any natural number and select the lower median of these numbers. A number is of the form $n^3$, when the cube'd root of the number is a natural number.
 
 We can find the lower median of a sequence of numbers by sorting the sequence and selecting the number in the middle of the sequence. If the size of the sequence is even, the lower median is the left element of the two elements in the middle.
 
