@@ -23,7 +23,7 @@ This document presents a formal specification and implementation of assignment 1
 \paragraph{Input} A simple textfile consisting of real numbers separated with whitespace.
 \paragraph{Output} Given is a sequence of numbers from which some numbers needs to be summed. The indices of the numbers that need to be added are given by the Fibonacci sequence. If this indice exists twice in the fibonacci sequence, this number should be summed twice. The output is the result of the sum in flat text.
 \paragraph{Example}
-Input: {-5.0 43.0 25.0 -83.0 67.0 -97.0}\\
+Input: {-5.0 43.5 25.0 -83.0 67.0 -97.0}\\
 The input has $6$ elements, so the following part of the fibonacci sequence is used: ${0, 1, 1, 2, 3, 5, 8, 13, 21, ...}$. Using the sequence as indices of the numbers on input, we get the following numbers that need to be summed: \\ {-5.0, 43.5, 43.5, 25, -83.0, -97.0}. \\ The summation of these numbers is $73$.
 
 \section{Formal specification}
