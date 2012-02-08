@@ -21,7 +21,10 @@ This document presents a formal specification and implementation of assignment 1
 
 \section{Informal requirements}
 \paragraph{Input} Provided is a simple (ASCII) file with a few numbers separated by a space of arbitrary size. There is no limit to the size of the file.
-\paragraph{Output} Take all unique numbers from the file in the form $n^3$ with $n$ a natural number and select the lower median. The lower median of a array of numbers is the number $x$ that separate the upper helft of the numbers from the lower half of the numbers. For all numbers in the upper half holds that they are greater then $x$ and for all numbers in the lower half holds that they are smaller then $x$. Furthermore the number of elements in the upper half subtracted from the number of elements in the lower half is the number null or one.
+
+\paragraph{Output} Take all unique numbers from the file of the form $n^3$ with $n$ a natural number and select the lower median of these numbers. A number is of the form $n^3$, when the cube'd root of the number is a natural number.
+
+We can find the lower median of a sequence of numbers by sorting the sequence and selecting the number in the middle of the sequence. If the size of the sequence is even, the lower median is the left element of the two elements in the middle.
 
 \section{Formal specification}
 
@@ -29,22 +32,22 @@ This section describes a formal specification adhering to the informal requireme
 
 We first have to define an enumeration \textit{Cubes} that contains all sets of natural numbers for which each element is a cube of a natural number.
 \begin{axdef}
-Cubes == \{ x : \power \nat | \forall y : x | \exists z : \nat | y^3 = z \}
+Cubes == \{ x : \power \nat | (\forall y : x | (\exists z : \nat @ y^3 = z) )\}
 \end{axdef}
 
-We define a function that calculates the lower median of a set of natural numbers. It defines two subsets that are the two halves of the input. The output is the number that is wedged between the two halves when they are in the natural order.
+We define a function that calculates the lower median of a set of natural numbers. It defines two disjoint subsets $a$ and $b$ that are the two (almost) equal halves of the input. All elements in $a$ are smaller than $b$, and the output is the number that is wedged between the two halves. The union of $a$, $b$ and the output is the whole input.
 \begin{schema}{Median}
 s? : \power \nat \\
 m! : \nat
 \where
-\exists a,b : \power s? | [ \: a \union b \union m! \\
-                          \t2 a \cap b = \empty \\
-                          \t2 !m \notin ( a \union b ) \\
-                          \t2 \# a - \# b = 0 \: \vee | \# a - \# b | = 1 \\
-                          \t2 \forall x : a , y : b | x < m! < y \: ]
+\exists a,b : \power s? | [ \: a \union b \union m! = s? \\
+                          \t1 a \cap b = \emptyset \\
+                          \t1 m! \notin ( a \union b ) \\
+                          \t1 \# b - \# a = 0 \: \vee \# b - \# a = 1 \\
+                          \t1 \forall x : a , y : b | x < m! < y \: ]
 \end{schema}
 
-Now we define the input and output of our specification.
+Now we define the input and output of our specification. The output is computed by taking a set from \textsl{Cubes} with only cubes from the input (and no other cubes) and computing the median from it.
 \begin{axdef}
 Input : \seq \nat
 \end{axdef}
@@ -52,7 +55,7 @@ Input : \seq \nat
 \begin{axdef}
 Output : \nat
 \where
-\exists X : Cubes | [ \: X \subseteq \ran Input \\ \t2 \forall Y : \ran Input \setminus X | Y \not\subseteq Cubes \\ \t2 Output = Median (X) \: ]
+\exists X : Cubes | [ \: X \subseteq \ran Input \\ \t1 \forall Y : \ran Input \setminus X | Y \not\subseteq Cubes \\ \t1 Output = Median (X) \: ]
 \end{axdef}
 
 \section{Judgement of the formal specification}
