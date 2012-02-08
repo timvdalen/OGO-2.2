@@ -36,7 +36,7 @@ fib : \nat \fun \nat
 \where
 fib(0) = 0 \\
 fib(1) = 1 \\
-\forall n : \nat | n \geq 2 @ f(n) = f(n-2) + f(n-1)
+\forall n : \nat | n \geq 2 @ fib(n) = fib(n-2) + fib(n-1)
 \end{axdef}
 
 Next, we also need a function \textit{sum} that returns the summation of a given sequence of numbers. This function is recursively defined as well, by computing the sum of the tail of the sequence until the sequence is empty, and adding all of the heads to this sum.
@@ -69,24 +69,24 @@ output! = sum(selectfibindices(input?))
 \section{Testcases for the implementation}
 
 \paragraph{Null testcase}
-This case checks whether an empty input creates the correct output.
-Input: {}
-Expected output: 0 (test succeeded)
+This case checks whether an empty input creates the correct output. \\
+Input: {} \\
+Expected output: 0 (test succeeded).
 
 \paragraph{Double one testcase}
-This case checks whether the number on index one is summed twice
-Input: {0 1}
+This case checks whether the number on index one is summed twice. \\
+Input: {0 1} \\
 Expected output: 2 (test succeeded)
 
 \paragraph{Negative numbers}
-This case checks whether negative numbers are summed correctly.
-Input: {-3 -2 -5 -8 -10}
+This case checks whether negative numbers are summed correctly. \\
+Input: {-3 -2 -5 -8 -10} \\
 Expected output: -20 (test succeeded)
 
 \paragraph{Large mixed list}
-This case check whether a longer list with mixed positive, negative and non-integer numbers are summed correctly.
-Input {-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12}
-Expected output: -8596.7134 (test succeeded)
+This case check whether a longer list with mixed positive, negative and non-integer numbers are summed correctly. \\
+Input {-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12} \\
+Expected output: -8596,7134 (test succeeded)
 
 \section{Implementation}
 We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. There is no precondition in the code because the input is correct as long as it consists of real numbers and there is no simple method of checking for non-reals in the formal specification. The postcondition of the formal specification is fully met. The method implementing the algorithm is shown below and requires an import for \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
@@ -98,24 +98,35 @@ We chose to implement the algorithm in the Java programming language, because ev
  * with indices equal to a fibonacci number are used.
  *
  * @param stream The stream to take the numbers from
- * @return The sum of the elements in the stream with
- *         indices equal to a fibonacci number
+ * @return The sum of the elements in the stream 
+ *         with indices equal to a fibonacci number
  */
 public static double fibAlgo(InputStream stream) {
     Scanner scanner = new Scanner(stream);
+    // Fibonacci is repeatedly computed using older
+    // fibonacci numbers (this is more efficient than 
+    // calculating each fibonacci number from scratch)
     int secondOldFib = 0;
     int firstOldFib = 1;
     int fib = 0;
-    int index = 0;
     double current;
+    // Index represents the index of the double in the
+    // stream
+    int index = 0;
     double sum = 0;
     while (scanner.hasNextDouble()) {
         current = scanner.nextDouble();
+        // When the index equals to the fibonacci 
+        // number, we add it to the sum
         if (index == fib) {
             sum += current;
+            // Index one is an exception because it
+            // occurs twice in the fibonacci sequence
             if (index == 1) {
                 sum += current;
             }
+            // Calculate the new fibonacci number and
+            // store the old numbers
             fib = secondOldFib + firstOldFib;
             secondOldFib = firstOldFib;
             firstOldFib = fib;
