@@ -1,7 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{ltcadiz}
 \usepackage{listings}
-\lstset{breaklines=true}
+\lstset{breaklines=true, numbers=left}
 
 \title{Report on OGO 2.2 Softwarespecification assignment 1a}
 \author{
@@ -91,7 +91,11 @@ Expected output: -8596,7134 (test succeeded)
 \appendix
 
 \section{Implementation}
-We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements. A variable keeps track of the index of the current element, and variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown below and requires an import for \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
+We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements. 
+
+A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computer in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
+
+All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown below and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
 
 \begin{lstlisting}[language=java]
 /**
