@@ -10,8 +10,8 @@ Cubes == { x : powerset natnum | forall y : x | exists z : natnum | y^3 = z }
 | exists a,b : powerset s? [ a union b union m! = s?
 |                            a intersect b = empty
 |                            m! not elementof (a union b)
-|                            ( count a + count b = 0
-|                              or absolute (count a + count b) = 1 )
+|                            ( count a - count b = 0
+|                              or absolute (count a - count b) = 1 )
 |                            forall x : a, y : b | x < m! < y ]
 |            
 '-------------------------------------------------------------------------
