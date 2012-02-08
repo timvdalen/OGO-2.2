@@ -68,8 +68,28 @@ output! = sum(selectfibindices(input?))
 
 \section{Testcases for the implementation}
 
+\paragraph{Null testcase}
+This case checks whether an empty input creates the correct output.
+Input: {}
+Expected output: 0 (test succeeded)
+
+\paragraph{Double one testcase}
+This case checks whether the number on index one is summed twice
+Input: {0 1}
+Expected output: 2 (test succeeded)
+
+\paragraph{Negative numbers}
+This case checks whether negative numbers are summed correctly.
+Input: {-3 -2 -5 -8 -10}
+Expected output: -20 (test succeeded)
+
+\paragraph{Large mixed list}
+This case check whether a longer list with mixed positive, negative and non-integer numbers are summed correctly.
+Input {-800 2,85 -85,15 -7482,2654 87 0,002 -0,008 784 -235 12}
+Expected output: -8596.7134 (test succeeded)
+
 \section{Implementation}
-We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The method implementing the algorithm is shown below and requires an import for \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
+We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. There is no precondition in the code because the input is correct as long as it consists of real numbers and there is no simple method of checking for non-reals in the formal specification. The postcondition of the formal specification is fully met. The method implementing the algorithm is shown below and requires an import for \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
 
 \begin{lstlisting}[language=java]
 /**
