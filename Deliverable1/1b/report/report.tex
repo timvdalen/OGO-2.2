@@ -1,0 +1,100 @@
+\documentclass[12pt]{article}
+\usepackage{ltcadiz}
+\usepackage{listings}
+\lstset{breaklines=true}
+
+\title{Report on OGO 2.2 Softwarespecification assignment 1b}
+\author{
+        Tim van Dalen, Tony Nan and Ferry Timmers\\ OGO 2.2 group 6 \\
+                Department of Computer Science\\
+        Technical University Eindhoven\\
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document presents a formal specification and implementation of assignment 1b of OGO 2.2 Softwarespecification. Also included are the informal requirement of the stakeholder, their judgement about the formal specification and testcases for the implementation.
+\end{abstract}
+
+\section{Informal requirements}
+\paragraph{Input} Provided is a simple (ASCII) file with a few numbers separated by a space of arbitrary size. There is no limit to the size of the file.
+\paragraph{Output} Take all unique numbers from the file in the form $n^3$ with $n$ a natural number and select the lower median. The lower median of a array of numbers is the number $x$ that separate the upper helft of the numbers from the lower half of the numbers. For all numbers in the upper half holds that they are greater then $x$ and for all numbers in the lower half holds that they are smaller then $x$. Furthermore the number of elements in the upper half subtracted from the number of elements in the lower half is the number null or one.
+
+\section{Formal specification}
+
+This section describes a formal specification adhering to the informal requirements described above.
+
+We first have to define an enumeration \textit{Cubes} that contains all sets of natural numbers for which each element is a cube of a natural number.
+\begin{axdef}
+Cubes == \{ x : \power \nat | \forall y : x | \exists z : \nat | y^3 = z \}
+\end{axdef}
+
+We define a function that calculates the lower median of a set of natural numbers. It defines two subsets that are the two halves of the input. The output is the number that is wedged between the two halves when they are in the natural order.
+\begin{schema}{Median}
+s? : \power \nat \\
+m! : \nat
+\where
+\exists a,b : \power s? | [ \: a \union b \union m! \\
+                          \t2 a \cap b = \empty \\
+                          \t2 !m \notin ( a \union b ) \\
+                          \t2 \# a - \# b = 0 \: \vee | \# a - \# b | = 1 \\
+                          \t2 \forall x : a , y : b | x < m! < y \: ]
+\end{schema}
+
+Now we define the input and output of our specification.
+\begin{axdef}
+Input : \seq \nat
+\end{axdef}
+
+\begin{axdef}
+Output : \nat
+\where
+\exists X : Cubes | [ \: X \subseteq \ran Input \\ \t2 \forall Y : \ran Input \setminus X | Y \not\subseteq Cubes \\ \t2 Output = Median (X) \: ]
+\end{axdef}
+
+\section{Judgement of the formal specification}
+
+\section{Testcases for the implementation}
+
+\section{Implementation}
+We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The method implementing the algorithm is shown below and requires an import for \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
+
+\begin{lstlisting}[language=java]
+/**
+ * This method is an algorithm that gives the sum of
+ * the (real) numbers in a stream. But only the numbers
+ * with indices equal to a fibonacci number are used.
+ *
+ * @param stream The stream to take the numbers from
+ * @return The sum of the elements in the stream with
+ *         indices equal to a fibonacci number
+ */
+public static double fibAlgo(InputStream stream) {
+    Scanner scanner = new Scanner(stream);
+    int secondOldFib = 0;
+    int firstOldFib = 1;
+    int fib = 0;
+    int index = 0;
+    double current;
+    double sum = 0;
+    while (scanner.hasNextDouble()) {
+        current = scanner.nextDouble();
+        if (index == fib) {
+            sum += current;
+            if (index == 1) {
+                sum += current;
+            }
+            fib = secondOldFib + firstOldFib;
+            secondOldFib = firstOldFib;
+            firstOldFib = fib;
+        }
+        index++;
+    }
+    return sum;
+}
+\end{lstlisting}
+
+\end{document} 
