@@ -27,10 +27,14 @@ Inleiding dolfijnen en vossen.
 
 The playing field consists of a two-dimensional grid of hexagonal tiles. Every tile has an associated elevation value which can be represented using color. Some of the tiles are flooded with water (depending on their elevation) and the other tiles are land. Initially, the tiles with land have to be adjacent. Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation. We can have bridges and underwater caves between two tiles. A dolphin can swim across a cave as long as both endpoints are flooded and a fox can cross a bridge as long as both endpoints are not flooded.
 
-The elevation of a tile lies between minus fifty and fifty. The water elevation lies between minus fifteen and fifteen. The sum of the elevation of all tiles must be zero. The tide of the water determines the exact elevation. The tide can randomly change between rounds and changes between one and five elevation units. The speed of propagation of water is two tiles per round (in the natural direction of the propagation).
+The elevation of a tile lies between minus fifty and fifty. The sum of the elevation of all tiles must be zero. The water elevation lies between minus fifteen and fifteen and is initially zero. The tide of the water determines the exact elevation. The tide can randomly change between rounds and changes between one and five elevation units. The speed of propagation of water is two tiles per round (in the natural direction of the propagation).
+
+A safe tile for a fox has an elevation of more than fifteen and a safe tile for a dolphin has an elevation of less than minus fifteen.
 
 \subsection{Gameplay}
 There are two players, each of them controlling a set of dolphins or a set of foxes. Initially there are an equal number of foxes and dolphins. This number can be defined beforehand by the players. The size of the playing board is dependent on the initial number of animals.
+
+All dolphins are initially placed in the water and all foxes are initially placed on land. No two animals of the same type can reside on the same tile.
 
 The game is played in rounds. In every round each player can move one quarter of the total number of animals at that moment in the game. A move means that one animal can move from one tile to an adjacent tile (or cross a bridge or cave). The player can determine how he distributes his moves between his animals. After a round the computer can adjust the tide level and let the water propagate accordingly.
 
