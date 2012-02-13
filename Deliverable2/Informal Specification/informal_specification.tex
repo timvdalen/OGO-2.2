@@ -5,7 +5,7 @@
 \usepackage{amssymb}
 \lstset{breaklines=true, numbers=left}
 
-\title{Report on OGO 2.2 Softwarespecification\\ Assignment 2a}
+\title{Report on OGO 2.2 Software specification\\ Assignment 2a}
 \author{
         Tim van Dalen, Tony Nan, Ferry Timmers, \\ Lasse Blaauwbroek, Femke Jansen, \\Jeroen Peters and Sander Breukink\\ OGO 2.2 group 6 \\
                 Department of Computer Science\\
@@ -24,7 +24,8 @@ This document describes the informal specification of a new multi-player game ab
 \section{Introduction}
 
 In this document we give an (informal) specification of a board game.
-The game will take base around a island in the middle of an ocean far away. On the island a group of foxes
+The game will take place around an island in the middle of an ocean.
+On the island a group of foxes
 lives that by evolution have acquired a taste for dolphins that live
 in the nearing ocean. The dolphins in turn have acquired a taste of
 the foxes because this area of the sea has not enough fish for them
@@ -49,18 +50,24 @@ will create lower tides.
 
 \section{Structure}
 
-The assignment is to develop a game. The game is being played by two computer aided players on a board that consists of tiles.
-Thus, the game consists of four parts, the two players, a board and the view.
+The assignment is to develop a game. The game is being played by two computer
+aided players on a board that consists of tiles. Thus, the game consists of four parts, the two players, a board and the view.
 
-To make sure that these parts can communicate with each other a controller has to be made. This controller receives requests of the players on which it replies.
-It then updates the state of the game by making requests to the board. The board can choose to deny a request if it isn't legal by the rules of the game.
+To make sure that these parts can communicate with each other a controller has
+to be made. This controller receives requests of the players on which it replies.
+It then updates the state of the game by making requests to the board.
+The board can choose to deny a request if it isn't legal by the rules of the game.
 
 The game should be shown real-time on a screen, which is handled by the view component.
-The view component draw the state of the board on the screen.
+The view component draws the state of the board on the screen.
 
-\includegraphics{plaatje-2a}
+\includegraphics[width=\linewidth]{plaatje-2a}
 It is not mandatory to separate this functionality from the controller,
 but it would be appreciated.
+
+The board can also update its own state between two rounds, to make events possible.
+Because of this it is not possible to use locally stored user-data, as this data
+doesn't have to be up to date: only the game-situation on the board has to be correct.
 
 The board can also update its own state between two rounds, to make events possible.
 Because of this it is not possible to use locally stored user-data, as this data
