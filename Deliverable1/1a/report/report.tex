@@ -30,7 +30,7 @@ The input has $6$ elements, so the following part of the fibonacci sequence is u
 
 This section describes a formal specification adhering to the informal requirements described above.
 
-We first have to define a function  \textit{fib} that returns the $n$'th Fibonacci number. Fibonacci numbers are recursively defined using the two previous Fibonacci numbers.
+We first have to define a function \textit{fib} that returns the $n$'th Fibonacci number. Fibonacci numbers are recursively defined using the two previous Fibonacci numbers.
 \begin{axdef}
 fib : \nat \fun \nat
 \where
@@ -66,7 +66,9 @@ output! = sum(filterFibIndices(input?))
 
 \section{Judgement of the formal specification}
 
-$z \geq 1$ looks better than $1 \leq z$, i would advise you to change that. I would also define the $filterFibIndices$ right after the $fib$ because it is based on the $fib$ function. Furthermore you get my compliments for keeping the all functions as simple as possible.
+$z \geq 1$ looks better than $1 \leq z$, i would advise you to change that. I would also define the $filterFibIndices$ right after the $fib$ because it is based on the $fib$ function. Furthermore, you get my compliments for keeping all the functions as simple as possible. 
+
+The specification satisfies all the demands that have been made and is consistent with the testcases and implementation.
 
 \section{Testcases}
 
@@ -93,7 +95,7 @@ Expected output: -8596,7134 (test succeeded)
 \section{Implementation}
 We chose to implement the algorithm in the Java programming language, because everyone in our group is familiar with it. The implementation is very different from the formal specification, and consist of one loop trough all input elements.
 
-A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computer in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
+A variable keeps track of the index of the current element, and a variable keeps track of the current Fibonacci number. As soon as the index is equal to the current Fibonacci number, the element is added to a sum variable, and the next Fibonacci number is computed. The Fibonacci numbers are computed in lines 36-38, corresponding to the \textsl{fib} function in the specification; the sum is computed on line 28, corresponding to the \textsl{sum} function of the specification; the filtering of indices is done at line 27, corresponding to the \textsl{filterFibIndices} function.
 
 All testcases are successfully tested (see previous sections). The method implementing the algorithm is shown in appendix \ref{codelisting} and requires an import for \\ \textsl{java.io.InputStream} and \textsl{java.io.Scanner}:
 
@@ -109,7 +111,7 @@ All testcases are successfully tested (see previous sections). The method implem
  *
  * @param stream The stream to take the numbers from
  * @return The sum of the elements in the stream
- *         with indices equal to a fibonacci number
+ * with indices equal to a fibonacci number
  */
 public static double fibAlgo(InputStream stream) {
     Scanner scanner = new Scanner(stream);
