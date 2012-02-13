@@ -4,7 +4,7 @@
 \usepackage{amssymb}
 \lstset{breaklines=true, numbers=left}
 
-\title{Report on OGO 2.2 Softwarespecification assignment 1b}
+\title{Report on OGO 2.2 Softwarespecification\\ Assignment 1b}
 \author{
         Tim van Dalen, Tony Nan, Ferry Timmers and Sander Breukink\\ OGO 2.2 group 6 \\
                 Department of Computer Science\\
@@ -94,7 +94,7 @@ Input: \{1 5 -8 -7 -6,5 -1 -8 2 0,5 3\} \\
 Expected output: -1 (test succeeded)
 
 \section{Implementation}
-Over here we, again, chose java as our programming language because that's the language that everyone in our group knows. The implementation follows our specification correctly, but returns a zero if no input is given.
+We chose Java to implement the specification because that's the language that everyone in our group has the most experience with. The implementation follows our specification correctly. If the input is empty, the program will throw an exception and terminate abnormally.
 
 First, in line 28 the input's cubed root is calculated. Then in lines 30-34 it adds the number to the array if there exists an $n \in \mathbb{N}$ for which the input number is equal to $n^3$, all numbers that satisfy this condition are added to the arraylist. If no results were added an exception is thrown to show that the (usable) input was empty.
 
@@ -167,4 +167,4 @@ public static int FindLowMed(InputStream stream){
 }
 \end{lstlisting}
 
-\end{document} ? 
+\end{document}
