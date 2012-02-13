@@ -108,7 +108,7 @@ All testcases resulted in a succes. The method implementing the algorithm is sho
 
 \section{Java implementation listing}
 \label{codelisting}
-\begin{lstlisting}[language=java]
+\begin{lstlisting}[language=java,basicstyle=\small]
 /**
  * This method first calculates the cube root of all
  * the natural numbers on the input, then it puts all
@@ -139,8 +139,8 @@ public static int FindLowMed(InputStream stream){
         result = (int) Math.round(Math.cbrt(input));
 
         if(Math.pow(result,3) == input){
-            //ignore for which there doesn't exist an n^3 (n is a natural
-            //number) which is equal to it
+            //ignore for which there doesn't exist an n^3 
+	    //(n is a natural number) which is equal to it
             n.add((int) input);
         }
     }
