@@ -9,4 +9,4 @@ Wat gebeurt er als er een defecte robot op een lopende band staat? Blijft deze s
 Kan een defecte robot ook een thuis/hintvlak blokkeren?
 Kan een hintvlakje één of twee richtingen als hint geven?
 Kunnen transportatiebanden zowel rotatie als transport zijn?
-
+Wat gebeurd er als een robot in het midden van een lopende band terecht komt, of zijn er alleen opstap en eindpunten?
