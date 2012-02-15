@@ -1,15 +1,16 @@
 msc
 {
 
-b [label=""],
-c [label=""],
-p1 [label=""],
-p2 [label=""];
+b [label="Board"],
+c [label="Controller"],
+p1 [label="Robot player 1"],
+p2 [label="Robot player 2"];
 
-b box b [label="Board"],
-c box c [label="Controller"],
-p1 box p1 [label="Robot player 1"],
-p2 box p2 [label="Robot player 2"];
+b box b [label=""],
+c box c [label=""],
+p1 box p1 [label=""],
+p2 box p2 [label=""];
+
 |||;
 c=>b [label="Get two valid tiles"];
 b>>c [label="two valid tiles"];
@@ -22,5 +23,12 @@ c->p1 [label="board changed"];
 c->p1 [label="robot rotated"];
 c->p2 [label="board changed"];
 ...;
+
+|||;
+
+b box b [label="",textbgcolor="black"],
+c box c [label="",textbgcolor="black"],
+p1 box p1 [label="",textbgcolor="black"],
+p2 box p2 [label="",textbgcolor="black"];
 
 }
