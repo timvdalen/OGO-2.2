@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70010" creator="Ipe 7.0.10">
-<info created="D:20120215110403" modified="D:20120215112853"/>
+<info created="D:20120215110403" modified="D:20120215115014"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -398,17 +398,6 @@ h
 464 400 l
 464 368 l
 </path>
-<path matrix="1 0 0 1 -80 -448" stroke="black">
-240 704 m
-240 656 l
-336 656 l
-336 704 l
-h
-</path>
-<path stroke="black" arrow="normal/normal">
-208 320 m
-208 256 l
-</path>
 <text matrix="1 0 0 1 -32 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Normal
 tile</text>
 <text matrix="1 0 0 1 96 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Hint
@@ -417,6 +406,5 @@ tile</text>
 tile</text>
 <text matrix="1 0 0 1 352 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Home
 tile</text>
-<text matrix="1 0 0 1 96 -360" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Provide hint</text>
 </page>
 </ipe>
