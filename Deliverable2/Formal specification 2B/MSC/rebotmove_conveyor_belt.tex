@@ -17,11 +17,10 @@ a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d >> c [label="Hinttile"];
-c => d [label="Get Hint"];
-d rbox d [label="Generate hint"];
-d >> c [label="Hint"];
-c -> a [label="Hint"];
+d >> c [label="OK"];
+c => d [label="Make move"];
+d >> c [label="Conveyer belt"];
+c -> a [label="Conveyer belt"];
 
 |||;
 
@@ -29,15 +28,14 @@ c -> a [label="Hint"];
 
 |||;
 
-b -> c [label="Move request"];
+a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d >> c [label="Hinttile"];
-c => d [label="Get Hint"];
-d rbox d [label="Generate hint"];
-d >> c [label="Hint"];
-c -> b [label="Hint"];
+d >> c [label="OK"];
+c => d [label="Make move"];
+d >> c [label="Conveyer belt"];
+c -> a [label="Conveyer belt"];
 
 |||;
 
