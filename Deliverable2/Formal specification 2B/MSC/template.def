@@ -1,0 +1,13 @@
+msc
+{
+
+a [label=""],
+b [label=""],
+c [label=""];
+
+a box a [label="Robot type A"],
+b box b [label="Robot type B"],
+c box c [label="Controller"];
+
+
+}
