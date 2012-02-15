@@ -17,9 +17,11 @@ a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
+d rbox d [label="Save location of robot"];
+d rbox d [label="Save which robot wins"];
 d >> c [label="WIN"];
 c -> a [label="WIN"];
-d box d [label="Destroy rest"];
+d rbox d [label="Destroy rest"];
 
 |||;
 
@@ -31,9 +33,11 @@ b -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
+d rbox d [label="Save location of robot"];
+d rbox d [label="Save which robot wins"];
 d >> c [label="WIN"];
 c -> b [label="WIN"];
-d box d [label="Destroy rest"];
+d rbox d [label="Destroy rest"];
 
 |||;
 

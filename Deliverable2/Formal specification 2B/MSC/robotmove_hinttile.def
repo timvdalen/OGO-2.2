@@ -19,7 +19,7 @@ d >> c [label="OK"];
 c => d [label="Make move"];
 d >> c [label="Hinttile"];
 c => d [label="Get Hint"];
-d box d [label="Generate hint"];
+d rbox d [label="Generate hint"];
 d >> c [label="Hint"];
 c -> a [label="Hint"];
 
@@ -35,7 +35,7 @@ d >> c [label="OK"];
 c => d [label="Make move"];
 d >> c [label="Hinttile"];
 c => d [label="Get Hint"];
-d box d [label="Generate hint"];
+d rbox d [label="Generate hint"];
 d >> c [label="Hint"];
 c -> b [label="Hint"];
 
