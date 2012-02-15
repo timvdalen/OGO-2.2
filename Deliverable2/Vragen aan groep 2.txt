@@ -4,4 +4,3 @@ Als een robot naar een vakje probeert te gaan wat bezet is, kan hij dan in dezel
 Wat gebeurt er als het einde van de lopende band is ingesloten door defecte robots?
 Wat gebeurt er als er een defecte robot op een lopende band staat? Blijft deze staan of wordt hij getransporteerd?
 Kan een defecte robot ook een thuis/hintvlak blokkeren?
-...
