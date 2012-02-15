@@ -1,0 +1,6 @@
+Als een robot die meerdere hokjes in een keer kan afgleggen over een hint/thuis/lopende band hee gaat, wat gebeurt er dan?
+Als een hintvlak maar een hint kan geven, hoe kan hij dan een volgende keer een andere hint geven?
+Als een robot naar een vakje probeert te gaan wat bezet is, kan hij dan in dezelfde beurt nog een andere zet doen?
+Wat gebeurt er als het einde van de lopende band is ingesloten door defecte robots?
+Wat gebeurt er als er een defecte robot op een lopende band staat? Blijft deze staan of wordt hij getransporteerd?
+Kan een defecte robot ook een thuis/hintvlak blokkeren?
