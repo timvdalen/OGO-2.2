@@ -1,6 +1,7 @@
 Als een robot die meerdere hokjes in een keer kan afgleggen over een hint/thuis/lopende band heen gaat, wat gebeurt er dan?
 Als een hintvlak maar een hint kan geven, hoe kan hij dan een volgende keer een andere hint geven?
 Als een robot naar een vakje probeert te gaan wat bezet is, kan hij dan in dezelfde beurt nog een andere zet doen?
+Als een robot ergens op de lopende band terecht komt (niet begin / einde), wordt hij dan getransporteerd?
 Zijn de transportiebanden alleen een begin en eindvlakje? En als een robot nou aan het einde door robots is ingesloten, kan deze dan terug de lopende band op en verandert deze dan van richting?
 Hoe ver wordt een robot verplaatst als deze op een transportatieband (geen rotatie) terecht komt? 
 Wat gebeurt er als het einde van de lopende band is ingesloten door defecte robots?
@@ -8,4 +9,4 @@ Wat gebeurt er als er een defecte robot op een lopende band staat? Blijft deze s
 Kan een defecte robot ook een thuis/hintvlak blokkeren?
 Kan een hintvlakje één of twee richtingen als hint geven?
 Kunnen transportatiebanden zowel rotatie als transport zijn?
-
+Wat gebeurd er als een robot in het midden van een lopende band terecht komt, of zijn er alleen opstap en eindpunten?
