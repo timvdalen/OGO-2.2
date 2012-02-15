@@ -15,11 +15,8 @@ d box d [label=""];
 
 a -> c [label="Move request"];
 c => d [label="Move OK?"];
-d >> c [label="OK"];
-c => d [label="Make move"];
-d box d [label="Save location of robot"];
-d >> c [label="OK"];
-c -> a [label="OK"];
+d >> c [label="NOK"];
+c -> a [label="NOK"];
 
 |||;
 
@@ -29,11 +26,8 @@ c -> a [label="OK"];
 
 b -> c [label="Move request"];
 c => d [label="Move OK?"];
-d >> c [label="OK"];
-c => d [label="Make move"];
-d box d [label="Save location of robot"];
-d >> c [label="OK"];
-c -> b [label="OK"];
+d >> c [label="NOK"];
+c -> b [label="NOK"];
 
 |||;
 

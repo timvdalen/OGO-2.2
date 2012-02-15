@@ -17,9 +17,11 @@ a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d box d [label="Save location of robot"];
-d >> c [label="OK"];
-c -> a [label="OK"];
+d >> c [label="Hinttile"];
+c => d [label="Get Hint"];
+d box d [label="Generate hint"];
+d >> c [label="Hint"];
+c -> a [label="Hint"];
 
 |||;
 
@@ -31,9 +33,11 @@ b -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d box d [label="Save location of robot"];
-d >> c [label="OK"];
-c -> b [label="OK"];
+d >> c [label="Hinttile"];
+c => d [label="Get Hint"];
+d box d [label="Generate hint"];
+d >> c [label="Hint"];
+c -> b [label="Hint"];
 
 |||;
 
