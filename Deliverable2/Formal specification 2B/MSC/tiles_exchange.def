@@ -1,0 +1,24 @@
+msc
+{
+
+b [label=""],
+c [label=""],
+p1 [label=""],
+p2 [label=""];
+
+b box b [label="Board"],
+c box c [label="Controller"],
+p1 box p1 [label="Player 1"],
+p2 box p2 [label="Player 2"];
+|||;
+c=>b [label="Get two valid tiles"];
+b>>c [label="two valid tiles"];
+c=>b [label="exchange tiles"];
+b rbox b [label="exchange two tiles"];
+b->c [label="tiles exchanged"];
+...;
+c->p1 [label="board changed"];
+c->p2 [label="board changed"];
+...;
+
+}
