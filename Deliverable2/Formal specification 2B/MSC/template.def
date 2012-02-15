@@ -1,0 +1,22 @@
+msc
+{
+
+a [label="Robot type A"],
+b [label="Robot type B"],
+c [label="Controller"];
+
+a box a [label=""],
+b box b [label=""],
+c box c [label=""];
+
+|||;
+
+// add here
+
+|||;
+
+a box a [label="", textbgcolor="black"],
+b box b [label="", textbgcolor="black"],
+c box c [label="", textbgcolor="black"];
+
+}
