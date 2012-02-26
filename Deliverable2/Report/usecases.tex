@@ -1,0 +1,83 @@
+\subsection{High Level Message Sequence Chart}
+	\includegraphics[width=\linewidth]{MSC-files/HMSC.pdf}
+	
+\subsection{Message Sequence Charts}
+	\subsubsection{Robot move - OK}
+	\begin{msc}
+		msc
+		{
+
+		a [label="Robot type A"],
+		b [label="Robot type B"],
+		c [label="Controller"],
+		d [label="Board"];
+
+		a box a [label=""],
+		b box b [label=""],
+		c box c [label=""],
+		d box d [label=""];
+
+		|||;
+
+		a -> c [label="Move request"];
+		c => d [label="Move OK?"];
+		d >> c [label="OK"];
+		c => d [label="Make move"];
+		d box d [label="Save location of robot"];
+		d >> c [label="OK"];
+		c -> a [label="OK"];
+
+		|||;
+
+		---;
+
+		|||;
+
+		b -> c [label="Move request"];
+		c => d [label="Move OK?"];
+		d >> c [label="OK"];
+		c => d [label="Make move"];
+		d box d [label="Save location of robot"];
+		d >> c [label="OK"];
+		c -> b [label="OK"];
+
+		|||;
+
+		a box a [label="", textbgcolor="black"],
+		b box b [label="", textbgcolor="black"],
+		c box c [label="", textbgcolor="black"],
+		d box d [label="", textbgcolor="black"];
+
+		}
+	\end{msc}
+	
+	\subsubsection{Robot move - Not OK}
+	\begin{msc}
+		\input{MSC-files/robotmove_nok.def}
+	\end{msc}
+	
+	\subsubsection{Robot move - Hint tile}
+	\begin{msc}
+		\input{MSC-files/robotmove_hinttile.def}
+	\end{msc}
+	
+	\subsubsection{Robot move - Conveyor Belt}
+	\begin{msc}
+		\input{MSC-files/robotmove_conveyor_belt.def}
+	\end{msc}
+	
+	\subsubsection{Robot move - Home tile}
+	\begin{msc}
+		\input{MSC-files/robotmove_hometile.def}
+	\end{msc}
+	
+	\subsubsection{Tiles exchange}
+	\begin{msc}
+		\input{MSC-files/tiles_exchange.def}
+	\end{msc}
+	
+	\subsubsection{Tiles exchange special}
+	\begin{msc}
+		\input{MSC-files/tiles_exchange_special.def}
+	\end{msc}
+	
