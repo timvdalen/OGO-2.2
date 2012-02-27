@@ -3,3 +3,6 @@ Z latex package: ftp://ftp.cs.york.ac.uk/hise_reports/cadiz/ZSTAN/toolkits/ltcad
 
 MSC tool: http://www.mcternan.me.uk/mscgen/
 MSC latex: https://github.com/unjello/msctexen/blob/master/msctexen.sty
+
+Statecharts: visual paradigm community edition:
+http://www.visual-paradigm.com/downloads/vpsuite/VP_Suite_Windows.exe
