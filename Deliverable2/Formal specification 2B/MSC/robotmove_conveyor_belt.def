@@ -19,6 +19,7 @@ d >> c [label="OK"];
 c => d [label="Make move"];
 d >> c [label="OK"];
 c => d [label="Make move"];
+d rbox d [label="Conveyer belt"];
 d >> c [label="Conveyer belt"];
 c -> a [label="Conveyer belt"];
 
@@ -28,14 +29,15 @@ c -> a [label="Conveyer belt"];
 
 |||;
 
-a -> c [label="Move request"];
+b -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
 d >> c [label="OK"];
 c => d [label="Make move"];
+d rbox d [label="Conveyer belt"];
 d >> c [label="Conveyer belt"];
-c -> a [label="Conveyer belt"];
+c -> b [label="Conveyer belt"];
 
 |||;
 
