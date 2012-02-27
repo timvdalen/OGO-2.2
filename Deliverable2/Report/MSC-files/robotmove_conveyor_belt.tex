@@ -1,3 +1,4 @@
+\begin{msc}
 msc
 {
 
@@ -17,9 +18,10 @@ a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d box d [label="Save location of robot"];
 d >> c [label="OK"];
-c -> a [label="OK"];
+c => d [label="Make move"];
+d >> c [label="Conveyer belt"];
+c -> a [label="Conveyer belt"];
 
 |||;
 
@@ -27,13 +29,14 @@ c -> a [label="OK"];
 
 |||;
 
-b -> c [label="Move request"];
+a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d >> c [label="OK"];
 c => d [label="Make move"];
-d box d [label="Save location of robot"];
 d >> c [label="OK"];
-c -> b [label="OK"];
+c => d [label="Make move"];
+d >> c [label="Conveyer belt"];
+c -> a [label="Conveyer belt"];
 
 |||;
 
@@ -43,3 +46,4 @@ c box c [label="", textbgcolor="black"],
 d box d [label="", textbgcolor="black"];
 
 }
+\end{msc}
