@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70010" creator="Ipe 7.0.10">
-<info created="D:20120215110403" modified="D:20120227151705"/>
+<info created="D:20120215110403" modified="D:20120228145241"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -257,38 +257,29 @@ h
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 -48 -448" stroke="black">
-240 704 m
-240 656 l
-336 656 l
-336 704 l
-h
-</path>
 <path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
 288 656 m
 288 624 l
 </path>
-<text matrix="1 0 0 1 208 8" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.413" depth="14.46" valign="center" size="LARGE" style="center">Robot
-movement</text>
-<text matrix="1 0 0 1 128 -360" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Tiles
-exchange</text>
-<path matrix="1 0 0 1 -112 -560" stroke="black">
+<text matrix="1 0 0 1 208 8" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Robot
+move request</text>
+<path matrix="1 0 0 1 -112 -480" stroke="black">
 240 704 m
 240 656 l
 336 656 l
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 16 -560" stroke="black">
+<path matrix="1 0 0 1 16 -480" stroke="black">
 240 704 m
 240 656 l
 336 656 l
 336 704 l
 h
 </path>
-<text matrix="1 0 0 1 64 -472" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Ordinair
+<text matrix="1 0 0 1 64 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Ordinairy
 exchange</text>
-<text matrix="1 0 0 1 192 -472" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Special
+<text matrix="1 0 0 1 192 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Special
 exchange</text>
 <path matrix="1 0 0 1 -64 -192" stroke="black">
 240 704 m
@@ -319,8 +310,8 @@ h
 272 512 l
 272 480 l
 </path>
-<text matrix="1 0 0 1 112 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Accept</text>
-<text matrix="1 0 0 1 304 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Reject</text>
+<text matrix="1 0 0 1 112 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Move accept</text>
+<text matrix="1 0 0 1 304 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Move reject</text>
 <path matrix="1 0 0 1 -176 -336" stroke="black">
 240 704 m
 240 656 l
@@ -335,11 +326,11 @@ h
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 80 -336" stroke="black">
-240 704 m
-240 656 l
-336 656 l
-336 704 l
+<path stroke="black">
+320 368 m
+320 320 l
+416 320 l
+416 368 l
 h
 </path>
 <path matrix="1 0 0 1 208 -336" stroke="black">
@@ -353,14 +344,11 @@ h
 192 464 m
 192 400 l
 </path>
-<text matrix="1 0 0 1 0 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Normal
-tile</text>
-<text matrix="1 0 0 1 128 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Hint
-tile</text>
-<text matrix="1 0 0 1 256 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.144" depth="5.16" valign="center" size="LARGE" style="center">Conveyor
-tile</text>
-<text matrix="1 0 0 1 384 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Home
-tile</text>
+<text matrix="1 0 0 1 0 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to
+Normal tile</text>
+<text matrix="1 0 0 1 128 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to Hint tile</text>
+<text matrix="1 0 0 1 256 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="20.988" depth="16.04" valign="center" size="LARGE" style="center">Move to Conveyor tile</text>
+<text matrix="1 0 0 1 384 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to Home tile</text>
 <text matrix="1 0 0 1 208 120" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Initialize</text>
 <path matrix="1 0 0 1 208 -416" stroke="black">
 240 704 m
@@ -392,17 +380,13 @@ game</text>
 288 624 l
 </path>
 <use matrix="1 0 0 1 32 0" name="mark/disk(sx)" pos="288 656" size="normal" stroke="black"/>
-<use matrix="1 0 0 1 96 64" name="mark/disk(sx)" pos="144 112" size="normal" stroke="black"/>
-<path matrix="1 0 0 1 96 64" stroke="black" arrow="normal/normal">
-144 144 m
-144 112 l
-</path>
-<path matrix="1 0 0 1 96 64" stroke="black" arrow="normal/normal">
+<use matrix="1 0 0 1 96 144" name="mark/disk(sx)" pos="144 112" size="normal" stroke="black"/>
+<path matrix="1 0 0 1 96 144" stroke="black" arrow="normal/normal">
 144 112 m
 80 112 l
 80 80 l
 </path>
-<path matrix="1 0 0 1 96 64" stroke="black" arrow="normal/normal">
+<path matrix="1 0 0 1 96 144" stroke="black" arrow="normal/normal">
 144 112 m
 208 112 l
 208 80 l
@@ -454,21 +438,21 @@ game</text>
 464 656 l
 288 656 l
 </path>
-<use matrix="1 0 0 1 32 0" name="mark/disk(sx)" pos="208 64" size="normal" stroke="black"/>
-<path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
+<use matrix="1 0 0 1 32 80" name="mark/disk(sx)" pos="208 64" size="normal" stroke="black"/>
+<path matrix="1 0 0 1 32 80" stroke="black" arrow="normal/normal">
 144 96 m
 144 64 l
 208 64 l
 </path>
-<path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
+<path matrix="1 0 0 1 32 80" stroke="black" arrow="normal/normal">
 272 96 m
 272 64 l
 208 64 l
 </path>
 <path stroke="black" arrow="normal/normal">
-240 64 m
-240 32 l
-32 32 l
+240 144 m
+240 112 l
+32 112 l
 32 656 l
 320 656 l
 </path>
