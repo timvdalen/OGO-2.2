@@ -1,7 +1,7 @@
 Init game
 
 - Pre-conditions: None
-- Trigger: The user press the start game button.
+- Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
 - Main Scenarios
 	(a) new board, players is created.
