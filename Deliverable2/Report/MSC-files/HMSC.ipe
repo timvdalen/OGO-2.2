@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70010" creator="Ipe 7.0.10">
-<info created="D:20120215110403" modified="D:20120228144231"/>
+<info created="D:20120215110403" modified="D:20120228145700"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -277,7 +277,7 @@ h
 336 704 l
 h
 </path>
-<text matrix="1 0 0 1 64 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Ordinair
+<text matrix="1 0 0 1 64 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Ordinary
 exchange</text>
 <text matrix="1 0 0 1 192 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Special
 exchange</text>
