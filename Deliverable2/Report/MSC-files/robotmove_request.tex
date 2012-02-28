@@ -17,12 +17,6 @@ r box r [label=""];
 a -> c [label="Move request"];
 c => d [label="Move OK?"];
 d => r [label="Move OK?"];
-r >> d [label="OK"];
-d >> c [label="OK"];
-c => d [label="Make move"];
-d rbox d [label="Save location of robot"];
-d >> c [label="OK"];
-c -> a [label="OK"];
 
 |||;
 

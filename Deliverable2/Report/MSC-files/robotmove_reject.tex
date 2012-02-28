@@ -14,16 +14,9 @@ r box r [label=""];
 
 |||;
 
-a -> c [label="Move request"];
-c => d [label="Move OK?"];
-d => r [label="Move OK?"];
-r >> d [label="OK"];
-d >> c [label="OK"];
-c => d [label="Make move"];
-d >> c [label="OK"];
-c => d [label="Make move"];
-d >> c [label="Conveyer belt"];
-c -> a [label="Conveyer belt"];
+r >> d [label="NOK"];
+d >> c [label="NOK"];
+c -> a [label="NOK"];
 
 |||;
 
