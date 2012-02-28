@@ -6,3 +6,6 @@ MSC latex: https://github.com/unjello/msctexen/blob/master/msctexen.sty
 
 Statecharts: visual paradigm community edition:
 http://www.visual-paradigm.com/downloads/vpsuite/VP_Suite_Windows.exe
+
+Graph tool: http://www.graphviz.org/Download..php
+Graphviz: http://mark.aufflick.com/files/download/graphviz.sty?version_id=6872

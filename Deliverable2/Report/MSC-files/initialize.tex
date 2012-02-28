@@ -13,15 +13,14 @@ c box c [label=""];
 |||;
 
 b rbox b [label="initialize"];
-b=>c [label="initialize"];
+
+b => a [label="initialize"];
+a rbox a [label="initialize"];
+a >> b [label=""];
+
+b =>c [label="initialize(robotlist)"];
 c rbox c [label="initliaze"];
-c>>b [label="OK"];
-
-...;
-
-a=>b [label="join"];
-b->c [label="robot joined"];
-b>>a [label="OK"];
+c >>b [label="OK"];
 
 |||;
 
