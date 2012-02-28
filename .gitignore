@@ -6,3 +6,6 @@
 
 # mscgen folder #
 Deliverable2/Report/msc/
+
+# Backups #
+*.bak
