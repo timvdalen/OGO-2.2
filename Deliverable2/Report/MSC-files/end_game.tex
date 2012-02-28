@@ -1,0 +1,35 @@
+\begin{msc}
+msc
+{
+
+b [label="Board"],
+c [label="Controller"],
+p [label="Player"],
+v [label="View"];
+
+b box b [label=""],
+c box c [label=""],
+p box p [label=""],
+v box v [label=""];
+
+|||;
+
+b -> c [label="game over"];
+c -> p [label="game over"];
+p rbox p [label="terminating"];
+
+c -> v [label="game over"];
+v rbox v [label="fireworks"];
+v -> c [label="done"];
+
+c rbox c [label="terminating"];
+
+|||;
+
+b box b [label="",textbgcolor="black"],
+c box c [label="",textbgcolor="black"],
+p box p [label="",textbgcolor="black"],
+v box v [label="",textbgcolor="black"];
+
+}
+\end{msc}
