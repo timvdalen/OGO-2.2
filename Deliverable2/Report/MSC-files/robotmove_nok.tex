@@ -2,40 +2,31 @@
 msc
 {
 
-a [label="Robot type A"],
-b [label="Robot type B"],
+a [label="Robot"],
 c [label="Controller"],
-d [label="Board"];
+d [label="Board"],
+r [label="Rule"];
 
 a box a [label=""],
-b box b [label=""],
 c box c [label=""],
-d box d [label=""];
+d box d [label=""],
+r box r [label=""];
 
 |||;
 
 a -> c [label="Move request"];
 c => d [label="Move OK?"];
+d => r [label="Move OK?"];
+r >> d [label="NOK"];
 d >> c [label="NOK"];
 c -> a [label="NOK"];
 
 |||;
 
----;
-
-|||;
-
-b -> c [label="Move request"];
-c => d [label="Move OK?"];
-d >> c [label="NOK"];
-c -> b [label="NOK"];
-
-|||;
-
 a box a [label="", textbgcolor="black"],
-b box b [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
-d box d [label="", textbgcolor="black"];
+d box d [label="", textbgcolor="black"],
+r box r [label="", textbgcolor="black"];
 
 }
 \end{msc}
