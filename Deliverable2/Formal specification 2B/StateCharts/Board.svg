@@ -6,10 +6,10 @@
   /><g
   ><defs id="defs1"
     ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath1"
-      ><path d="M-7 -7 L31 -7 L31 31 L-7 31 L-7 -7 Z"
+      ><path d="M-7 -7 L491 -7 L491 191 L-7 191 L-7 -7 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath2"
-      ><path d="M-7 -7 L491 -7 L491 191 L-7 191 L-7 -7 Z"
+      ><path d="M-7 -7 L31 -7 L31 31 L-7 31 L-7 -7 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath3"
       ><path d="M-7 -7 L491 -7 L491 176 L-7 176 L-7 -7 Z"
@@ -48,7 +48,7 @@
       ><path d="M-77 -15 L154 -15 L154 30 L-77 30 L-77 -15 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath15"
-      ><path d="M-82 -16 L164 -16 L164 32 L-82 32 L-82 -16 Z"
+      ><path d="M-52 -16 L104 -16 L104 32 L-52 32 L-52 -16 Z"
       /></clipPath
       ><clipPath clipPathUnits="userSpaceOnUse" id="clipPath16"
       ><path d="M-52 -15 L104 -15 L104 30 L-52 30 L-52 -15 Z"
@@ -60,17 +60,17 @@
     ><g fill="white" text-rendering="geometricPrecision" fill-opacity="1" stroke-opacity="1" stroke="white"
     ><rect x="0" width="516" height="216" y="0" stroke="none"
     /></g
-    ><g font-size="11" transform="translate(2,2)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><circle r="9.5" clip-path="url(#clipPath1)" cx="9.5" cy="9.5" stroke="none"
-    /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(32,32)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1" stroke-miterlimit="0"
-    ><rect x="0" y="0" clip-path="url(#clipPath2)" fill="none" width="480" rx="10" ry="10" height="180"
+    ><rect x="0" y="0" clip-path="url(#clipPath1)" fill="none" width="480" rx="10" ry="10" height="180"
+    /></g
+    ><g font-size="11" transform="translate(2,2)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
+    ><circle r="9.5" clip-path="url(#clipPath2)" cx="9.5" cy="9.5" stroke="none"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(82,82)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1" stroke-miterlimit="0"
     ><rect x="0" y="0" clip-path="url(#clipPath4)" fill="none" width="80" rx="10" ry="10" height="40"
     /></g
     ><g font-size="11" transform="translate(52,52)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><circle r="9.5" clip-path="url(#clipPath1)" cx="9.5" cy="9.5" stroke="none"
+    ><circle r="9.5" clip-path="url(#clipPath2)" cx="9.5" cy="9.5" stroke="none"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(192,82)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1" stroke-miterlimit="0"
     ><rect x="0" y="0" clip-path="url(#clipPath4)" fill="none" width="80" rx="10" ry="10" height="40"
@@ -166,9 +166,9 @@
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath14)" stroke="none"
       >Make Move</text
     ></g
-    ><g font-size="11" transform="translate(292,72)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
+    ><g font-size="11" transform="translate(302,72)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath15)" stroke="none"
-      >Not Possible</text
+      >Reject</text
     ></g
     ><g font-size="11" transform="translate(152,132)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath16)" stroke="none"
@@ -178,7 +178,7 @@
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath17)" stroke="none"
       >Check Request</text
     ></g
-    ><g fill="rgb(120,120,120)" text-rendering="geometricPrecision" fill-opacity="1" font-size="10" stroke-opacity="1" stroke="rgb(120,120,120)"
+    ><g font-size="10" transform="rotate(-45) translate(-153.1329,0)" fill-opacity="1" fill="rgb(120,120,120)" text-rendering="geometricPrecision" stroke="rgb(120,120,120)" stroke-opacity="1"
     ></g
   ></g
 ></svg
