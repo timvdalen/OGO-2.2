@@ -2,10 +2,10 @@
 msc
 {
 
-a [label="Robot type A"],
-b [label="Robot type B"],
-c [label="Controller"],
-d [label="Board"];
+a [label="Robot"],
+b [label="Controller"],
+c [label="Board"],
+d [label="Rule"];
 
 a box a [label=""],
 b box b [label=""],
@@ -14,22 +14,16 @@ d box d [label=""];
 
 |||;
 
+b rbox b [label="initialize"];
+b->c [label="initialize"];
 c rbox c [label="initialize"];
-c->d [label="initialize"];
-d rbox d [label="initialize"];
-d>>c [label="OK"];
-
-...;
-
-a=>c [label="join"];
-c->d [label="robot joined"];
-c>>a [label="OK"];
-
-...;
-
-b=>c [label="join"];
-c->d [label="robot joined"];
 c>>b [label="OK"];
+
+...;
+
+a=>b [label="join"];
+b->c [label="robot joined"];
+b>>a [label="OK"];
 
 |||;
 

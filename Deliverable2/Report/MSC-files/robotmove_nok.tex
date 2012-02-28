@@ -23,6 +23,17 @@ c -> a [label="NOK"];
 
 |||;
 
+---;
+
+|||;
+
+a -> c [label="Move OK?"];
+c => d [label="Move OK?"];
+d >> c [label="NOK"];
+c -> a [label="NOK"];
+
+|||;
+
 a box a [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
 d box d [label="", textbgcolor="black"],

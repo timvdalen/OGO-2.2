@@ -1,0 +1,8 @@
+# LaTeX #
+*.aux
+*.log
+*.pdf
+*.toc
+
+# mscgen folder #
+Deliverable2/Report/msc/
