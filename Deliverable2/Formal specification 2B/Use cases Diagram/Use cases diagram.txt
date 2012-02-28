@@ -1,0 +1,66 @@
+Init game
+
+- Pre-conditions: None
+- Trigger: The user press the start game button.
+- Guarantee: A new game is initiated.
+- Main Scenarios
+	(a) new board, players is created.
+- Alternatives
+
+
+End game
+- Pre-conditions: The game is initiated.
+- Trigger:  A robot has reached its home tile.
+- Guarantee: The game is properly terminated.
+- Main Scenarios
+	(a) Fireworks are shown then all components of the game are terminated.
+- Alternatives
+	(a-1).1
+
+
+Tiles exchange
+- Pre-conditions: The game is initiated.
+- Trigger:  A robot has moved.
+- Guarantee: two tiles are exchanged
+- Main Scenarios
+	(a) Two normal tiles are exchanged.
+	(b) Two tiles including a conveyor tile or broken robot tile are exchanged
+	(c) Two tiles including a tile with a robot on it are exchanged, then the robot is rotated.
+
+
+Robot Move
+- Pre-conditions: The game is initiated. And the indicated position is a empty tile.
+- Trigger: A robot requests to move his position.
+- Guarantee: The robot is moved to the indicated position.
+- Main Scenarios
+	(a) The robot is moved to the indicated position.
+- Alternatives
+	(a-1).1 If the indicated tile is not empty, then the request is reject and the robot is not moved.
+
+
+Home tile
+- Pre-conditions: The game is initiated. And the indicated position is its home tile.
+- Trigger: A robot requests to move his position to a home tile.
+- Guarantee: The robot is moved to the indicated position which is its home tile.
+- Main Scenarios
+	(a) The robot is moved to the indicated position which is its home tile.
+
+
+Hint tile
+- Pre-conditions: The game is initiated.And the indicated position is a empty hint tile.
+- Trigger: A robot requests to move his position to a hint tile.
+- Guarantee: The robot is moved to the indicated position which is a hint tile and a hint is given to the player.
+- Main Scenarios
+	(a) The robot is moved to the indicated position which is a hint tile and a hint is given to the player.
+- Alternatives
+	(a-1).1 If the indicated tile is not empty, then the request is reject and the robot is not moved.
+
+
+Conveyor belt
+- Pre-conditions: The game is initiated. And the indicated position is a empty conveyor tile.
+- Trigger: A robot requests to move his position to a conveyor belt tile.
+- Guarantee: The robot is moved to the indicated position which is a conveyor belt tile.
+- Main Scenarios
+	(a) The robot is moved to the indicated position which is a conveyor belt tile.
+- Alternatives
+	(a-1).1 If the indicated tile is not empty, then the request is reject and the robot is not moved.

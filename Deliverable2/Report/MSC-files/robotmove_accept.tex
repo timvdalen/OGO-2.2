@@ -1,3 +1,4 @@
+
 \begin{msc}
 msc
 {
@@ -14,23 +15,8 @@ r box r [label=""];
 
 |||;
 
-a -> c [label="Move request"];
-c => d [label="Move OK?"];
-d => r [label="Move OK?"];
-r >> d [label="NOK"];
-d >> c [label="NOK"];
-c -> a [label="NOK"];
-
-|||;
-
----;
-
-|||;
-
-a -> c [label="Move OK?"];
-c => d [label="Move OK?"];
-d >> c [label="NOK"];
-c -> a [label="NOK"];
+r >> d [label="OK"];
+d >> c [label="OK"];
 
 |||;
 
