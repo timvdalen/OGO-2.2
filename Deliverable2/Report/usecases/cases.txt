@@ -4,7 +4,7 @@ Init game
 - Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
 - Main Scenarios
-	(a) new board, players is created.
+	(a) New board and players are created.
 - Alternatives
 
 
@@ -13,22 +13,22 @@ End game
 - Trigger:  A robot has reached its home tile.
 - Guarantee: The game is properly terminated.
 - Main Scenarios
-	(a) Fireworks are shown then all components of the game are 
+	(a) Fireworks are shown and then all components of the game are 
 		terminated.
 - Alternatives
-	(a-1).1
 
 
 Tiles exchange
 - Pre-conditions: The game is initiated.
 - Trigger:  A robot has moved.
-- Guarantee: two tiles are exchanged
+- Guarantee: Two tiles are exchanged
 - Main Scenarios
 	(a) Two normal tiles are exchanged.
 	(b) Two tiles including a conveyor tile or broken robot tile 
 		are exchanged
 	(c) Two tiles including a tile with a robot on it are 
 		exchanged, then the robot is rotated.
+- Alternatives
 
 
 Robot Move
@@ -52,6 +52,7 @@ Home tile
 - Main Scenarios
 	(a) The robot is moved to the indicated position which 
 		is its home tile.
+- Alternatives
 
 Hint tile
 - Pre-conditions: The game is initiated.And the indicated position 
@@ -64,7 +65,7 @@ Hint tile
 		is a hint tile and a hint is given to the player.
 - Alternatives
 	(a-1).1 If the indicated tile is not empty, then the request 
-		is reject and the robot is not moved.
+		is rejected and the robot is not moved.
 
 
 Conveyor belt
@@ -79,4 +80,4 @@ Conveyor belt
 		is a conveyor belt tile.
 - Alternatives
 	(a-1).1 If the indicated tile is not empty, then the 
-		request is reject and the robot is not moved.
+		request is rejected and the robot is not moved.
