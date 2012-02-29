@@ -11,9 +11,12 @@
 
 	\subsubsection{Initialize}
     \input{MSC-files/initialize.tex}
-    \begin{digraph}
+    \digraph{Initialize}{
+        rankdir=LR;
+        a[label="",shape="plaintext"];
+        b[label="Initialize",shape="Mrecord"];
         a->b
-    \end{digraph}
+    }
     	
 	\subsubsection{Robot move request}
 	\input{MSC-files/robotmove_request.tex}
