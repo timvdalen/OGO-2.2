@@ -2,25 +2,32 @@
 msc
 {
 
-a [label="Robot"],
+r1 [label="Robot1"],
+r2 [label="Robot2"],
 b [label="Controller"],
 c [label="Board"];
 
-a box a [label=""],
+r1 box r1 [label=""],
+r2 box r2 [label=""],
 b box b [label=""],
 c box c [label=""];
 
 |||;
 
+c rbox c [label="initialize"];
+c => b [label="preInitialize"];
+b rbox b [label="preInitialize"];
+b => c [label="done"];
+c => r1 [label="initialize"]; 
+r1 rbox r1 [label="initialize"];
+c => r2 [label="initialize"]; 
+r2 rbox r2 [label="initialize"];
+r1 note r2 [label="All robots receive an initialize from the board."];
+r1 >> c [label="done"];
+r2 >> c [label="done"];
+c => b [label="initialize(robotList)"];
 b rbox b [label="initialize"];
-
-b => a [label="initialize"];
-a rbox a [label="initialize"];
-a >> b [label=""];
-
-b =>c [label="initialize(robotlist)"];
-c rbox c [label="initliaze"];
-c >>b [label="OK"];
+c >> b [label="done"];
 
 |||;
 
@@ -29,4 +36,4 @@ b box b [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"];
 
 }
-\end{msc} 
+\end{msc}
