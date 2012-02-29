@@ -7,22 +7,18 @@ c [label="Controller"],
 p1 [label="Robot player 1"],
 p2 [label="Robot player 2"];
 
-b box b [label=""],
 c box c [label=""],
+b box b [label=""],
 p1 box p1 [label=""],
 p2 box p2 [label=""];
 
 |||;
-c=>b [label="Get two valid tiles"];
-b>>c [label="two valid tiles"];
 c=>b [label="exchange tiles"];
 b rbox b [label="exchange two tiles"];
-b rbox b [label="rotate robot player 1 and conveyer belt"];
+b rbox b [label="rotate robot player 1 and rotate tiles"];
 b->c [label="tiles exchanged"];
-...;
-c->p1 [label="board changed"];
-c->p1 [label="robot rotated"];
-...;
+c->p1 [label="involved in tiles exchange"];
+b note b [label="special exchange may involve no robots, one robot or two robots; internal action of rotating the tiles to rotate the direction of conveyer belt(s) that may be involved."];
 
 |||;
 

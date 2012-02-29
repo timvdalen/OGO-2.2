@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70010" creator="Ipe 7.0.10">
-<info created="D:20120215110403" modified="D:20120228145700"/>
+<info created="D:20120215110403" modified="D:20120229115746"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -232,36 +232,36 @@ h
 <page>
 <layer name="alpha"/>
 <view layers="alpha" active="alpha"/>
-<path layer="alpha" matrix="1 0 0 1 32 32" stroke="black">
+<path layer="alpha" matrix="1 0 0 1 16 32" stroke="black">
 240 704 m
 240 656 l
 336 656 l
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 32 64" stroke="black">
+<path matrix="1 0 0 1 16 64" stroke="black">
 272 768 m
 288 736 l
 304 768 l
 304 768 l
 h
 </path>
-<path matrix="1 0 0 1 32 32" stroke="black" arrow="normal/normal">
+<path matrix="1 0 0 1 16 32" stroke="black" arrow="normal/normal">
 288 736 m
 288 704 l
 </path>
-<path matrix="1 0 0 1 32 -80" stroke="black">
+<path matrix="1 0 0 1 16 -80" stroke="black">
 240 704 m
 240 656 l
 336 656 l
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
+<path matrix="1 0 0 1 16 0" stroke="black" arrow="normal/normal">
 288 656 m
 288 624 l
 </path>
-<text matrix="1 0 0 1 208 8" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Robot
+<text matrix="1 0 0 1 192 8" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Robot
 move request</text>
 <path matrix="1 0 0 1 -112 -480" stroke="black">
 240 704 m
@@ -281,37 +281,24 @@ h
 exchange</text>
 <text matrix="1 0 0 1 192 -392" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="21.082" depth="16.14" valign="center" size="LARGE" style="center">Special
 exchange</text>
-<path matrix="1 0 0 1 -64 -192" stroke="black">
+<path matrix="1 0 0 1 96 -192" stroke="black">
 240 704 m
 240 656 l
 336 656 l
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 128 -192" stroke="black">
-240 704 m
-240 656 l
-336 656 l
-336 704 l
-h
-</path>
-<use matrix="1 0 0 1 144 32" name="mark/disk(sx)" pos="176 512" size="normal" stroke="black"/>
-<path matrix="1 0 0 1 144 32" stroke="black" arrow="normal/normal">
+<use matrix="1 0 0 1 128 32" name="mark/disk(sx)" pos="176 512" size="normal" stroke="black"/>
+<path matrix="1 0 0 1 128 32" stroke="black" arrow="normal/normal">
 176 544 m
 176 512 l
 </path>
-<path matrix="1 0 0 1 144 32" stroke="black" arrow="normal/normal">
-176 512 m
-80 512 l
-80 480 l
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 544 m
+400 544 l
+400 512 l
 </path>
-<path matrix="1 0 0 1 144 32" stroke="black" arrow="normal/normal">
-176 512 m
-272 512 l
-272 480 l
-</path>
-<text matrix="1 0 0 1 112 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Move accept</text>
-<text matrix="1 0 0 1 304 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Move reject</text>
+<text matrix="1 0 0 1 272 -104" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="10.04" depth="5.07" valign="center" size="LARGE" style="center">Move reject</text>
 <path matrix="1 0 0 1 -176 -336" stroke="black">
 240 704 m
 240 656 l
@@ -340,16 +327,15 @@ h
 336 704 l
 h
 </path>
-<path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
-192 464 m
-192 400 l
-</path>
-<text matrix="1 0 0 1 0 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to
+<text matrix="1 0 0 1 0 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Return
 Normal tile</text>
-<text matrix="1 0 0 1 128 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to Hint tile</text>
-<text matrix="1 0 0 1 256 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="20.988" depth="16.04" valign="center" size="LARGE" style="center">Move to Conveyor tile</text>
-<text matrix="1 0 0 1 384 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Move to Home tile</text>
-<text matrix="1 0 0 1 208 120" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Initialize</text>
+<text matrix="1 0 0 1 128 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Return$\linebreak$
+Hint tile</text>
+<text matrix="1 0 0 1 256 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="20.988" depth="16.04" valign="center" size="LARGE" style="center">Return
+Conveyor tile</text>
+<text matrix="1 0 0 1 384 -248" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="19.319" depth="14.36" valign="center" size="LARGE" style="center">Return$\linebreak$
+Home tile</text>
+<text matrix="1 0 0 1 192 120" transformations="translations" pos="64 592" stroke="black" type="minipage" width="96" height="8.465" depth="3.49" valign="center" size="LARGE" style="center">Initialize</text>
 <path matrix="1 0 0 1 208 -416" stroke="black">
 240 704 m
 240 656 l
@@ -363,23 +349,22 @@ game</text>
 80 432 m
 80 400 l
 </path>
-<path stroke="black" arrow="normal/normal">
-496 240 m
-496 208 l
-576 208 l
-576 768 l
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+512 208 m
+592 208 l
+592 768 l
 320 768 l
 </path>
-<path matrix="1 0 0 1 32 64" stroke="black" arrow="normal/normal">
+<path matrix="1 0 0 1 16 64" stroke="black" arrow="normal/normal">
 288 736 m
 288 704 l
 </path>
-<use matrix="1 0 0 1 32 144" name="mark/disk(sx)" pos="288 624" size="normal" stroke="black"/>
-<path matrix="1 0 0 1 32 32" stroke="black" arrow="normal/normal">
+<use matrix="1 0 0 1 16 144" name="mark/disk(sx)" pos="288 624" size="normal" stroke="black"/>
+<path matrix="1 0 0 1 16 32" stroke="black" arrow="normal/normal">
 288 656 m
 288 624 l
 </path>
-<use matrix="1 0 0 1 32 0" name="mark/disk(sx)" pos="288 656" size="normal" stroke="black"/>
+<use matrix="1 0 0 1 16 0" name="mark/disk(sx)" pos="288 656" size="normal" stroke="black"/>
 <use matrix="1 0 0 1 96 144" name="mark/disk(sx)" pos="144 112" size="normal" stroke="black"/>
 <path matrix="1 0 0 1 96 144" stroke="black" arrow="normal/normal">
 144 112 m
@@ -410,33 +395,12 @@ game</text>
 208 320 m
 208 288 l
 </path>
-<use matrix="1 0 0 1 32 -32" name="mark/disk(sx)" pos="192 432" size="normal" stroke="black"/>
-<path matrix="1 0 0 1 32 -32" stroke="black" arrow="normal/normal">
-192 432 m
-80 432 l
-80 400 l
-</path>
-<path matrix="1 0 0 1 32 -32" stroke="black" arrow="normal/normal">
-192 432 m
-208 432 l
-208 400 l
-</path>
-<path matrix="1 0 0 1 32 -32" stroke="black" arrow="normal/normal">
-192 432 m
-336 432 l
-336 400 l
-</path>
-<path matrix="1 0 0 1 32 -32" stroke="black" arrow="normal/normal">
-192 432 m
-464 432 l
-464 400 l
-</path>
-<path matrix="1 0 0 1 32 0" stroke="black" arrow="normal/normal">
-384 464 m
-384 432 l
-464 432 l
-464 656 l
-288 656 l
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+400 464 m
+400 432 l
+496 432 l
+496 656 l
+320 656 l
 </path>
 <use matrix="1 0 0 1 32 80" name="mark/disk(sx)" pos="208 64" size="normal" stroke="black"/>
 <path matrix="1 0 0 1 32 80" stroke="black" arrow="normal/normal">
@@ -449,12 +413,53 @@ game</text>
 272 64 l
 208 64 l
 </path>
-<path stroke="black" arrow="normal/normal">
-240 144 m
-240 112 l
-32 112 l
-32 656 l
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+256 144 m
+256 112 l
+48 112 l
+48 656 l
 320 656 l
+</path>
+<path matrix="-1 0 0 -1 784 848" stroke="black">
+272 768 m
+288 736 l
+304 768 l
+304 768 l
+h
+</path>
+<use name="mark/disk(sx)" pos="496 208" size="normal" stroke="black"/>
+<path stroke="black" arrow="normal/normal">
+496 240 m
+496 208 l
+</path>
+<path stroke="black" arrow="normal/normal">
+496 208 m
+496 112 l
+</path>
+<use matrix="1 0 0 1 -16 0" name="mark/disk(sx)" pos="320 400" size="normal" stroke="black"/>
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 544 m
+320 400 l
+</path>
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 400 m
+128 400 l
+128 368 l
+</path>
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 400 m
+256 400 l
+256 368 l
+</path>
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 400 m
+384 400 l
+384 368 l
+</path>
+<path matrix="1 0 0 1 -16 0" stroke="black" arrow="normal/normal">
+320 400 m
+512 400 l
+512 368 l
 </path>
 </page>
 </ipe>
