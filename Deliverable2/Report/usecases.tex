@@ -1,3 +1,8 @@
+\subsection{Use cases}
+	\lstinputlisting{usecases/cases.txt}
+\subsection{Use case diagram}
+	\includegraphics[width=\linewidth]{usecases/diagram.pdf}	
+
 \subsection{High Level Message Sequence Chart}
 	\includegraphics[width=\linewidth,bb=0 0 680 1000]{MSC-files/HMSC.pdf}
 	
@@ -5,27 +10,38 @@
 	Note: the symbol $\vdots$ denotes the start and end of a co-region.
 
 	\subsubsection{Initialize}
-    	\input{MSC-files/initialize.tex}
-    
-	\subsubsection{Robot move - OK}
-	\input{MSC-files/robotmove_ok.tex}	
+    \input{MSC-files/initialize.tex}
+    \begin{digraph}
+        a->b
+    \end{digraph}
+    	
+	\subsubsection{Robot move request}
+	\input{MSC-files/robotmove_request.tex}
 	
-	\subsubsection{Robot move - Not OK}
-	\input{MSC-files/robotmove_nok.tex}
-	
-	\subsubsection{Robot move - Hint tile}
-	\input{MSC-files/robotmove_hinttile.tex}
-	
-	\subsubsection{Robot move - Conveyor Belt}
-	\input{MSC-files/robotmove_conveyor_belt.tex}
-	
-	\subsubsection{Robot move - Home tile}
-	\input{MSC-files/robotmove_hometile.tex}
-	
-	\subsubsection{Tiles exchange}
+	\subsubsection{Move accept}
+	\input{MSC-files/robotmove_accept.tex}
+
+	\subsubsection{Move to Normal tile}
+	\input{MSC-files/robotmove_to_normal.tex}
+
+	\subsubsection{Move to Hint tile}
+	\input{MSC-files/robotmove_to_hint.tex}
+
+	\subsubsection{Move to Conveyor tile}
+	\input{MSC-files/robotmove_to_conveyor.tex}
+
+	\subsubsection{Move to Home tile}
+	\input{MSC-files/robotmove_to_home.tex}
+
+
+	\subsubsection{Move reject}
+	\input{MSC-files/robotmove_reject.tex}
+
+
+	\subsubsection{Ordinairy exchange}
 	\input{MSC-files/tiles_exchange.tex}
 	
-	\subsubsection{Tiles exchange special}
+	\subsubsection{Special exchange}
 	\input{MSC-files/tiles_exchange_special.tex}
 	
 	\subsubsection{End game}

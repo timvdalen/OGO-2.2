@@ -4,33 +4,29 @@ msc
 
 a [label="Robot"],
 b [label="Controller"],
-c [label="Board"],
-d [label="Rule"];
+c [label="Board"];
 
 a box a [label=""],
 b box b [label=""],
-c box c [label=""],
-d box d [label=""];
+c box c [label=""];
 
 |||;
 
 b rbox b [label="initialize"];
-b->c [label="initialize"];
-c rbox c [label="initialize"];
-c>>b [label="OK"];
 
-...;
+b => a [label="initialize"];
+a rbox a [label="initialize"];
+a >> b [label=""];
 
-a=>b [label="join"];
-b->c [label="robot joined"];
-b>>a [label="OK"];
+b =>c [label="initialize(robotlist)"];
+c rbox c [label="initliaze"];
+c >>b [label="OK"];
 
 |||;
 
 a box a [label="", textbgcolor="black"],
 b box b [label="", textbgcolor="black"],
-c box c [label="", textbgcolor="black"],
-d box d [label="", textbgcolor="black"];
+c box c [label="", textbgcolor="black"];
 
 }
 \end{msc} 
