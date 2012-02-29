@@ -5,16 +5,13 @@ msc
 b [label="Board"],
 c [label="Controller"];
 
-b box b [label=""],
 c box c [label=""];
+b box b [label=""],
 
 |||;
 
-c=>b [label="Get two valid tiles"];
-b>>c [label="two valid tiles"];
 c=>b [label="exchange tiles"];
 b rbox b [label="exchange two tiles"];
-b->c [label="tiles exchanged"];
 
 |||;
 
