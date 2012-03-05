@@ -12,10 +12,11 @@ d box d [label=""];
 
 |||;
 
-d rbox d [label="Save location of robot"];
-d rbox d [label="Save which robot wins"];
+d rbox d [label="calculateNewLocation(localCoords, robot)"];
+d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="WIN"];
-c -> a [label="WIN"];
+c => a [label="terminate"];
+a note a [label="each robot, except the robot that won the game, receives a terminate from the controller"];
 
 |||;
 
