@@ -5,18 +5,14 @@ msc
 a [label="Robot"],
 c [label="Controller"],
 d [label="Board"],
-r [label="Rule"];
 
 a box a [label=""],
 c box c [label=""],
 d box d [label=""],
-r box r [label=""];
 
 |||;
 
-r >> d [label="NOK"];
-d >> c [label="NOK"];
-c -> a [label="NOK"];
+d >> c [label="FAILED"];
 
 |||;
 
