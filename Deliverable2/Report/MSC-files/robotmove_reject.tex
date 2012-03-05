@@ -27,3 +27,16 @@ r box r [label="", textbgcolor="black"];
 
 }
 \end{msc}
+\digraph[scale=0.5]{HMSC_mvrej}{
+rankdir=LR;
+p2 [label="",shape="point"];
+p3 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord"];
+mvrej [label="Reject move",shape="Mrecord",style=filled];
+init->p2;
+p2->mvreq;
+mvreq->p3;
+p3->mvrej;
+mvrej->p2;
+}

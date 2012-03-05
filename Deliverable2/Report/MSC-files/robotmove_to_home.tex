@@ -25,3 +25,17 @@ d box d [label="", textbgcolor="black"];
 
 }
 \end{msc}
+\digraph[scale=0.5]{HMSC_mvmt}{
+rankdir=LR;
+p3 [label="",shape="point"];
+p4 [label="",shape="point"];
+mvrej [label="Reject move",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord"];
+retmt [label="Return Home tile",shape="Mrecord",style=filled];
+endgame [label="End game",shape="Mrecord"];
+mvreq->p3;
+p3->mvrej;
+p3->p4;
+p4->retmt;
+retmt->endgame;
+}

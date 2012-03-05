@@ -24,3 +24,23 @@ d box d [label="", textbgcolor="black"];
 
 }
 \end{msc}
+\digraph[scale=0.5]{HMSC_mvnt}{
+rankdir=LR;
+p3 [label="",shape="point"];
+p4 [label="",shape="point"];
+p5 [label="",shape="point"];
+p6 [label="",shape="point"];
+mvreq [label="Robot move request",shape="Mrecord"];
+mvrej [label="Reject move",shape="Mrecord"];
+retnt [label="Return Normal tile",shape="Mrecord",style=filled];
+ordex [label="Ordinary exchange",shape="Mrecord"];
+spcex [label="Special exchange",shape="Mrecord"];
+mvreq->p3;
+p3->mvrej;
+p3->p4;
+p4->retnt;
+retnt->p5;
+p5->p6;
+p6->ordex;
+p6->spcex;
+}
