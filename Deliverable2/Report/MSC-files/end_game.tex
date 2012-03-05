@@ -14,15 +14,15 @@ v box v [label=""];
 
 |||;
 
-b -> c [label="game over"];
+c => p [label="terminate"];
+p note p [label="each robot, except the robot that won the game, receives a terminate from the controller"];
 c -> p [label="game over"];
 p rbox p [label="terminating"];
-
-c -> v [label="game over"];
+c => v [label="notifyGameOver(robot)"];
+v note v [label="robot is here the robot that has won the game"];
 v rbox v [label="fireworks"];
 v -> c [label="done"];
-
-c rbox c [label="terminating"];
+c rbox c [label="terminate"];
 
 |||;
 
