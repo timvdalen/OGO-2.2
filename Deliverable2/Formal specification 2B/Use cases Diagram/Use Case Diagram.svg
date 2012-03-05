@@ -156,20 +156,28 @@
       >Board</text
     ></g
     ><g font-size="11" transform="translate(121,302)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="6" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
-      >Conveyor belt</text
+    ><text x="23" xml:space="preserve" y="17" clip-path="url(#clipPath6)" stroke="none"
+      >Return</text
+      ><text x="7" xml:space="preserve" y="32" clip-path="url(#clipPath6)" stroke="none"
+      >conveyor belt</text
     ></g
     ><g font-size="11" transform="translate(231,282)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="21" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
-      >Hint tile</text
+    ><text x="13" xml:space="preserve" y="17" clip-path="url(#clipPath6)" stroke="none"
+      >Return hint</text
+      ><text x="32" xml:space="preserve" y="32" clip-path="url(#clipPath6)" stroke="none"
+      >tile</text
     ></g
     ><g font-size="11" transform="translate(281,192)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="16" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
-      >Home tile</text
+    ><text x="8" xml:space="preserve" y="17" clip-path="url(#clipPath6)" stroke="none"
+      >Return home</text
+      ><text x="32" xml:space="preserve" y="32" clip-path="url(#clipPath6)" stroke="none"
+      >tile</text
     ></g
     ><g font-size="11" transform="translate(121,192)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="9" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
+    ><text x="9" xml:space="preserve" y="17" clip-path="url(#clipPath6)" stroke="none"
       >Robot move</text
+      ><text x="21" xml:space="preserve" y="32" clip-path="url(#clipPath6)" stroke="none"
+      >request</text
     ></g
     ><g font-size="11" transform="translate(121,72)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="8" xml:space="preserve" y="24" clip-path="url(#clipPath7)" stroke="none"
@@ -180,8 +188,8 @@
       >End game</text
     ></g
     ><g font-size="11" transform="translate(121,2)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="16" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
-      >Init game</text
+    ><text x="20" xml:space="preserve" y="24" clip-path="url(#clipPath6)" stroke="none"
+      >Initialize</text
     ></g
     ><g font-size="11" transform="translate(2,162)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="11" xml:space="preserve" y="12" clip-path="url(#clipPath8)" stroke="none"
@@ -251,8 +259,6 @@
       >&lt;&lt;Include&gt;&gt;</text
     ></g
     ><g fill="rgb(120,120,120)" text-rendering="geometricPrecision" fill-opacity="1" font-size="10" stroke-opacity="1" stroke="rgb(120,120,120)"
-    ><text x="0" xml:space="preserve" y="10" stroke="none"
-      >Visual Paradigm for UML Community Edition [not for commercial use] </text
     ></g
   ></g
 ></svg
