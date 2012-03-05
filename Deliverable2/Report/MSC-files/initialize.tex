@@ -29,4 +29,15 @@ b box b [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"];
 
 }
-\end{msc} 
+\end{msc}
+\digraph[scale=0.5]{HMSC_init}{rankdir=LR;
+begin [label="",shape="invtriangle"];
+p1 [label="",shape="point"];
+p2 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord"];
+begin->p1;
+p1->init;
+init->p2;
+p2->mvreq
+}
