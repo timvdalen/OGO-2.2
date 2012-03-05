@@ -13,11 +13,11 @@ p1 box p1 [label=""],
 p2 box p2 [label=""];
 
 |||;
-c=>b [label="exchange tiles"];
+c=>b [label="requestTilesExchange"];
 b rbox b [label="exchange two tiles"];
 b rbox b [label="rotate robot player 1 and rotate tiles"];
 b->c [label="tiles exchanged"];
-c->p1 [label="involved in tiles exchange"];
+c=>p1 [label="notifyAutoMovement"];
 b note b [label="special exchange may involve no robots, one robot or two robots; internal action of rotating the tiles to rotate the direction of conveyer belt(s) that may be involved."];
 
 |||;
