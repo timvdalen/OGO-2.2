@@ -21,3 +21,25 @@ c box c [label="",textbgcolor="black"];
 
 }
 \end{msc}
+\digraph[scale=0.5]{HMSC_exch}{
+rankdir=LR;
+p2 [label="",shape="point"];
+p5 [label="",shape="point"];
+p6 [label="",shape="point"];
+p7 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord"];
+retnt [label="Return Normal tile",shape="Mrecord"];
+retht [label="Return Hint tile",shape="Mrecord"];
+retct [label="Return Conveyor tile",shape="Mrecord"];
+ordex [label="Ordinary exchange",shape="Mrecord",style=filled];
+init->p2;
+p2->mvreq;
+retnt->p5;
+retht->p5;
+retct->p5;
+p5->p6;
+p6->ordex;
+ordex->p7;
+p7->p2;
+}

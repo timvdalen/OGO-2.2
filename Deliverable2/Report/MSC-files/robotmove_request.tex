@@ -31,15 +31,15 @@ r box r [label="", textbgcolor="black"];
 
 }
 \end{msc}
-\digraph[scale=0.5]{HMSC_robomove}{
+\digraph[scale=0.5]{HMSC_req}{
 rankdir=LR;
 p2 [label="",shape="point"];
 p3 [label="",shape="point"];
 p4 [label="",shape="point"];
-mvreq [label="Robot move request",shape="Mrecord",color="lavender",style=filled];
+mvreq [label="Robot move request",shape="Mrecord",style=filled];
 mvrej [label="Reject move",shape="Mrecord"];
 retnt [label="Return Normal tile",shape="Mrecord"];
-retht [label="Return Home tile",shape="Mrecord"];
+retht [label="Return Hint tile",shape="Mrecord"];
 retct [label="Return Conveyor tile",shape="Mrecord"];
 retmt [label="Return Home tile",shape="Mrecord"];
 init->p2;

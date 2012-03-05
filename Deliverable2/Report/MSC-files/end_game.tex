@@ -33,3 +33,19 @@ v box v [label="",textbgcolor="black"];
 
 }
 \end{msc}
+\digraph[scale=0.5]{HMSC_end}{
+rankdir=LR;
+begin [label="",shape="invtriangle"];
+end [label="",shape="triangle"];
+p1 [label="",shape="point"];
+p8 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+retmt [label="Return Home tile",shape="Mrecord"];
+endgame [label="End game",shape="Mrecord",style=filled];
+begin->p1;
+p1->init;
+retmt->endgame;
+endgame->p8;
+p8->p1;
+p8->end;
+}

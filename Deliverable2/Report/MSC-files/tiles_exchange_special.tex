@@ -29,3 +29,48 @@ p2 box p2 [label="",textbgcolor="black"];
 
 }
 \end{msc}
+\begin{msc}
+msc
+{
+
+b [label="Board"],
+c [label="Controller"];
+
+c box c [label=""];
+b box b [label=""],
+
+|||;
+
+c=>b [label="exchange tiles"];
+b rbox b [label="exchange two tiles"];
+b->c [label="tiles exchanged"];
+
+|||;
+
+b box b [label="",textbgcolor="black"],
+c box c [label="",textbgcolor="black"];
+
+}
+\end{msc}
+\digraph[scale=0.5]{HMSC_exchsp}{
+rankdir=LR;
+p2 [label="",shape="point"];
+p5 [label="",shape="point"];
+p6 [label="",shape="point"];
+p7 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord"];
+retnt [label="Return Normal tile",shape="Mrecord"];
+retht [label="Return Hint tile",shape="Mrecord"];
+retct [label="Return Conveyor tile",shape="Mrecord"];
+spcex [label="Special exchange",shape="Mrecord",style=filled];
+init->p2;
+p2->mvreq;
+retnt->p5;
+retht->p5;
+retct->p5;
+p5->p6;
+p6->spcex;
+spcex->p7;
+p7->p2;
+}
