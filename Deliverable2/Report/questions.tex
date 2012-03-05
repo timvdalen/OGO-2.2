@@ -51,3 +51,5 @@ hetzelfde.
 	loopt. De robot krijgt deze hint dan niet te zien.
 
 \end{lstlisting}
+
+On Tuesday the 28th of Februari, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs the controller communicated with all other parts of the game (the players, the view and the board) and, for instance, first asked the board for two tiles that could be switched and then asked it to switch those. In the opninion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made automic, i.e. the tile request functions are now one function that the board handles by itself.

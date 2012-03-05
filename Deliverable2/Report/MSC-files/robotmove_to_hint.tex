@@ -12,12 +12,13 @@ d box d [label=""];
 
 |||;
 
-d rbox d [label="Save location of robot"];
-d >> c [label="Hinttile"];
-c => d [label="Get Hint"];
-d rbox d [label="Generate hint"];
-d >> c [label="Hint"];
-c -> a [label="Hint"];
+d rbox d [label="calculateNewLocation(localCoords, robot)"];
+d rbox d [label="saveLocation(absCoords, robot)"];
+d >> c [label="HINT"];
+c => d [label="getHint(robot)"];
+d rbox d [label="generate hint"];
+d >> c [label="hint"];
+c => a [label="notifyHint(hint)"];
 
 |||;
 
