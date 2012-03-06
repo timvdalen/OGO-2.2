@@ -1,0 +1,5 @@
+The controller is the class that manages all communication between all the other classes.
+This class also can't do anything without being initialized, so the first thing it does
+is initialize. It passes all the messages between the board and the robots. It can also 
+call the function switchtiles which selects 2 random tiles and, if there aren't any home- 
+and hinttiles, switches them around.

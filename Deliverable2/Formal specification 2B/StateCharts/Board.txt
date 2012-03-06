@@ -1,0 +1,4 @@
+First the board has to be initalized, then it can switch tiles and answer moverequests.
+Moverequests can be declined (FAILED), allowed (SUCCES) or allowed with somehting happing
+(CONVEYER || HINT || WIN), in the last case a new position has to be calculated, a hint
+has to be generated or the players have to be notified that the game has ended.
