@@ -39,8 +39,9 @@ Robot Move
 - Main Scenarios
 	(a) The robot is moved to the indicated position.
 - Alternatives
-	(a-1).1 If the indicated tile is not empty, then the 
-		request is reject and the robot is not moved.
+	(a-1).1 If the indicated tile is occupied by a player 
+		or a broken robot, then the request is rejected 
+		and the robot is not moved.
 
 
 Home tile
@@ -55,8 +56,8 @@ Home tile
 - Alternatives
 
 Hint tile
-- Pre-conditions: The game is initiated.And the indicated position 
-	is a empty hint tile.
+- Pre-conditions: The game is initiated. The indicated position 
+	is hint tile.
 - Trigger: A robot requests to move his position to a hint tile.
 - Guarantee: The robot is moved to the indicated position which 
 	is a hint tile and a hint is given to the player.
@@ -64,13 +65,14 @@ Hint tile
 	(a) The robot is moved to the indicated position which 
 		is a hint tile and a hint is given to the player.
 - Alternatives
-	(a-1).1 If the indicated tile is not empty, then the request 
-		is rejected and the robot is not moved.
+	(a-1).1 If the indicated tile is occupied by a player, 
+		then the request is rejected and the robot is 
+		not moved.
 
 
 Conveyor belt
 - Pre-conditions: The game is initiated. And the indicated position 
-	is a empty conveyor tile.
+	is a conveyor tile.
 - Trigger: A robot requests to move his position to a conveyor 
 	belt tile.
 - Guarantee: The robot is moved to the indicated position which 
@@ -79,5 +81,6 @@ Conveyor belt
 	(a) The robot is moved to the indicated position which 
 		is a conveyor belt tile.
 - Alternatives
-	(a-1).1 If the indicated tile is not empty, then the 
-		request is rejected and the robot is not moved.
+	(a-1).1 If the indicated tile is occupied by a player, 
+		then the request is rejected and the robot is 
+		not moved.
