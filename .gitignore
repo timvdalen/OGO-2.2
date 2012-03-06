@@ -9,6 +9,7 @@ Deliverable2/Report/msc/
 
 # graph folder #
 Deliverable2/Report/graph/
+*.dot
 
 # Backups #
 *.bak
