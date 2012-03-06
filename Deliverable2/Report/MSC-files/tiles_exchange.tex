@@ -10,9 +10,10 @@ b box b [label=""];
 
 |||;
 
-c=>b [label="requestTilesExchange"];
-b rbox b [label="exchange two tiles"];
-b->c [label="tiles exchanged"];
+c=>b [label="requestTilesExchange()"];
+b rbox b [label="getValidTiles()"];
+b rbox b [label="exchange two valid tiles"];
+b>>c [label="empty RobotPair"];
 
 |||;
 

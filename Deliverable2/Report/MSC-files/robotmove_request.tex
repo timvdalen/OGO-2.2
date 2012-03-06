@@ -16,9 +16,9 @@ r box r [label=""];
 
 a => c [label="moveRequest(localCoords, robot)"];
 c => d [label="moveRequest(localCoords, robot)"];
-d => r [label="getPossibleMoves"];
+d => r [label="getPossibleMoves()"];
 d << r [label="list of possible moves"];
-d => r [label="getPossibleRotations"];
+d => r [label="getPossibleRotations()"];
 d << r [label="list of possible rotations"];
 d box d [label="canPlaceRobot(localCoords, robot)"];
 
@@ -52,4 +52,4 @@ p4->retnt;
 p4->retht;
 p4->retct;
 p4->retmt;
-} 
+}
