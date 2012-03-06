@@ -25,7 +25,8 @@ r2 rbox r2 [label="initialize"];
 r1 note r2 [label="All robots receive an initialize() from the board."];
 r1 >> c [label="done"];
 r2 >> c [label="done"];
-c => b [label="postInitialize(robotList)"];
+c => b [label="postInitialize(board, robotList)"];
+c note c [label="'board' is the initialized board"];
 b rbox b [label="postInitialize"];
 c << b [label="done"];
 
