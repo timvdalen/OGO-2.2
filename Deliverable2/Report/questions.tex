@@ -1,55 +1,16 @@
-\lstset{
-	tabsize=5,
-	basicstyle=\small,
-}
+During the development of the product, there was some communication with the stateholder.
 
-\begin{lstlisting}
-Als een robot die meerdere hokjes in een keer kan afgleggen over een hint/
-thuis/lopende band heen gaat, wat gebeurt er dan?
-	Hint niets.
-	Thuis wint.
-	Lopende band gesleurd.
-Als een hintvlak maar een hint kan geven, hoe kan hij dan een volgende 
-keer een andere hint geven?
-	Random.
-Als een robot naar een vakje probeert te gaan wat bezet is, kan hij dan 
-in dezelfde beurt nog een andere zet doen?
-	Geen beurten, geen probleem.
-Als een robot ergens op de lopende band terecht komt (niet begin / einde), 
-wordt hij dan getransporteerd?
-	Meegesleurd naar het einde.
-Zijn de transportiebanden alleen een begin en eindvlakje? En als een robot 
-nou aan het einde door robots is ingesloten, kan deze dan terug de lopende 
-band op en verandert deze dan van richting?
-	Aan het eind van een lopende band moet je je thuisvlak kunnen bereiken, 
-	lopende banden zijn 1 kant op.
-Hoe ver wordt een robot verplaatst als deze op een transportatieband 
-(geen rotatie) terecht komt? 
-	In 1x naar het einde.
-Wat gebeurt er als het einde van de lopende band is ingesloten door 
-defecte robots?
-	-
-Wat gebeurt er als er een defecte robot op een lopende band staat? 
-Blijft deze staan of wordt hij getransporteerd?
-	Je wisselt vakjes om, dus de lopende band stopt daar gewoon.
-Kan een defecte robot ook een thuis/hintvlak blokkeren?
-	Aantal soorten vakjes, die niet kunnen overlappen.
-Kan een hintvlakje een of twee richtingen als hint geven?
-	-
-Kunnen transportatiebanden zowel rotatie als transport zijn?
-	Beide, lopende band verdraaid random je rotatie.
-Wat gebeurt er als een robot in het midden van een lopende band terecht komt, 
-of zijn er alleen opstap en eindpunten?
-	Gewoon naar het einde.
-De twee robots hebben eigenlijk precies dezelfde functionaliteit aangezien er 
-geen rondes zijn, en de robots dus zoveel moves in een tijdsunit mogen doen 
-als ze willen. Daarom kan robot A net zo snel bewegen als robot B. En omdat 
-robot B niet springt moet hij over alle vakjes heen en is het netto effect 
-hetzelfde.
-	Gewoon implementeren, het resultaat mag hetzelfde zijn. Het enige verschil 
-	is dat robot B in zijn weg een hint tegen kan komen waar hij overheen 
-	loopt. De robot krijgt deze hint dan niet te zien.
+\begin{description}
+	\item[If a robot that does multiple steps at once crosses a special tile, what happens?] Hint tile: nothing. Home time: the robot wins. Conveyor belt: it gets dragged along.
+	\item[If a robot tries to move to a tile that is occupied, can he move again directly after that?] There are no turns so this doesn't matter.
+	\item[If a robot moves to a tile that is part of a conveyor belt (not the beginning and not the end), what happens?] The robot gets dragged along.
+	\item[If a robot is 'trapped' by three broken robots after it steps of a conveyor belt, can it move back?] This can't happen by definition, all robots must be able to reach their home tiles. Conveyor belts are one way.
+	\item[How should conveyor belt transportation work? In one move to the end or a certain amount of tiles per time unit?] In one time to the end.
+	\item[What happens if a broken robot is swapped with a tile in the middle of a conveyor belt?] The tile before the broken robot is the new end tile and the tile after the broken robot becomes the start tile for the conveyor belt after that.
+	\item[Can a broken robot block a hint or home tile?] No, a broken robot should be a tile type, like home or hint.
+	\item[Can a conveyor belt be a rotation and a move belt at the same time?] Yes, it always is.
+\end{description}
 
-\end{lstlisting}
+Both robots have the same functionality seeing as there are no turns. Robot A can do three times a move in the same time that robot B can do one three tile move. Because robot B does not jump but actually crosses the tiles, the result is the same, except for when they cross their home tile. The stakeholder decided that we should just implement it the way it's specified now.
 
 On Tuesday the 28th of Februari, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs the controller communicated with all other parts of the game (the players, the view and the board) and, for instance, first asked the board for two tiles that could be switched and then asked it to switch those. In the opninion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made automic, i.e. the tile request functions are now one function that the board handles by itself.
