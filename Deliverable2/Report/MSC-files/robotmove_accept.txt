@@ -1,1 +1,0 @@
-The board calculates and saves the new location of the robot then notifies the controller that the requested move is successful, then the controller notifies the robot and the viewer that the position of has been changed.
