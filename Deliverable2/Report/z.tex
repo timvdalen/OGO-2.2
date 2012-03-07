@@ -70,9 +70,15 @@ rotation = 270DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y + 1 \\
 \ELSE output! = input?
 \end{schema}
 
-\begin{gendef}[Board]
-ConveyorDest == ConveyorUnitDest[Board] \star
-\end{gendef}
+\begin{schema}{ConveyorDest}
+\Xi Board \\
+input? : AbsoluteCoord \\
+output! : AbsoluteCoord
+\where
+\IF  ConveyorUnitDest(input?) = input? \\
+\THEN output! = input? \\
+\ELSE output! = ConveyorDest(ConveyorUnitDest(input?))
+\end{schema}
 
 \begin{gendef}[Board]
 Adjacent : \power (AbsoluteCoord \times AbsoluteCoord \pfun \bool)
