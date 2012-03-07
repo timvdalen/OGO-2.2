@@ -4,11 +4,13 @@ msc
 
 d [label="Board"],
 c [label="Controller"],
-a [label="Robot"];
+a [label="Robot"],
+v [label="Viewer"];
 
 d box d [label=""],
 c box c [label=""],
-a box a [label=""];
+a box a [label=""],
+v box v [label=""];
 
 |||;
 
@@ -16,6 +18,7 @@ d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
 c >> a [label="SUCCESS"];
+c => v [label="notifyStateChange()"];
 
 |||;
 

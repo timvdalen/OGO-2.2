@@ -4,11 +4,13 @@ msc
 
 d [label="Board"],
 c [label="Controller"],
-a [label="Robot"];
+a [label="Robot"],
+v [label="Viewer"];
 
 d box d [label=""],
 c box c [label=""],
-a box a [label=""];
+a box a [label=""],
+v box v [label=""];
 
 |||;
 
@@ -19,6 +21,7 @@ c => d [label="getHint(robot)"];
 d rbox d [label="generate hint"];
 d >> c [label="hint"];
 c => a [label="notifyHint(hint)"];
+
 
 |||;
 
