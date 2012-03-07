@@ -1,0 +1,166 @@
+\documentclass[12pt]{article}
+\usepackage{ltcadiz}
+\usepackage{listings}
+\lstset{breaklines=true, numbers=left}
+
+\title{Report on OGO 2.2 Softwarespecification\\ Assignment 1a}
+\author{
+        Femke Jansen and Lasse Blaauwbroek OGO 2.2 group 6 \\
+                Department of Computer Science\\
+        Technical University Eindhoven\\
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\begin{axdef}
+BoardWith : \nat
+\end{axdef}
+
+\begin{axdef}
+BoardHeight : \nat
+\end{axdef}
+
+\begin{axdef}
+Rotation == \{0DEG, 90DEG, 180DEG, 270DEG\}
+\end{axdef}
+
+\begin{axdef}
+BoardResponse == \{CONVEYOR, FAILED, HINT, SUCCESS, \\ \t1 WIN\}
+\end{axdef}
+
+\begin{axdef}
+Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST, WEST\_NORTH\}
+\end{axdef}
+
+\begin{schema}{Occupied}
+\Xi Board \\
+coord? : AbsoluteCoord \\
+output! : \bool
+\where
+\IF (tiles(coord).type = BrokenRobotTile \vee \\ \t1
+(\exists r : Robot @ robotLocations(r) = coord?)) \\
+\THEN
+output! = \true \\
+\ELSE
+output! = \false
+\end{schema}
+
+\begin{schema}{ConveyorUnitDest}
+\Xi Board \\
+input? : AbsoluteCoord \\
+output! : AbsoluteCoord
+\where
+\IF tiles(input?).type = ConveyorTile \\ \t1
+\exists d : AbsoluteCoord @ \\ \t2
+\IF \neg Occupied(d) \\ \t3
+rotation = 0DEG \Rightarrow \\ \t4 input?.x = d.x + 1 \wedge input?.y = d.y \\ \t3
+rotation = 90DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y - 1
+\\ \t3
+rotation = 180DEG \Rightarrow \\ \t4 input?.x = d.x - 1 \wedge input?.y = d.y \\ \t3
+rotation = 270DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y + 1 \\ \t2
+\THEN output! = d \\ \t2
+\ELSE output! = input? \\ 
+\ELSE output! = input?
+\end{schema}
+
+\begin{gendef}[Board]
+ConveyorDest == ConveyorUnitDest[Board] \star
+\end{gendef}
+
+\begin{gendef}[Board]
+Adjacent : \power (AbsoluteCoord \times AbsoluteCoord \pfun \bool)
+\where
+\forall a,b : AbsoluteCoord, z : Board |\\ \t1
+\IF \|a.x - b.x\| + \|a.y - b.y\| = 1 \\ \t2
+\neg Occupied[Board](b) \\ \t2
+z.tiles(b).type \not = ConveyorTile \\ \t1
+\THEN Adjacent((a,b)) = \true \\ \t1
+\ELSE Adjacent((a,b)) = \false
+\end{gendef}
+
+\begin{gendef}[Board]
+Reachable : \power (AbsoluteCoord \times AbsoluteCoord \pfun \bool)
+\where
+\forall a : AbsoluteCoord | Reachable[Board](a,a) = \true \\
+\forall a,b : AbsoluteCoord | Reachable[Board](a,b) = \\ \t2 (Adjacent[Board](a,b) \: \vee \\ \t2 ConveyerDest[Board](a) = b \: \vee \\ \t2
+\exists z : AbsoluteCoord @ \\ \t3 Reachable[Board](a,z) \wedge Reachable[Board](z,b))
+\end{gendef}
+
+\begin{schema}{AbsoluteCoord}
+x : \nat \cup \{0\} \\
+y : \nat \cup \{0\}
+\where
+x < BoardWidth \\
+y < BoardHeight
+\end{schema}
+
+\begin{schema}{RelativeCoord}
+x : \num \\
+y : \num
+\end{schema}
+
+\begin{schema}{NormalTile}
+Tile
+\end{schema}
+
+\begin{schema}{HintTile}
+Tile
+\end{schema}
+
+\begin{schema}{BrokenRobotTile}
+Tile
+\end{schema}
+
+\begin{schema}{HomeTile}
+Tile \\
+target : Robot
+\end{schema}
+
+\begin{schema}{ConveyorTile}
+Tile \\
+rotation : Rotation
+\end{schema}
+
+\begin{schema}{Tile}
+type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\}
+\end{schema}
+
+\begin{schema}{Board}
+tiles : \power (AbsoluteCoord \fun Tile) \\
+robotLocations : \power (Robots \fun AbsoluteCoord)
+\where
+\forall r : \dom robotLocations | \exists (c,t) : tiles @  \\ \t1 t.type = HomeTile \wedge t.target = r \wedge \\ \t1 Reachable(RobotLocations(r)) = c
+\end{schema}
+
+\begin{schema}{BoardSnapshot}
+tiles : \power (AbsoluteCoord \fun Tile) \\
+RobotLocations == \power (Robots \fun AbsoluteCoord)
+\end{schema}
+
+\begin{schema}{Rule}
+possibleMoves : \power RelativeCoord \\
+possibleRotations : \power Rotation
+\end{schema}
+
+\begin{schema}{Robot}
+rules : Rules
+\end{schema}
+
+\begin{schema}{Viewer}
+controller : Controller
+\end{schema}
+
+\begin{schema}{Controller}
+board : Board \\
+robots : \power Robot
+viewer : Viewer
+\end{schema}
+
+\end{document} 
