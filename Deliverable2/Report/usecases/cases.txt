@@ -1,6 +1,6 @@
 Init game
 
-- Pre-conditions: None
+- Pre-conditions: True
 - Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
 - Main Scenarios
