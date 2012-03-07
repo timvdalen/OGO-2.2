@@ -3,10 +3,12 @@ msc
 {
 
 b [label="Board"],
-c [label="Controller"];
+c [label="Controller"],
+v [label="Viewer"];
 
 c box c [label=""],
-b box b [label=""];
+b box b [label=""],
+v box v [label=""];
 
 |||;
 
@@ -14,11 +16,13 @@ c=>b [label="requestTilesExchange()"];
 b rbox b [label="getValidTiles()"];
 b rbox b [label="exchange two valid tiles"];
 b>>c [label="empty RobotPair"];
+c => v [label="notifyStateChange()"];
 
 |||;
 
 b box b [label="",textbgcolor="black"],
-c box c [label="",textbgcolor="black"];
+c box c [label="",textbgcolor="black"],
+v box v [label="",textbgcolor="black"];
 
 }
 \end{msc}
