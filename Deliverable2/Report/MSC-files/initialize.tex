@@ -2,15 +2,17 @@
 msc
 {
 
+v [label="Viewer"];
 r1 [label="Robot1"],
 r2 [label="Robot2"],
 b [label="Controller"],
-c [label="Board"];
+c [label="Board"],
 
+v box v [label=""];
 r1 box r1 [label=""],
 r2 box r2 [label=""],
 b box b [label=""],
-c box c [label=""];
+c box c [label=""],
 
 |||;
 
@@ -26,9 +28,13 @@ r1 note r2 [label="All robots receive an initialize() from the board."];
 r1 >> c [label="done"];
 r2 >> c [label="done"];
 c => b [label="postInitialize(board, robotList)"];
-c note c [label="'board' is the initialized board"];
+c note b [label="'board' is the initialized board"];
 b rbox b [label="postInitialize"];
 c << b [label="done"];
+b => v [label="initialize(controller)"];
+b note v [label="'controller' is the fully initialized controller"];
+v rbox v [label="initialize"];
+v >> b [label="done"];
 
 |||;
 
