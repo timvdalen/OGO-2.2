@@ -13,8 +13,8 @@ End game
 - Trigger:  A robot has reached its home tile.
 - Guarantee: The game is properly terminated.
 - Main Scenarios
-	(a) Fireworks are shown and then all components of the game are 
-		terminated.
+	(a) Fireworks are shown and then all components of the 
+		game are terminated.
 - Alternatives
 
 
