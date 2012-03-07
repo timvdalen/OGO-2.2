@@ -1,0 +1,56 @@
+\digraph[scale=0.5]{classdiagram}{
+    fontname = "Sans"
+    fontsize = 8
+    splines = ortho
+    node [fontname = "Sans",fontsize = 8, shape = "record"]
+    edge [fontname = "Sans",fontsize = 8, arrowhead=open]
+#
+    BoardSnapshot [label="{BoardSnapshot||}"]
+    BoardSnapshot->Tile[headlabel="- snapTiles"]
+#
+    Board [label="{Board||}"]
+    Board->Tile [arrowtail=diamond,headlabel="- tiles"]
+    Board->Coord [style=dashed]
+#
+    Hint [label="{Hint|- NORTH\l- NORTH_EAST\l- EAST\l- EAST_SOUTH\l- SOUTH\l- SOUTH_WEST\l- WEST\l- WEST_NORTH|}"]
+#
+    BoardResponse [label="{BoardResponse|- FAILED\l- SUCCESS\l- WIN|}"]
+    Board->BoardResponse [style=dashed]
+    Board->Hint [style=dashed]
+#
+    Controller [label="{Controller||}"]
+    Controller->Board [headlabel="- board"]
+    Controller->Viewer [headlabel="- viewer",arrowhead=none,taillabel="- controller"]
+    Controller->Robot [headlabel="- robots",arrowhead=none,taillabel="- controller"]
+    Controller->Coord [style=dashed]
+#
+    Viewer [label="{Viewer||+ notifyStateChange()\l+ notifyGameOver(in robot : Robot)}"]
+    Viewer->BoardSnapshot [style=dashed]
+#
+    Tile [label="{Tile||}"]
+    Tile->Robot [headlabel="- occupied"]
+    TileTop [shape=point]
+    TileTop->Tile [arrowhead=empty]
+    NormalTile [label="{NormalTile||}"]
+    NormalTile->TileTop [arrowhead=none]
+    HomeTile [label="{HomeTile||}"]
+    HomeTile->TileTop [arrowhead=none]
+    HomeTile->Robot[headlable="- homeRobot"]
+    HintTile [label="{HintTile||}"]
+    HintTile->TileTop [arrowhead=none]
+    HintTile->Rotation [style=dashed]
+    ConveyorTile [label="{ConveyorTile|- rotation : Rotation|}"]
+    ConveyorTile->TileTop [arrowhead=none]
+    BrokenRobotTile [label="{BrokenRobotTile||}"]
+    BrokenRobotTile->TileTop [arrowhead=none]
+#
+    Robot [label="{Robot||+ initialize()\l+ notifyAutoMovement()\l+ notifyHint(in hint : Hint)\l+ terminate()}"]
+    Robot->AbstractRule [headlabel="- rule"]
+#
+    Coord [label="{Coord|- x : int\l- y : int|}"]
+#
+    Rotation [label="{Rotation|- 0DEG\l- 90DEG\l- 180DEG\l- 270DEG\l|}"]
+#
+    AbstractRule [label="{AbstractRule|- possibleMoves : CoordinateList\l- possibleRotations : RotationList|}"]
+    AbstractRule->Rotation [style=dashed]
+}

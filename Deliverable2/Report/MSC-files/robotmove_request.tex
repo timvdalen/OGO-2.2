@@ -14,13 +14,11 @@ r box r [label=""];
 
 |||;
 
-a => c [label="moveRequest(localCoords, robot)"];
-c => d [label="moveRequest(localCoords, robot)"];
-d => r [label="getPossibleMoves()"];
-d << r [label="list of possible moves"];
-d => r [label="getPossibleRotations()"];
-d << r [label="list of possible rotations"];
-d box d [label="canPlaceRobot(localCoords, robot)"];
+a => c [label="moveRequest(localCoords, robot, rotation)"];
+c => d [label="moveRequest(localCoords, robot, rotation)"];
+d rbox d [label="getPossibleMoves"], r note r [label="references the robot's ruleset"];
+d rbox d [label="getPossibleRotations"];
+d rbox d [label="canPlaceRobot(localCoords, robot)"];
 
 |||;
 

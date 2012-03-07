@@ -18,7 +18,7 @@ d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
 c >> a [label="SUCCESS"];
-c => v [label="notifyStateChange()"];
+c -> v [label="notifyStateChange()"];
 
 |||;
 
@@ -35,6 +35,9 @@ p3 [label="",shape="point"];
 p4 [label="",shape="point"];
 p5 [label="",shape="point"];
 p6 [label="",shape="point"];
+notrob1 [label="Notify robots",shape="Mrecord"];
+p55 [label="",shape="point"];
+p66 [label="",shape="point"];
 mvreq [label="Robot move request",shape="Mrecord"];
 mvrej [label="Reject move",shape="Mrecord"];
 retnt [label="Return Normal tile",shape="Mrecord",style=filled];
@@ -45,7 +48,11 @@ p3->mvrej;
 p3->p4;
 p4->retnt;
 retnt->p5;
-p5->p6;
+p5->p55;
+p55->p66;
+p66->p6;
+p55->notrob1;
+notrob1->p66;
 p6->ordex;
 p6->spcex;
 }
