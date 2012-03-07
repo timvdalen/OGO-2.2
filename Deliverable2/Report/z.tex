@@ -90,7 +90,7 @@ coordA? : AbsoluteCoord \\
 coordB? : AbsoluteCoord \\
 output! : \bool
 \where
-\IF \|coordA.x - coordB.x\| + \|coordA.y - coordB.y\| = 1 \\ \t1
+\IF |\!coordA.x - coordB.x\!| + |\!coordA.y - coordB.y\!| \: = 1 \; \wedge \\ \t1
 \neg Occupied(coordB) \\
 \THEN output! = \true \\
 \ELSE output! = \false
@@ -144,14 +144,14 @@ rotation : Rotation
 
 \begin{schema}{Tile}
 type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
-occupies : Robot \cup Null
+occupiers : Robot \cup Null
 \end{schema}
 
 \begin{schema}{Board}
 tiles : \power (AbsoluteCoord \fun Tile) \\
 robots : \power Robot
 \where
-\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1 
+\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
 \exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
 \end{schema}
 
