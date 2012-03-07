@@ -13,8 +13,8 @@ End game
 - Trigger:  A robot has reached its home tile.
 - Guarantee: The game is properly terminated.
 - Main Scenarios
-	(a) Fireworks are shown and then all components of the game are 
-		terminated.
+	(a) Fireworks are shown and then all components of the 
+		game are terminated.
 - Alternatives
 
 
@@ -29,6 +29,8 @@ Tiles exchange
 	(c) Two tiles including a tile with a robot on it are 
 		exchanged, then the robot is rotated.
 - Alternatives
+	(b-1).1 This exange would make it impossible for a robot to reach
+			it's home tile, 2 other tiles are selected.
 
 
 Robot Move

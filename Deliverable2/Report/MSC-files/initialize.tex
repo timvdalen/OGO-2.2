@@ -6,14 +6,12 @@ w [label="World"],
 c [label="Board"],
 b [label="Controller"],
 r1 [label="Robot1"],
-r2 [label="Robot2"],
-v [label="Viewer"];
+r2 [label="Robot2"];
 
 c box c [label=""],
 b box b [label=""],
 r1 box r1 [label=""],
 r2 box r2 [label=""],
-v box v [label=""],
 w box w [label=""];
 
 |||;
@@ -34,10 +32,6 @@ c => b [label="postInitialize(board, robotList)"];
 c note b [label="'board' is the initialized board"];
 b rbox b [label="postInitialize"];
 c << b [label="done"];
-b => v [label="initialize(controller)"];
-b note v [label="'controller' is the fully initialized controller"];
-v rbox v [label="initialize"];
-v >> b [label="done"];
 
 |||;
 
@@ -45,7 +39,6 @@ r1 box r1 [label="", textbgcolor="black"],
 r2 box r2 [label="", textbgcolor="black"],
 b box b [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
-v box v [label="", textbgcolor="black"],
 w box w [label="", textbgcolor="black"];
 
 }
