@@ -1,4 +1,12 @@
 \digraph[scale=0.5]{HMSC}{
+begin2 [label="",shape="invtriangle"];
+end2 [label="",shape="triangle"];
+initview [label="Initialize viewer"];
+updateview [label="Update viewer"];
+begin2->initview;
+initview->updateview;
+updateview->updateview;
+updateview->end2;
 begin [label="",shape="invtriangle"];
 end [label="",shape="triangle"];
 p1 [label="",shape="point"];
