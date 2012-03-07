@@ -23,8 +23,8 @@ c box c [label="", textbgcolor="black"];
 \digraph[scale=0.5]{HMSC_upview}{
 rankdir=LR;
 end2 [label="",shape="triangle"];
-initview [label="Initialize viewer"];
-updateview [label="Update viewer"];
+initview [label="Initialize viewer",shape="Mrecord"];
+updateview [label="Update viewer",shape="Mrecord"];
 initview->updateview;
 updateview->updateview;
 updateview->end2;
