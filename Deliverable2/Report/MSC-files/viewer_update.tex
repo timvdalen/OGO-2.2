@@ -1,22 +1,27 @@
 \begin{msc}
 msc {
 
+b [label="Board"],
 d [label="Viewer"],
 c [label="Controller"];
 
+b box b [label=""],
 d box d [label=""],
 c box c [label=""];
-
 
 |||;
 
 d => c [label="requestBoardSnapshot()"];
-c => d [label="BoardSnapshot"];
+c => b [label="requestBoardStatus()"];
+b >> c [label="BoardSnapshot"];
+c >> d [label="BoardSnapshot"];
+d box d [label="updateView()"];
 
 |||;
 
 d box d [label="", textbgcolor="black"],
-c box c [label="", textbgcolor="black"];
+c box c [label="", textbgcolor="black"],
+b box b [label="", textbgcolor="black"];
 
 }
 \end{msc}
@@ -24,7 +29,7 @@ c box c [label="", textbgcolor="black"];
 rankdir=LR;
 end2 [label="",shape="triangle"];
 initview [label="Initialize viewer",shape="Mrecord"];
-updateview [label="Update viewer",shape="Mrecord"];
+updateview [label="Update viewer",shape="Mrecord",style=filled];
 initview->updateview;
 updateview->updateview;
 updateview->end2;
