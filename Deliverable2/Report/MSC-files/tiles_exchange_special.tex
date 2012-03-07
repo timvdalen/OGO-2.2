@@ -5,12 +5,14 @@ msc
 b [label="Board"],
 c [label="Controller"],
 p1 [label="Robot player 1"],
-p2 [label="Robot player 2"];
+p2 [label="Robot player 2"],
+v [label="Viewer"];
 
 c box c [label=""],
 b box b [label=""],
 p1 box p1 [label=""],
-p2 box p2 [label=""];
+p2 box p2 [label=""],
+v box v [label=""];
 
 |||;
 c=>b [label="requestTilesExchange()"];
@@ -20,13 +22,15 @@ b rbox b [label="rotate robot player 1 and rotate tiles"];
 b>>c [label="RobotPair with one robot"];
 c=>p1 [label="notifyAutoMovement()"];
 b note b [label="Special exchange may involve no robots, one robot or two robots; internal action of rotating the tiles to rotate the direction of conveyer belt(s) that may be involved. RobotPair contains here one robot."];
+c => v [label="notifyStateChange()"];
 
 |||;
 
 b box b [label="",textbgcolor="black"],
 c box c [label="",textbgcolor="black"],
 p1 box p1 [label="",textbgcolor="black"],
-p2 box p2 [label="",textbgcolor="black"];
+p2 box p2 [label="",textbgcolor="black"],
+v box v [label="",textbgcolor="black"];
 
 }
 \end{msc}

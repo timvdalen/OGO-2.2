@@ -44,7 +44,7 @@ Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST
 coord? : AbsoluteCoord \\
 output! : \bool
 \where
-\IF (tiles(coord).type = BrokenRobotTile \vee \\ \t1
+\IF (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
 (\exists r : Robot @ robotLocations(r) = coord?)) \\
 \THEN
 output! = \true \\
@@ -57,16 +57,16 @@ output! = \false
 input? : AbsoluteCoord \\
 output! : AbsoluteCoord
 \where
-\IF tiles(input?).type = ConveyorTile \\ \t1
+\IF tiles(input?).type = ConveyorTile \; \; \wedge \\ \t1
 \exists d : AbsoluteCoord @ \\ \t2
-\IF \neg Occupied(d) \\ \t3
+\IF \neg Occupied(d) \; \; \wedge \\ \t3
 rotation = 0DEG \Rightarrow \\ \t4 input?.x = d.x + 1 \wedge input?.y = d.y \\ \t3
 rotation = 90DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y - 1
 \\ \t3
 rotation = 180DEG \Rightarrow \\ \t4 input?.x = d.x - 1 \wedge input?.y = d.y \\ \t3
 rotation = 270DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y + 1 \\ \t2
 \THEN output! = d \\ \t2
-\ELSE output! = input? \\ 
+\ELSE output! = input? \\
 \ELSE output! = input?
 \end{schema}
 
