@@ -1,4 +1,4 @@
-During the development of the product, there was some communication with the stateholder.
+During the development of the product, there was some communication with the stakeholder.
 
 %\newcommand{\question}[2]{\noindent{\textbf #1}\\\hspace{1cm} #2}
 
@@ -18,7 +18,13 @@ During the development of the product, there was some communication with the sta
 
 \question{Can a conveyor belt be a rotation and a move belt at the same time?}{Yes, it always is.}
 
+\question{Can a robot move to the hometile of abother robot? If so, can we just allow the robot who's hometile it is to move to the tile even though another robot is standing there (e.g. by pushing him away in the view) because the game will end anyway? Otherwise, the hometile won't be reachable.}{Our solution, to just allow the move, is okay.}
+
+\question{If the end tile of a conveyor belt is blocked by a robot and the other robot moves, does any robot still on the belt move?}{Yes.}
+
 \bigskip
 Both robots have the same functionality seeing as there are no turns. Robot A can do three times a move in the same time that robot B can do one three tile move. Because robot B does not jump but actually crosses the tiles, the result is the same, except for when they cross their home tile. The stakeholder decided that we should just implement it the way it's specified now.
 
-On Tuesday the 28th of Februari, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs the controller communicated with all other parts of the game (the players, the view and the board) and, for instance, first asked the board for two tiles that could be switched and then asked it to switch those. In the opninion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made automic, i.e. the tile request functions are now one function that the board handles by itself.
+On Tuesday the 28th of February, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs the controller communicated with all other parts of the game (the players, the view and the board) and, for instance, first asked the board for two tiles that could be switched and then asked it to switch those. In the opinion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made atomic, i.e. the tile request functions are now one function that the board handles by itself.
+
+On Tuesday the third of March, we had another meeting with the stakeholders. Their answer to our question about automatically moving robots introduced serious problems in our model. Since we weren't allowed to send messages from the Board to the Controller without making a request from the Controller first, the only way to implement this feature was to make \texttt{Board::moveRequest()} return a list of moved robots when the Controller made the request to move the first. This, however, introduced a lot of overhead. After some discussion, the stakeholder decided it was best to allow the Board to send unsolicited messages to the Controller.

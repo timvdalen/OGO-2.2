@@ -1,0 +1,31 @@
+\begin{msc}
+msc {
+
+d [label="Viewer"],
+c [label="Controller"];
+
+d box d [label=""],
+c box c [label=""];
+
+
+|||;
+
+d => c [label="requestBoardSnapshot()"];
+c => d [label="BoardSnapshot"];
+
+|||;
+
+d box d [label="", textbgcolor="black"],
+c box c [label="", textbgcolor="black"];
+
+}
+\end{msc}
+\digraph[scale=0.5]{HMSC_upview}{
+rankdir=LR;
+end2 [label="",shape="triangle"];
+initview [label="Initialize viewer",shape="Mrecord"];
+updateview [label="Update viewer",shape="Mrecord"];
+initview->updateview;
+updateview->updateview;
+updateview->end2;
+} 

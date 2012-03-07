@@ -1,0 +1,1 @@
+The board calculates and saves the new location of the robot then notifies the controller that the robot has reached its home tile and that this robot has won the game, the controller notifies the viewer that the game is over. Now the game can only go to the end game MSC.
