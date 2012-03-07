@@ -8,13 +8,15 @@
 	\input{hmsc.tex}
 	
 \subsection{Message Sequence Charts}
-	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Messae Sequence Chart. 
+	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Messae Sequence Chart.
 
 	Note: the symbol $\vdots$ denotes the start and end of a co-region.
 
-    	\subsubsection{Update viewer}
-    	
-	\input{MSC-files/viewer_update.tex}
+    \subsubsection{Initialize viewer}
+    \input{MSC-files/viewer_initialize.tex}
+
+    \subsubsection{Update viewer}
+    \input{MSC-files/viewer_update.tex}
 
 	\subsubsection{Initialize}
 	When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots, which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. Concurrent to this, the viewer will be initialized by the world.
@@ -33,8 +35,6 @@
 	\subsubsection{Return Conveyer tile}
 	\input{MSC-files/robotmove_to_conveyor.tex}
 
-	%\advance\count17 by -5
-
 	\subsubsection{Return Home tile}
 	\input{MSC-files/robotmove_to_home.tex}
 
@@ -50,4 +50,4 @@
 	\input{MSC-files/tiles_exchange_special.tex}
 	
 	\subsubsection{End game}
-	\input{MSC-files/end_game.tex} 
+	\input{MSC-files/end_game.tex}
