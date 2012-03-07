@@ -20,8 +20,8 @@ d >> c [label="HINT"];
 c => d [label="getHint(robot)"];
 d rbox d [label="generate hint"];
 d >> c [label="hint"];
-c => a [label="notifyHint(hint)"];
 c => v [label="notifyStateChange()"];
+c => a [label="notifyHint(hint)"];
 
 |||;
 
