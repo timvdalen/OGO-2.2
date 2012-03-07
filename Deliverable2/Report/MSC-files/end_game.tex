@@ -2,28 +2,34 @@
 msc
 {
 
+b [label="Board"],
 c [label="Controller"],
 p [label="Robot"],
 v [label="View"];
 
+b box b [label=""],
 c box c [label=""],
 p box p [label=""],
 v box v [label=""];
 
 |||;
 
-c => p [label="terminate()"];
-p rbox p [label="terminate"];
+c -> p [label="terminate"];
+p rbox p [label="terminate()"];
 p note p [label="each robot, except the robot that won the game, receives a terminate from the controller"];
-p -> c [label="done"];
-c => v [label="notifyGameOver(robot)"];
+c -> v [label="notifyGameOver(robot)"];
 c note v [label="robot is here the robot that has won the game"];
 v rbox v [label="fireworks"];
-v -> c [label="done"];
+v >> c [label="done"];
+v rbox v [label="terminate"],
+c -> b [label="canReset"],
+b rbox b [label="reset()"],
 c rbox c [label="terminate()"];
+
 
 |||;
 
+b box b [label="",textbgcolor="black"],
 c box c [label="",textbgcolor="black"],
 p box p [label="",textbgcolor="black"],
 v box v [label="",textbgcolor="black"];

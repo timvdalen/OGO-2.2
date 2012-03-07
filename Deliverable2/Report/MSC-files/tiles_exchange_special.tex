@@ -4,8 +4,8 @@ msc
 
 b [label="Board"],
 c [label="Controller"],
-p1 [label="Robot player 1"],
-p2 [label="Robot player 2"],
+p1 [label="Robot1"],
+p2 [label="Robot2"],
 v [label="Viewer"];
 
 c box c [label=""],
@@ -18,11 +18,10 @@ v box v [label=""];
 c=>b [label="requestTilesExchange()"];
 b rbox b [label="getValidTiles()"];
 b rbox b [label="exchange two valid tiles"];
-b rbox b [label="rotate robot player 1 and rotate tiles"];
+b rbox b [label="rotate robot1 and rotate tiles"];
 b>>c [label="RobotPair with one robot"];
-c=>p1 [label="notifyAutoMovement()"];
-b note b [label="Special exchange may involve no robots, one robot or two robots; internal action of rotating the tiles to rotate the direction of conveyer belt(s) that may be involved. RobotPair contains here one robot."];
-c => v [label="notifyStateChange()"];
+c->p1 [label="notifyAutoMovement()"];
+c -> v [label="notifyStateChange()"];
 
 |||;
 
@@ -41,6 +40,9 @@ p2 [label="",shape="point"];
 p5 [label="",shape="point"];
 p6 [label="",shape="point"];
 p7 [label="",shape="point"];
+p22 [label="",shape="point"];
+p77 [label="",shape="point"];
+notrob2 [label="Notify robots",shape="Mrecord"];
 init [label="Initialize",shape="Mrecord"];
 mvreq [label="Robot move request",shape="Mrecord"];
 retnt [label="Return Normal tile",shape="Mrecord"];
@@ -55,5 +57,9 @@ retct->p5;
 p5->p6;
 p6->spcex;
 spcex->p7;
-p7->p2;
+p7->p77;
+p77->p22;
+p22->p2;
+p77->notrob2;
+notrob2->p22;
 }
