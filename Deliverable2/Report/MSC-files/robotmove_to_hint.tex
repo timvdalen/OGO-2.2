@@ -20,14 +20,15 @@ d >> c [label="HINT"];
 c => d [label="getHint(robot)"];
 d rbox d [label="generate hint"];
 d >> c [label="hint"];
-c => a [label="notifyHint(hint)"];
 c => v [label="notifyStateChange()"];
+c => a [label="notifyHint(hint)"];
 
 |||;
 
 a box a [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
-d box d [label="", textbgcolor="black"];
+d box d [label="", textbgcolor="black"],
+v box v [label="", textbgcolor="black"];
 
 }
 \end{msc}
