@@ -1,0 +1,57 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+\usepackage{eurosym}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{ltcadiz}
+\begin{document}
+\today
+\title{Z schemas (methods)}
+\author{J. Peters, s102231}
+\maketitle
+
+BEGIN OK, enable moves
+\begin{schema}{moveRequest}
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+output! : BoardResponse
+\where
+\IF rotation? \not = 0 \\ \t1 
+localCoords.x = 0 \\ \t1
+localCoords.y = 0 \\ \t1
+ \exists r : robot?.rule.possibleRotations | r = rotation?\\
+\THEN response! = SUCCESS \\ \t1
+robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
+\ELSE \\ \t1
+\IF robot?.Rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot
+\end{schema}
+
+WORKING ON IT, check ADD
+\begin{schema}{canPlaceRobot}
+\Xi Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+path : seq RelativeCoord \\
+absoluteCoord : AbsoluteCoord \\
+output! : \bool \\
+\where
+path = robot?.rule.possibleMoves(RelativeCoord \cross robots(robot?)) \\
+\exists (coord1, t) : tiles | t.occupies = robot? \implies \\ \t1
+\forall (int, coord) : path | 
+\end{schema}
+
+DONE
+\begin{axdef}
+addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \union Null)
+\where
+\forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
+\IF (0 <= a.x + b.x < BoardWidth \\ \t2
+0 <= a.x + b.x < BoardHeigth) \\ \t1
+\THEN 
+addAbtoRel(a,b).x = a.x + b.x \\ \t2
+addAbtoRel(a,b).y = a.y + b.y \\ \t1
+\ELSE addAbtoRel(a,b) = Null
+\end{axdef}
+\end{document}
