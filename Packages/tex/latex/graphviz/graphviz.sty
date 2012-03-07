@@ -28,6 +28,7 @@
   \immediate\write\dotfile{digraph #2 {\string#3}}
   \immediate\closeout\dotfile
   \immediate\write18{cmd /C "dot -Tps2 graph/#2.dot | epstopdf --filter > graph/#2.pdf" 2> graph/#2.err}
+  \immediate\advance\count17 by -1
   \IfFileExists{graph/#2.pdf}
   % the pdf exists: include it
   { \includegraphics[#1]{graph/#2} }

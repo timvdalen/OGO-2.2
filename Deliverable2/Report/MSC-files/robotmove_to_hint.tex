@@ -16,10 +16,9 @@ v box v [label=""];
 
 d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
-d >> c [label="HINT"];
-c => d [label="getHint(robot)"];
-d rbox d [label="generate hint"];
-d >> c [label="hint"];
+d >> d [label="HINT"];
+d rbox d [label="getHint(robot)"];
+d => c [label="notifyHint(hint, robot)"];
 c => v [label="notifyStateChange()"];
 c => a [label="notifyHint(hint)"];
 

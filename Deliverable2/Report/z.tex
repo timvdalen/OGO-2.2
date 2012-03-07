@@ -20,6 +20,10 @@
 \end{abstract}
 
 \begin{axdef}
+[Null]
+\end{axdef}
+
+\begin{axdef}
 BoardWith : \nat
 \end{axdef}
 
@@ -32,7 +36,7 @@ Rotation == \{0DEG, 90DEG, 180DEG, 270DEG\}
 \end{axdef}
 
 \begin{axdef}
-BoardResponse == \{CONVEYOR, FAILED, HINT, SUCCESS, \\ \t1 WIN\}
+BoardResponse == \{FAILED, SUCCESS, WIN\}
 \end{axdef}
 
 \begin{axdef}
@@ -45,7 +49,7 @@ coord? : AbsoluteCoord \\
 output! : \bool
 \where
 \IF (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
-(\exists r : Robot @ robotLocations(r) = coord?)) \\
+tiles(coord).occupies = Null \\
 \THEN
 output! = \true \\
 \ELSE
@@ -80,24 +84,28 @@ output! : AbsoluteCoord
 \ELSE output! = ConveyorDest(ConveyorUnitDest(input?))
 \end{schema}
 
-\begin{gendef}[Board]
-Adjacent : \power (AbsoluteCoord \times AbsoluteCoord \pfun \bool)
+\begin{schema}{Adjacent}
+\Xi Board \\
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
 \where
-\forall a,b : AbsoluteCoord, z : Board |\\ \t1
-\IF \|a.x - b.x\| + \|a.y - b.y\| = 1 \\ \t2
-\neg Occupied[Board](b) \\ \t2
-z.tiles(b).type \not = ConveyorTile \\ \t1
-\THEN Adjacent((a,b)) = \true \\ \t1
-\ELSE Adjacent((a,b)) = \false
-\end{gendef}
+\IF |\!coordA.x - coordB.x\!| + |\!coordA.y - coordB.y\!| \: = 1 \; \wedge \\ \t1
+\neg Occupied(coordB) \\
+\THEN output! = \true \\
+\ELSE output! = \false
+\end{schema}
 
-\begin{gendef}[Board]
-Reachable : \power (AbsoluteCoord \times AbsoluteCoord \pfun \bool)
+\begin{schema}{Reachable}
+\Xi Board
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
 \where
-\forall a : AbsoluteCoord | Reachable[Board](a,a) = \true \\
-\forall a,b : AbsoluteCoord | Reachable[Board](a,b) = \\ \t2 (Adjacent[Board](a,b) \: \vee \\ \t2 ConveyerDest[Board](a) = b \: \vee \\ \t2
-\exists z : AbsoluteCoord @ \\ \t3 Reachable[Board](a,z) \wedge Reachable[Board](z,b))
-\end{gendef}
+\IF Adjacent(coordA, coordB)
+\THEN
+output! = \true
+\end{schema}
 
 \begin{schema}{AbsoluteCoord}
 x : \nat \cup \{0\} \\
@@ -135,19 +143,20 @@ rotation : Rotation
 \end{schema}
 
 \begin{schema}{Tile}
-type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\}
+type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
+occupiers : Robot \cup Null
 \end{schema}
 
 \begin{schema}{Board}
 tiles : \power (AbsoluteCoord \fun Tile) \\
-robotLocations : \power (Robots \fun AbsoluteCoord)
+robots : \power Robot
 \where
-\forall r : \dom robotLocations | \exists (c,t) : tiles @  \\ \t1 t.type = HomeTile \wedge t.target = r \wedge \\ \t1 Reachable(RobotLocations(r)) = c
+\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
+\exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
 \end{schema}
 
 \begin{schema}{BoardSnapshot}
 tiles : \power (AbsoluteCoord \fun Tile) \\
-RobotLocations == \power (Robots \fun AbsoluteCoord)
 \end{schema}
 
 \begin{schema}{Rule}
