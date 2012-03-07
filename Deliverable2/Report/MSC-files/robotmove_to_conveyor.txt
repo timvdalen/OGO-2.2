@@ -1,1 +1,0 @@
-The board calculates and saves the new location of the robot then notifies the controller that the requested move resulted in a hint, then the controller requests a hint of the board class, which generates and returns a hint. Then the controller notifies the viewer and the robot, in this notification to the robot it also sends the hint.
