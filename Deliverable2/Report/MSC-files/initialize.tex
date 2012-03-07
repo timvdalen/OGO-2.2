@@ -2,12 +2,12 @@
 msc
 {
 
+w [label="World"],
 c [label="Board"],
 b [label="Controller"],
 r1 [label="Robot1"],
 r2 [label="Robot2"],
-v [label="Viewer"],
-w [label="World"];
+v [label="Viewer"];
 
 c box c [label=""],
 b box b [label=""],
@@ -18,7 +18,7 @@ w box w [label=""];
 
 |||;
 
-w => b [label="initialize"];
+w => c [label="initialize"];
 c rbox c [label="initialize"];
 c => b [label="preInitialize()"];
 b rbox b [label="preInitialize"];
