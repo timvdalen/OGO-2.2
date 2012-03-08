@@ -5,41 +5,152 @@
 \usepackage[english]{babel}
 \usepackage{ltcadiz}
 \begin{document}
-\today
 \title{Z schemas (methods)}
 \author{J. Peters, s102231}
 \maketitle
 
-BEGIN OK, enable moves
+\begin{schema}{getHint}
+\Delta Board \\
+robot? : Robot \\
+output!: Hint
+\where
+\exists t, t1: Tile | t.occupies = robot? @\\ \t1
+t1.type = HomeTile @ t1.target = robot? \\ \t1
+\exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
+tiles(coord1) = t1 \\ \t2
+\IF coord.x = coord1.x \\ \t3
+coord.x < coord1.x \\ \t2
+\THEN output! = EAST \\ \t2
+\IF coord.x = coord1.x \\ \t3
+coord.x > coord1.x \\ \t2
+\THEN output! = WEST \\ \t2
+\IF coord.y = coord1.y \\ \t3
+coord.y < coord1.y \\ \t2
+\THEN output! = SOUTH \\ \t2
+\IF coord.y = coord1.y \\ \t3
+coord.y > coord1.y \\ \t2
+\THEN output! = NORTH \\ \t2
+\IF coord.x < coord1.x \\ \t3
+coord.y < coord1.y \\ \t2
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t2
+\IF coord.x < coord1.x \\ \t3
+coord.y > coord1.y \\ \t2
+\THEN \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint \\ \t2
+\IF coord.x > coord1.x \\ \t3
+coord.y < coord1.y \\ \t2
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t2
+\IF coord.x > coord1.x \\ \t3
+coord.y > coord1.y \\ \t2
+\THEN \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\end{schema}
+
+Rekening houdende met de invariant...
+\begin{schema}{getValidTiles}
+\Xi Board \\
+output! : (Tile \cross Tile)
+\where
+\exists t,t1: Tile | t \not = t1  @ \\ \t1 
+t.type \not = HomeTile \\ \t1
+t.type \not = HintTile \\ \t1
+t1.type \not = HomeTile \\ \t1
+t1.type \not = HintTile \implies \\ \t1
+output! = (t \cross t1)
+\end{schema}
+
+BEGIN OK, SAVE LOCATIONS NECESSARY
 \begin{schema}{moveRequest}
 \Delta Board \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
 rotation? : Rotation \\
+absoluteCoord : AbsoluteCoord \\
 output! : BoardResponse
 \where
-\IF rotation? \not = 0 \\ \t1 
+\IF rotation? \not = 0 \\ \t1
 localCoords.x = 0 \\ \t1
 localCoords.y = 0 \\ \t1
  \exists r : robot?.rule.possibleRotations | r = rotation?\\
 \THEN response! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 \ELSE \\ \t1
-\IF robot?.Rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot
+\IF robot?.Rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
+rotation? = 0 \\
+\THEN \exists l : calculateNewLocation | l.localCoords? = localCoords? \\ \t1
+l.robot? = robot? \\ \t1
+absoluteCoord = l.output! \\ \t1
+\IF absoluteCoord = null \\ \t1
+\THEN output! = FAILED \\ \t1
+\ELSE \\ \t2
+\IF tiles(absoluteCoord).type = HomeTile \\ \t3
+tiles(absoluteCoord).target = robot? \\ \t2
+\THEN SAVELOCATION \\ \t3
+output! = WIN \\ \t2
+\ELSE SAVELOCATION \\ \t3
+output! = SUCCESS
 \end{schema}
 
-WORKING ON IT, check ADD
-\begin{schema}{canPlaceRobot}
+\begin{schema}{SaveLocation}
+\Xi Board \\
+\Delta Tile \\
+absCoords? : AbsoluteCoord \\
+robot? : Robot
+\where
+\exists t : clearTile | t.occupies = robot?\\ \t1
+\exists s : put | s.input? = robot?
+\end{schema}
+
+\begin{schema}{clearTile}
+\Delta Tile \\
+\where
+occupies' = Null
+\end{schema}
+
+\begin{schema}{put}
+\Delta Tile \\
+input? : Robot
+\where
+occupies' = input?
+\end{schema}
+
+This one should be done. Gets the path for the move it wants to do. Gets coordinate, then for all tiles it holds that if he can't pass, a conveyor tile should be in front of the obstruction (the first conveyor). Else null
+\begin{schema}{calculateNewLocation}
 \Xi Board \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
 path : seq RelativeCoord \\
 absoluteCoord : AbsoluteCoord \\
-output! : \bool \\
+output! : (AbsoluteCoord \union Null) \\
 \where
-path = robot?.rule.possibleMoves(RelativeCoord \cross robots(robot?)) \\
-\exists (coord1, t) : tiles | t.occupies = robot? \implies \\ \t1
-\forall (int, coord) : path | 
+path = robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) \\
+\exists (c, t) : tiles | t.occupies = robot? \implies \\ \t1
+\IF
+\forall (int, coord) : path | \\ \t2
+(addAbtoRel(c, coord) = Null \vee \\ \t2
+(tiles(addAbtoRel(c, coord).type = BrokenRobotTile) \vee \\ \t2
+\exists r: Robot | tiles(addAbtoRel(c, coord).occupies = r )\implies \\ \t3
+\exists (int1, coord1) : path | int1 < int \\ \t3
+tiles(addAbtoRel(c, coord1).type = ConveyorTile \\ \t3
+absoluteCoord = addAbtoRel(c, coord1) \\ \t1
+\THEN absoluteCoord = firstConveyor(c, path) \\ \t2
+\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
+output! = s.output! \\ \t1
+\ELSE output! = Null
+\end{schema}
+
+
+seq of RelativeCoord should contain conveyorTile which is not blocked (no brokenTiles / occupied tiles on path in front of conveyorTile)
+Specifies that, for a given path with conveyor tile, there exists such a conveyor tile that the int is minimal. This is the AbsoluteCoord given back by the function
+\begin{schema}{firstConveyor}
+\Xi Board \\
+firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \rightarrow AbsoluteCoord
+\where
+\exists absoluteCoord : AbsoluteCoord |  \\ \t1
+\exists (int, coord): seq RelativeCoord |  \\ \t2
+(tiles(addAbtoRel(absoluteCoord, coord).type = conveyorTile \\ \t2
+conveyorInPath(absoluteCoord, (int, coord)) = addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
+\forall (int1, coord1): seq RelativeCoord | \\ \t3
+\IF tiles(addAbtoRel(absoluteCoord, coord1).type = conveyorTile \\ \t3
+\THEN int <= int1
 \end{schema}
 
 DONE
@@ -49,7 +160,7 @@ addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \u
 \forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
 \IF (0 <= a.x + b.x < BoardWidth \\ \t2
 0 <= a.x + b.x < BoardHeigth) \\ \t1
-\THEN 
+\THEN
 addAbtoRel(a,b).x = a.x + b.x \\ \t2
 addAbtoRel(a,b).y = a.y + b.y \\ \t1
 \ELSE addAbtoRel(a,b) = Null
