@@ -17,9 +17,11 @@ v box v [label=""];
 d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
+...;
 c >> a [label="SUCCESS"];
 c -> v [label="notifyStateChange()"];
 c -> a [label="notifyAutoMovement()"];
+...;
 |||;
 
 a box a [label="", textbgcolor="black"],
