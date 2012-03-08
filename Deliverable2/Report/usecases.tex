@@ -80,6 +80,6 @@
 	\input{MSC-files/notify_robots.tex}
 
 	\subsubsection{End game}
-	The controller will send a terminate message to all robots, which will then terminate safely. The controller will then notify the view which robot won the game, so it can show to end game animation. When the animation is done, the call will return and the controller will send a message to the board that everything it done and the board can reset and will then terminate. The board can then choose to either reset to start a new game or terminate.
+	The controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the view which robot won the game, so it can show to end game animation. When the animation is done, the call will return and the controller will send a message to the board that everything it done and the board can reset and will then terminate. The winning robot will also terminate. The board can then choose to either reset to start a new game or terminate.
 
 	\input{MSC-files/end_game.tex}
