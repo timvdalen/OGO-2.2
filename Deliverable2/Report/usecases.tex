@@ -61,6 +61,8 @@
 	\input{MSC-files/robotmove_reject.tex}
 
 
+	\advance\count17 by -6
+
 	\subsubsection{Ordinairy exchange}
 	The controller requests the board to do a tile exchange. The board will get two valid tiles (internally, this function relies on the rule entities), swap them and returns an empty RobotPair to signal that there were no robots on the tiles.
 
@@ -72,7 +74,7 @@
 	\input{MSC-files/tiles_exchange_special.tex}
 	
 	\subsubsection{Notify robots}
-	
+	The board sends a notification to the controller, which forwards this to the robot that was moved.	
 
 	\input{MSC-files/notify_robots.tex}
 
