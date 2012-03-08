@@ -32,7 +32,7 @@ BoardHeight : \nat
 \end{axdef}
 
 \begin{axdef}
-Rotation == \{0DEG, 90DEG, 180DEG, 270DEG\}
+Rotation == \{0, 90, 180, 270\}
 \end{axdef}
 
 \begin{axdef}
@@ -49,7 +49,7 @@ coord? : AbsoluteCoord \\
 output! : \bool
 \where
 \IF (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
-tiles(coord).occupies = Null \\
+tiles(coord).occupies \not = Null \\
 \THEN
 output! = \true \\
 \ELSE
@@ -61,16 +61,15 @@ output! = \false
 input? : AbsoluteCoord \\
 output! : AbsoluteCoord
 \where
-\IF tiles(input?).type = ConveyorTile \; \; \wedge \\ \t1
-\exists d : AbsoluteCoord @ \\ \t2
-\IF \neg Occupied(d) \; \; \wedge \\ \t3
-rotation = 0DEG \Rightarrow \\ \t4 input?.x = d.x + 1 \wedge input?.y = d.y \\ \t3
-rotation = 90DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y - 1
-\\ \t3
-rotation = 180DEG \Rightarrow \\ \t4 input?.x = d.x - 1 \wedge input?.y = d.y \\ \t3
-rotation = 270DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y + 1 \\ \t2
-\THEN output! = d \\ \t2
-\ELSE output! = input? \\
+\forall d : AbsoluteCoord @ \\ \t1
+\IF (\exists s : Occupied | s.coord? = d @ \neg s.output!) \; \; \wedge \\ \t2
+rotation = 0 \Rightarrow \\ \t3 input?.x = d.x + 1 \wedge input?.y = d.y \\ \t2
+rotation = 90 \Rightarrow \\ \t3 input?.x = d.x \wedge input?.y = d.y - 1
+\\ \t2
+rotation = 180 \Rightarrow \\ \t3 input?.x = d.x - 1 \wedge input?.y = d.y \\ \t2
+rotation = 270 \Rightarrow \\ \t3 input?.x = d.x \wedge input?.y = d.y + 1 \\ \t2
+tiles(input?).type = ConveyorTile \\ \t1
+\THEN output! = d \\ \t1
 \ELSE output! = input?
 \end{schema}
 
@@ -79,9 +78,9 @@ rotation = 270DEG \Rightarrow \\ \t4 input?.x = d.x \wedge input?.y = d.y + 1 \\
 input? : AbsoluteCoord \\
 output! : AbsoluteCoord
 \where
-\IF  ConveyorUnitDest(input?) = input? \\
+\IF (\exists s : ConveyorUnitDest | s.input? = input? @ \\ \t1 s.output! = input?) \\
 \THEN output! = input? \\
-\ELSE output! = ConveyorDest(ConveyorUnitDest(input?))
+\ELSE \forall p : ConveyorUnitDest, s : ConveyorDest | \\ \t2 p.input? = input? \wedge s.input? = p.output! @ \\ \t3 s.output! = output!
 \end{schema}
 
 \begin{schema}{Adjacent}
@@ -90,21 +89,24 @@ coordA? : AbsoluteCoord \\
 coordB? : AbsoluteCoord \\
 output! : \bool
 \where
-\IF |\!coordA.x - coordB.x\!| + |\!coordA.y - coordB.y\!| \: = 1 \; \wedge \\ \t1
-\neg Occupied(coordB) \\
+\IF \|coordA.x - coordB.x\| + \|coordA.y - coordB.y\| = 1 \\ \t1
+(\exists s : Occupied | s.coord? = coordB @ s.output! = false) \\
 \THEN output! = \true \\
 \ELSE output! = \false
 \end{schema}
 
 \begin{schema}{Reachable}
-\Xi Board
+\Xi Board \\
 coordA? : AbsoluteCoord \\
 coordB? : AbsoluteCoord \\
 output! : \bool
 \where
-\IF Adjacent(coordA, coordB)
-\THEN
-output! = \true
+\IF (\exists s : Adjacent, p,h : ConveyorDest, c,d : AbsoluteCoord | \\ \t1 
+    p.input? = coordA \wedge p.output! = c \\ \t1
+    s.coordA? = c \wedge s.coordB? = d \\ \t1
+    h.input? = d \wedge h.output! = coordB) \\
+\THEN output! = \true \\
+\ELSE output! = \false
 \end{schema}
 
 \begin{schema}{AbsoluteCoord}
@@ -144,14 +146,14 @@ rotation : Rotation
 
 \begin{schema}{Tile}
 type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
-occupiers : Robot \cup Null
+occupies : Robot \cup Null
 \end{schema}
 
 \begin{schema}{Board}
 tiles : \power (AbsoluteCoord \fun Tile) \\
-robots : \power Robot
+robots : \power (Robot \fun Rotation)
 \where
-\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
+\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1 
 \exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
 \end{schema}
 
@@ -160,7 +162,7 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 \end{schema}
 
 \begin{schema}{Rule}
-possibleMoves : \power RelativeCoord \\
+possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
 \end{schema}
 
