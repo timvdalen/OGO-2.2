@@ -21,8 +21,8 @@ c -> v [label="notifyGameOver(robot)"];
 c note v [label="robot is here the robot that has won the game"];
 v rbox v [label="fireworks"];
 v >> c [label="done"];
+c -> b [label="canReset"];
 v rbox v [label="terminate"],
-c -> b [label="canReset"],
 b rbox b [label="reset()"],
 c rbox c [label="terminate()"];
 
