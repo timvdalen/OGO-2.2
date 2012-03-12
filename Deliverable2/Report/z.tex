@@ -62,7 +62,7 @@ y : \num
 \end{schema}
 
 \section{Classes and invariants}
-We first describe the Tile class and all its specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A tile has a type, which is either of the above specializations, and a field 'occupier', which describes the robot that currently occupier the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupier can also be null. All the specializations of Tile inherit the characteristics of Tile. The HomeTile is different from the other tiles, since it always belongs to one specific robot, the target robot. A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
+We first describe the Tile class and all its specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A tile has a type, which is either of the above specializations, and a field 'occupies', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile. The HomeTile is different from the other tiles, since it always belongs to one specific robot, the target robot. A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
 
 \begin{schema}{NormalTile}
 Tile
@@ -88,7 +88,7 @@ rotation : Rotation
 
 \begin{schema}{Tile}
 type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
-occupier : Robot \cup Null
+occupies : Robot \cup Null
 \end{schema}
 
 The Board consists of a collection of tiles, which maps absolute coordinates to a specific tile. Since each robot may have a different rotation which must be maintained, the Board also has a list of robots and their current rotation. \\
@@ -96,11 +96,10 @@ According to the informal specification, the following invariant must always be 
 
 \begin{schema}{Board}
 tiles : \power (AbsoluteCoord \fun Tile) \\
-robots : \power (Robot \fun Rotation) \\
-controller : Controller
+robots : \power (Robot \fun Rotation)
 \where
 \forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
-\exists d : \dom tiles @ d.occupier = r \wedge Reachable((c, d))
+\exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
 \end{schema}
 
 A BoardSnapshot is simply a copy of the current state of the board; therefore, the BoardSnapshot maintains a mapping of absolute coordinates to the tiles.
@@ -144,7 +143,7 @@ coord? : AbsoluteCoord \\
 output! : \bool
 \where
 \IF (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
-tiles(coord).occupier \not = Null \\
+tiles(coord).occupies \not = Null \\
 \THEN
 output! = \true \\
 \ELSE
