@@ -68,31 +68,43 @@ output!: Hint
 \exists t, t1: Tile | t.occupier = robot? @\\ \t1
 t1.type = HomeTile @ t1.target = robot? \\ \t1
 \exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
-tiles(coord1) = t1 \\ \t2
-\IF coord.x = coord1.x \\ \t3
-coord.x < coord1.x \\ \t2
-\THEN output! = EAST \\ \t2
-\IF coord.x = coord1.x \\ \t3
-coord.x > coord1.x \\ \t2
-\THEN output! = WEST \\ \t2
-\IF coord.y = coord1.y \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN output! = SOUTH \\ \t2
-\IF coord.y = coord1.y \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN output! = NORTH \\ \t2
-\IF coord.x < coord1.x \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t2
-\IF coord.x < coord1.x \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint \\ \t2
+\IF coord.x = coord1.x \\ \t2
+\THEN \\ \t3
+\IF coord.y < coord1.y \\ \t3
+\THEN output! = SOUTH \\ \t3
+\ELSE output! = NORTH \\ \t2
+\ELSE \\ \t3
 \IF coord.x > coord1.x \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t2
-\IF coord.x > coord1.x \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\THEN output! = getHintLeft(coord , coord1) \\ \t3
+\ELSE output! = getHintRight(coord, coord1)
+\end{schema}
+
+\begin{schema}{getHintLeft}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint 
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = WEST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\end{schema}
+
+\begin{schema}{getHintRight}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = EAST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint
 \end{schema}
 
 Rekening houdende met de invariant...
@@ -207,9 +219,9 @@ output! = SUCCESS
 absCoords? : AbsoluteCoord \\
 robot? : Robot
 \where
-\exists t : clearTile | t.occupier = robot?\\ \t1
-\exists s : put | s.input? = robot? \\
-\exists n : notifyView
+\exists t : Tile | t.occupier = robot? \implies clearTile(t)\\
+put(tiles(absCoords?), robot?) \\
+viewer.notifyView
 \end{schema}
 
 \begin{schema}{clearTile}
