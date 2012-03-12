@@ -174,6 +174,9 @@ output! = ConveyorDest(coordA?) = coordB? \: \vee \\ \t1 (\exists c : AbsoluteCo
 (\exists c,d : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = d \: \wedge \\ \t2 Reachable(d, output!))
 \end{schema} \\
 \znewpage
+\begin{classcom}
+Initialize is called from the outside world, when a new game has to be started. Note that the tiles and robots in this method are read from an input file. After the tiles and robots have been initiated, the Board pre-initializes the Controller and initializes all the robots. Finally, the Board post-initializes the Controller with the initialized Robots and the Board.
+\end{classcom}
 \begin{schema}{Initialize}
 \Delta (tiles, robots, controller)
 \where
@@ -194,11 +197,17 @@ The method below creates a set of tiles from a file. This is not further specifi
 \begin{schema}{createTiles}
 output! : \power (AbsoluteCoord \fun Tile)
 \end{schema} \\
+\begin{classcom}
+CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot. 
+\end{classcom}
 \begin{schema}{canReset}
 \where
 (\exists t : Tile | t.type = HomeTile \\ \t1
 t.occupier = t.target) \Rightarrow board.reset
 \end{schema} \\
+\begin{classcom}
+When the Board resets itself, the tiles, the controller and the robots are deleted.
+\end{classcom}
 \begin{schema}{reset}
 \Delta (tiles, robots)
 \where
@@ -207,6 +216,9 @@ robots' = Null.selfRef \\
 controller' = Null.selfRef
 \end{schema} \\
 \znewpage
+\begin{classcom}
+We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
+\end{classcom}
 \begin{schema}{requestSnapShot}
 boardSnapshot : BoardSnapShot \\
 output! : BoardSnapshot
@@ -215,6 +227,9 @@ output! : BoardSnapshot
 \exists (d,u) : boardSnapshot | c = d \: \wedge \\ \t2 t \not = u \wedge t.type = u.type \: \wedge \\ \t2 t.occupier = u.occupier \: \wedge \\ \t2 t.type = HomeTile \Rightarrow t.target = u.target \: \wedge \\ \t2 t.type = ConveyorTile \Rightarrow t.rotation = u.rotation \\
 output! = boardSnapshot
 \end{schema} \\
+\begin{classcom}
+GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. It checks where the HomeTile of the robot is and according to that gives the appropiate hint.
+\end{classcom}
 \begin{schema}{getHint}
 robot? : Robot \\
 output!: Hint
@@ -233,6 +248,9 @@ t1.type = HomeTile @ t1.target = robot? \\ \t1
 \ELSE output! = getHintRight(coord, coord1)
 \end{schema} \\
 \znewpage
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the left of the robot.
+\end{classcom}
 \begin{schema}{getHintLeft}
 absCoord? : AbsoluteCoord \\
 absCoord1? : AbsoluteCoord \\
@@ -245,6 +263,9 @@ output! : Hint
 \THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | \\ \t3 output! = hint \\ \t1
 \ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | \\ \t3 output! = hint
 \end{schema}\\
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the right of the robot.
+\end{classcom}
 \begin{schema}{getHintRight}
 absCoord? : AbsoluteCoord \\
 absCoord1? : AbsoluteCoord \\
@@ -257,6 +278,9 @@ output! : Hint
 \THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | \\ \t3 output! = hint \\ \t1
 \ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | \\ \t3 output! = hint
 \end{schema} \\
+\begin{classcom}
+getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile. Off course, the invariant also holds for this function.
+\end{classcom}
 \begin{schema}{getValidTiles}
 output! : (Tile \cross Tile)
 \where
@@ -268,6 +292,9 @@ t1.type \not = HintTile \implies \\ \t1
 output! = (t \cross t1)
 \end{schema}
 \znewpage
+\begin{classcom}
+Method to exchange the positions of two tiles on the board. These tiles should be valid. If a robot is on one of the tiles, it moves along.
+\end{classcom}
 \begin{schema}{requestTilesExchange}
 \Delta (tiles)
 output! : ({Robot \union Null} \cross {Robot \union Null}) \\
@@ -292,6 +319,9 @@ tile1.occupier \not = Null.selfRef\\ \t2
 tile.occupier \not = Null.selfRef \\ \t2
 \THEN \exists m : moveConveyorSwitch | \\ \t3 \t1 m.absoluteCoord? = abCoord1
 \end{schema} \\
+\begin{classcom}
+Method to deal with the fact that a robot is part of a tile exchange.
+\end{classcom}
 \begin{schema}{specialExchange}
 \Delta (robots)
 tile? : Tile
@@ -300,6 +330,9 @@ tile? : Tile
 controller.notifyAutoMovement(r) \\ \t1
 \exists rotation : Rotation | robots(r)' = rotation
 \end{schema} \\
+\begin{classcom}
+Make sure that a robot on a conveyor belt is moved to the proper tile.
+\end{classcom}
 \begin{schema}{moveConveyorSwitch}
 absoluteCoord? : AbsoluteCoord \\
 \where
@@ -309,6 +342,9 @@ moveConveyorSwitchSub(absoluteCoord?, 0,-1) \\
 moveConveyorSwitchSub(absoluteCoord?, -1,0) \\
 \end{schema}
 \znewpage
+\begin{classcom}
+Subfunction of moveConveyorSwitch, does the actual calculation of the placement of the robot.
+\end{classcom}
 \begin{schema}{moveConveyorSwitchSub}
 absoluteCoord? : AbsoluteCoord \\
 x? : int \\
@@ -323,6 +359,9 @@ tiles(absoluteCoord?).occupier = Null \\ \t1
 \THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
 saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
 \end{schema}
+\begin{classcom}
+This functions deals with the moveRequest of the controller
+\end{classcom}
 \begin{schema}{moveRequest}
 localCoords? : RelativeCoord \\
 robot? : Robot \\
@@ -334,6 +373,9 @@ output! : BoardResponse
 \THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
 \ELSE response! = moveWalk(localCoords?, robot?)
 \end{schema}
+\begin{classcom}
+Used to deal with rotations a robot wants to make.
+\end{classcom}
 \begin{schema}{moveRotate}
 localCoords? : RelativeCoord \\
 robot? : Robot \\
