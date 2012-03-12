@@ -1,9 +1,5 @@
 MSCs suggesties:
 - Uitleg over de verschillende soorten pijlen? Waarom gebruiken we soms signals en soms method calls?
-- Viewer_initialize
-  ~ Inconsistentie met classe diagram: initialize uit Viewer heeft ook de Controller nodig!!
-- Robotmove_to_conveyer
-  ~ Net als in Robotmove_to_hint: kan er hier een coregion gebruikt worden bij de laatste twee notify's?
 
 -----------------------------------------------------------------------------------------------------------------------
 
