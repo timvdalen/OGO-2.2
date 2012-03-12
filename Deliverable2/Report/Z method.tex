@@ -147,6 +147,7 @@ tile.occupier \not = Null \\ \t3
 tile? : Tile
 \where
 \exists r : Robot | tile.occupier = r \implies \\ \t1
+controller.notifyAutoMovement(r) \\ \t1
 \exists rotation : Rotation | robots(r)' = rotation 
 \end{schema}
 
