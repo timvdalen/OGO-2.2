@@ -27,6 +27,8 @@ This is a class representing nothing.
 \end{classcom}
 \end{class}
 
+We define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
+In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
 \end{axdef}
@@ -38,6 +40,8 @@ BoardResponse == \{FAILED, SUCCESS, WIN\}
 \begin{axdef}
 Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST, WEST\_NORTH\}
 \end{axdef}
+
+We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
 \begin{class}{AbsoluteCoord}
 \upharpoonright (x, y, BoardWith, BoardHeight) \\
