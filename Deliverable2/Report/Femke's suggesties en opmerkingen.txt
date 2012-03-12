@@ -6,16 +6,8 @@ MSCs suggesties:
   ~ Persoonlijk zou ik in Board nog een interne actie "make snapshot" toevoegen, vóór de return van BoardSnapshot.
 - Initialize
   ~ Uitleg waarom wij gekozen hebben voor een preInitialize() en postInitialize() in Controller!
-  ~ Moet Robot.initialize(controller) een parameter Controller hebben? 
-- Robotmove_request
-  ~ Als getPossibleMoves en getPossibleRotations geen functie aanroepen zijn, zou ik ze scheiden met spaties. 
 - Robotmove_to_conveyer
   ~ Net als in Robotmove_to_hint: kan er hier een coregion gebruikt worden bij de laatste twee notify's?
-- Notify_robots
-  ~ Moet er niet een interne actie van Board bij, om de nieuwe locatie te berekenen en deze op te slaan?
-- End game
-  ~ Typo: "... it can show THE end game animation."
-  ~ Hoe krijgt de winnende robot het seintje wanneer hij moet termineren?
 
 -----------------------------------------------------------------------------------------------------------------------
 
