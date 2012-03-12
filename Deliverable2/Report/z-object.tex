@@ -109,14 +109,14 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 robots : \power (Robot \fun Rotation)
 \where
 \forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
-\exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
+\exists d : \dom tiles @ d.occupier = r \wedge Reachable((c, d))
 \end{state} \\
 \begin{schema}{Occupied}
 coord? : AbsoluteCoord \\
 output! : \bool
 \where
 output! = (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
-tiles(coord).occupies \not = Null
+tiles(coord).occupier \not = Null
 \end{schema} \\
 \begin{schema}{ConveyorUnitDest}
 coordA? : AbsoluteCoord \\
@@ -175,13 +175,15 @@ possibleRotations : \power Rotation
 \begin{class}{Robot}
 \upharpoonright (rules) \\
 \begin{state}
-rules : Rules
+rules : Rules \\
+controller : Controller
 \end{state}
 \end{class}
 
 \begin{class}{Viewer}
 \begin{state}
-controller : Controller
+controller : Controller \\
+boardChanged : \bool
 \end{state}
 \end{class}
 
