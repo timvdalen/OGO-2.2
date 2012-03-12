@@ -4,7 +4,7 @@
 	\includegraphics[width=\linewidth]{usecases/diagram.pdf}	
 
 \subsection{High Level Message Sequence Chart}
-	The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game. 
+	The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game.
 	
 	\input{hmsc.tex}
 	%\includegraphics[width=\linewidth]{classdiagram}
@@ -63,7 +63,7 @@
 	\input{MSC-files/robotmove_reject.tex}
 
 
-	\advance\count17 by -6
+	%\advance\count17 by -6
 
 	\subsubsection{Ordinary exchange}
 	The controller requests the board to do a tile exchange. The board will get two valid tiles (internally, this function relies on the rule entities), swap them and returns an empty RobotPair to signal that there were no robots on the tiles.
