@@ -9,6 +9,8 @@
 \author{J. Peters, s102231}
 \maketitle
 
+
+BEGIN BOARD
 \begin{schema}{getHint}
 \Delta Board \\
 robot? : Robot \\
@@ -49,12 +51,28 @@ Rekening houdende met de invariant...
 \Xi Board \\
 output! : (Tile \cross Tile)
 \where
-\exists t,t1: Tile | t \not = t1  @ \\ \t1 
+\exists t,t1: Tile | t \not = t1  @ \\ \t1
 t.type \not = HomeTile \\ \t1
 t.type \not = HintTile \\ \t1
 t1.type \not = HomeTile \\ \t1
 t1.type \not = HintTile \implies \\ \t1
 output! = (t \cross t1)
+\end{schema}
+
+Tileswitch aanroep goed checken / kijken naar functieaanroep notifystatechange
+\begin{schema}{requestTilesExchange}
+\Delta Board \\
+output! : ({Robot \union Null} \cross {Robot \union Null})
+\where
+\exists (tile \cross tile1) : getValidTiles | \\ \t1
+\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t2
+tiles(abCoord1) = tile1 \implies \\ \t3
+tiles(abCoord) = tile1 \\ \t3
+tiles(abCoord1) = tile \\ \t3
+\exists r : Robot | tile.occupies = r \implies \\ \t4
+\exists n : notifyStateChange | n.input? = r \\ \t3
+\exists r1 : Robot | tile1.occupies = r \implies \\ \t4
+\exists n1: notifyStateChange | n1.input? = r1
 \end{schema}
 
 BEGIN OK, SAVE LOCATIONS NECESSARY
@@ -73,7 +91,7 @@ localCoords.y = 0 \\ \t1
 \THEN response! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 \ELSE \\ \t1
-\IF robot?.Rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
+\IF robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
 rotation? = 0 \\
 \THEN \exists l : calculateNewLocation | l.localCoords? = localCoords? \\ \t1
 l.robot? = robot? \\ \t1
@@ -86,6 +104,14 @@ tiles(absoluteCoord).target = robot? \\ \t2
 \THEN SAVELOCATION \\ \t3
 output! = WIN \\ \t2
 \ELSE SAVELOCATION \\ \t3
+\IF tiles(absoluteCoord).type = ConveyorTile \\ \t3
+\THEN \exists n : notifyAutomovement | n.boardResponse? = SUCCESS \\ \t4
+n.robot? = robot? \\ \t3
+\IF tiles(absoluteCoord).type = HintTile \\ \t3
+\THEN \exists n1 : notifyHint | \\ \t4
+\exists hint : getHint | hint.robot? = robot? \\ \t5
+hint.output! = n1.hint? \\ \t5
+n1.robot? = robot? \\ \t3
 output! = SUCCESS
 \end{schema}
 
@@ -165,4 +191,97 @@ addAbtoRel(a,b).x = a.x + b.x \\ \t2
 addAbtoRel(a,b).y = a.y + b.y \\ \t1
 \ELSE addAbtoRel(a,b) = Null
 \end{axdef}
+
+
+BEGIN CONTROLLER
+
+meerdere viewers mogelijk?
+\begin{schema}{addViewer}
+\Delta Controller \\
+viewer? : Viewer 
+\where
+viewer = viewer?
+\end{schema}
+
+Rotatie moet hier in het klasse diagram nog aan toegevoegd worden. Verder heeft deze functie weinig zin, zit al in moveRequest in Board.. ROTATION? nog te verkrijgen, misschien desbetreffende robot toevoegen of kijken of er een rotatie is waarbij het kan?
+\begin{schema}{canMakeMove}
+\Xi Controller \\
+localCoords? : RelativeCoord \\
+rotation? : Rotation \\
+rule? : Rule \\
+output! : \bool
+\where
+\IF rule?.possibleRotations = rotation? \\
+\THEN output! = \true \\
+\ELSE \\ \t1
+\IF rule?.possibleMoves(localCoords? \cross ROTATION?) \not = Null \\ \t1
+\THEN output! = \true \\ \t1
+\ELSE output! = \false
+\end{schema}
+
+geeft door aan robot dat die fucked is
+\begin{schema}{notifyAutoMovement}
+\Xi Controller \\
+boardResponse? : BoardResponse \\
+robot? : Robot
+\where 
+robot?.notifyAutomovement
+\end{schema}
+
+Onderscheid tussen moveRequest board en controller..
+\begin{schema}{moveRequest}
+\Xi Controller \\
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+ouput! : BoardResponse
+\where
+\exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
+m.robot? = robot? \\ \t1
+m.rotation? = rotation? \\ \t1
+m.output! = output!
+\end{schema}
+
+onderscheid tussen robot notifyHint en die van controller
+\begin{schema}{notifyHint}
+\Xi Controller \\
+\Delta Robot \\ 
+hint? : Hint \\
+robot? : Robot
+\where
+\exists n : robot.notifyHint | n.hint? = hint?
+\end{schema}
+
+BEGIN ROBOT
+
+initialize geen rules nodig?
+\begin{schema}{initialize}
+\Delta Robot \\
+rules? : Rules
+\where
+rules = rules? \\
+hint = Null
+\end{schema}
+
+deze functie doet wist in principe eventuele hints, robot heeft dus een hint nodig lijkt me..
+\begin{schema}{notifyAutoMovement}
+\Delta Robot
+\where
+hint = Null
+\end{schema}
+
+ook hier hint heel handig
+\begin{schema}{notifyHint}
+\Delta Robot \\
+hint? : Hint 
+\where
+hint = hint?
+\end{schema}
+
+wat is het nut van deze functie? Doet intern eigenlijk niks...
+\begin{schema}{terminate}
+\Xi Robot
+\where
+\end{schema}
 \end{document}
