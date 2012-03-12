@@ -1,6 +1,6 @@
 \documentclass[12pt]{article}
 \usepackage{ltcadiz}
-\usepackage{listings}
+\usepackage{listings, a4wide}
 \lstset{breaklines=true, numbers=left}
 
 \title{Report on OGO 2.2 Softwarespecification\\ Assignment 1a}
@@ -22,9 +22,15 @@
 \section{Basic Axiomatic definitions}
 
 \begin{class}{Null}
+\upharpoonright (selfRef)
 \begin{classcom}
 This is a class representing nothing.
-\end{classcom}
+\end{classcom} \\
+\begin{schema}{selfRef}
+output! : Null
+\where
+output! = self
+\end{schema}
 \end{class}
 
 \begin{axdef}
@@ -36,7 +42,7 @@ BoardResponse == \{FAILED, SUCCESS, WIN\}
 \end{axdef}
 
 \begin{axdef}
-Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST, WEST\_NORTH\}
+Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST, NORTH\_WEST\}
 \end{axdef}
 
 \begin{class}{AbsoluteCoord}
@@ -109,7 +115,7 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 robots : \power (Robot \fun Rotation)
 \where
 \forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
-\exists d : \dom tiles @ d.occupier = r \wedge Reachable((c, d))
+\exists d : \dom tiles @ d.occupier = r \wedge Reachable(c, d)
 \end{state} \\
 \begin{schema}{Occupied}
 coord? : AbsoluteCoord \\
@@ -154,6 +160,126 @@ output! : \bool
 \where
 output! = ConveyorDest(coordA?) = coordB? \: \vee \\ \t1 (\exists c : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = output!) \: \vee \\ \t1
 (\exists c,d : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = d \: \wedge \\ \t2 Reachable(d, output!))
+\end{schema} \\
+\znewpage
+\begin{schema}{Initialize}
+\Delta (tiles, robots, controller)
+\where
+tiles' = createTiles \\
+robots' = createRobots \\
+controller'.preInitialize \\
+\forall r : Robot | r \in \dom(Robots) \implies \\ \t1
+r.initialize(controller)
+\end{schema} \\
+\begin{classcom}
+The method below creates a set of robots from a file. This is not further specified.
+\end{classcom} \\
+\begin{schema}{createRobots}
+controller? : Controller
+output! : \power (Robot \fun Rotation)
+\end{schema} \\
+\begin{classcom}
+The method below creates a set of tiles from a file. This is not further specified.
+\end{classcom} \\
+\begin{schema}{createTiles}
+output! : \power (AbsoluteCoord \fun Tile)
+\end{schema} \\
+\begin{schema}{canReset}
+\where
+(\exists t : Tile | t.type = HomeTile \\ \t1
+t.occupier = t.target) \Rightarrow \\
+board.reset
+\end{schema} \\
+\begin{schema}{reset}
+\Delta (tiles, robots)
+\where
+tiles' = Null.selfRef \\
+robots' = Null.selfRef \\
+controller' = Null.selfRef
+\end{schema} \\
+\znewpage
+\begin{schema}{requestSnapShot}
+boardSnapshot : BoardSnapShot \\
+output! : BoardSnapshot
+\where
+\forall (c,t) : tiles |  \\ \t1
+\exists (d,u) : boardSnapshot | c = d \: \wedge \\ \t2 t \not = u \wedge t.type = u.type \: \wedge \\ \t2 t.occupier = u.occupier \: \wedge \\ \t2 t.type = HomeTile \Rightarrow t.target = u.target \: \wedge \\ \t2 t.type = ConveyorTile \Rightarrow t.rotation = u.rotation \\
+output! = boardSnapshot
+\end{schema} \\
+\begin{schema}{getHint}
+robot? : Robot \\
+output!: Hint
+\where
+\exists t, t1: \ran tiles | t.occupier = robot? @\\ \t1
+t1.type = HomeTile @ t1.target = robot? \\ \t1
+\exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
+\IF coord.x = coord1.x \\ \t2
+\THEN \\ \t3
+\IF coord.y < coord1.y \\ \t3
+\THEN output! = SOUTH \\ \t3
+\ELSE output! = NORTH \\ \t2
+\ELSE \\ \t3
+\IF coord.x > coord1.x \\ \t3
+\THEN output! = getHintLeft(coord , coord1) \\ \t3
+\ELSE output! = getHintRight(coord, coord1)
+\end{schema} \\
+\znewpage
+\begin{schema}{getHintLeft}
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = WEST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | \\ \t3 output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | \\ \t3 output! = hint
+\end{schema}\\
+\begin{schema}{getHintRight}
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = EAST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | \\ \t3 output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | \\ \t3 output! = hint
+\end{schema} \\
+\begin{schema}{getValidTiles}
+output! : (Tile \cross Tile)
+\where
+\exists t,t1: Tile | t \not = t1  @ \\ \t1
+t.type \not = HomeTile \\ \t1
+t.type \not = HintTile \\ \t1
+t1.type \not = HomeTile \\ \t1
+t1.type \not = HintTile \implies \\ \t1
+output! = (t \cross t1)
+\end{schema}
+\znewpage
+\begin{schema}{requestTilesExchange}
+output! : ({Robot \union Null} \cross {Robot \union Null})
+\where
+\exists (tile \cross tile1) : getValidTiles | \\ \t1
+\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t2
+tiles(abCoord1) = tile1 \implies \\ \t3
+tiles(abCoord)' = tile1 \\ \t3
+tiles(abCoord1)' = tile \\ \t3
+\exists n : notifyView \\ \t3
+\exists r : Robot | tile.occupier = r \implies \\ \t4
+\exists rotation : Rotation | robots(r)' = rotation \\ \t4
+\exists n : notifyStateChange | n.input? = r \\ \t3
+\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
+\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
+\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
+\IF tile.occupier = Null.selfRef \\ \t4
+tile1.occupier \not = Null.selfRef\\ \t3
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t2 m.absoluteCoord? = abCoord1 \\ \t3
+\IF tile1.occupier = Null.selfRef \\ \t4
+tile.occupier \not = Null.selfRef \\ \t3
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t2 m.absoluteCoord? = abCoord1
 \end{schema}
 \end{class}
 
