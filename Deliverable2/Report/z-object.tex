@@ -20,15 +20,14 @@
 \end{abstract}
 
 \section{Basic Axiomatic definitions}
-
+We define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
+In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators. 
 \begin{class}{Null}
 \begin{classcom}
 This is a class representing nothing.
 \end{classcom}
 \end{class}
 
-We define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
-In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
 \end{axdef}
