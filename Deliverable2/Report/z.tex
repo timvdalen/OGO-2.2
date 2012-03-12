@@ -34,7 +34,7 @@ BoardWith : \nat
 BoardHeight : \nat
 \end{axdef}
 
-In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators. 
+In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -62,7 +62,7 @@ y : \num
 \end{schema}
 
 \section{Classes and invariants}
-We first describe the Tile class and all its specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A tile has a type, which is either of the above specializations, and a field 'occupies', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile. The HomeTile is different from the other tiles, since it always belongs to one specific robot, the target robot. A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported. 
+We first describe the Tile class and all its specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A tile has a type, which is either of the above specializations, and a field 'occupies', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile. The HomeTile is different from the other tiles, since it always belongs to one specific robot, the target robot. A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
 
 \begin{schema}{NormalTile}
 Tile
@@ -115,16 +115,18 @@ possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq Relat
 possibleRotations : \power Rotation
 \end{schema}
 
-A Robot has no knowledge about its environment; it only knows which type of robot it is and this is maintained in rules. 
+A Robot has no knowledge about its environment; it only knows which type of robot it is and this is maintained in rules.
 
 \begin{schema}{Robot}
-rules : Rules
+rules : Rules \\
+controller : Controller
 \end{schema}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller.
 
 \begin{schema}{Viewer}
-controller : Controller
+controller : Controller \\
+boardChanged : \bool
 \end{schema}
 
 The controller has knowledge about the Board, the Viewer and all the robots that are currently on the board.
@@ -200,4 +202,4 @@ output! : \bool
 \ELSE output! = \false
 \end{schema}
 
-\end{document}
+\end{document} 
