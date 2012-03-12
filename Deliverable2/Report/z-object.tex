@@ -1,0 +1,196 @@
+\documentclass[12pt]{article}
+\usepackage{ltcadiz}
+\usepackage{listings}
+\lstset{breaklines=true, numbers=left}
+
+\title{Report on OGO 2.2 Softwarespecification\\ Assignment 1a}
+\author{
+        Femke Jansen and Lasse Blaauwbroek OGO 2.2 group 6 \\
+                Department of Computer Science\\
+        Technical University Eindhoven\\
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Basic Axiomatic definitions}
+
+\begin{class}{Null}
+\begin{classcom}
+This is a class representing nothing.
+\end{classcom}
+\end{class}
+
+\begin{axdef}
+Rotation == \{0, 90, 180, 270\}
+\end{axdef}
+
+\begin{axdef}
+BoardResponse == \{FAILED, SUCCESS, WIN\}
+\end{axdef}
+
+\begin{axdef}
+Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST, WEST\_NORTH\}
+\end{axdef}
+
+\begin{class}{AbsoluteCoord}
+\upharpoonright (x, y, BoardWith, BoardHeight) \\
+\begin{axdef}
+BoardWith : \nat
+\end{axdef} \\
+\begin{axdef}
+BoardHeight : \nat
+\end{axdef} \\
+\begin{state}
+x : \nat \cup \{0\} \\
+y : \nat \cup \{0\}
+\where
+x < BoardWidth \\
+y < BoardHeight
+\end{state}
+\end{class}
+
+\begin{class}{RelativeCoord}
+\upharpoonright (x, y) \\
+\begin{state}
+x : \num \\
+y : \num
+\end{state}
+\end{class}
+
+\section{Classes and invariants}
+
+\begin{class}{NormalTile}
+Tile
+\end{class}
+
+\begin{class}{HintTile}
+Tile
+\end{class}
+
+\begin{class}{BrokenRobotTile}
+Tile
+\end{class}
+
+\begin{class}{HomeTile}
+Tile \\
+\upharpoonright (target) \\
+\begin{state}
+target : Robot
+\end{state}
+\end{class}
+
+\begin{class}{ConveyorTile}
+Tile \\
+\upharpoonright (rotation) \\
+\begin{state}
+rotation : Rotation
+\end{state}
+\end{class}
+
+\begin{class}{Tile}
+\upharpoonright (type, occupier) \\
+\begin{state}
+type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
+occupier : Robot \cup Null
+\end{state}
+\end{class}
+
+\begin{class}{Board}
+\upharpoonright (tiles, robots) \\
+\begin{state}
+tiles : \power (AbsoluteCoord \fun Tile) \\
+robots : \power (Robot \fun Rotation)
+\where
+\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
+\exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
+\end{state} \\
+\begin{schema}{Occupied}
+coord? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
+tiles(coord).occupies \not = Null
+\end{schema} \\
+\begin{schema}{ConveyorUnitDest}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = \neg Occupied(coordB) \\ \t1
+        tiles(input?).type = ConveyorTile \\ \t1
+        tiles(input?).rotation = 0 \Rightarrow \\ \t2 input?.x = output!.x + 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 90 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y - 1 \\ \t1
+        tiles(input?).rotation = 180 \Rightarrow \\ \t2 input?.x = output!.x - 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 270 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y + 1) \\ \t1
+\end{schema} \\
+\znewpage
+\begin{schema}{ConveyorDest}
+input? : AbsoluteCoord \\
+output! : AbsoluteCoord
+\where
+\IF ConveyorUnitDest(input?, output!) \\
+\THEN output! = input? \\
+\ELSE output! = \exists c : AbsoluteCoord | \\ \t2 ConveyorUnitDest(input?, c) \\ \t2 ConveyorDest(c, output!)
+\end{schema} \\
+\begin{schema}{Adjacent}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = |\!coordA.x - coordB.x\!| + \\ \t1 |\!coordA.y - coordB.y\!| = 1 \\ \t1
+\neg Occupied(coordB)
+\end{schema} \\
+\begin{schema}{Reachable}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = ConveyorDest(coordA?) = coordB? \: \vee \\ \t1 (\exists c : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = output!) \: \vee \\ \t1
+(\exists c,d : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = d \: \wedge \\ \t2 Reachable(d, output!))
+\end{schema}
+\end{class}
+
+\begin{class}{BoardSnapshot}
+\upharpoonright (tiles) \\
+\begin{state}
+tiles : \power (AbsoluteCoord \fun Tile) \\
+\end{state}
+\end{class}
+
+\begin{class}{Rule}
+\upharpoonright (possibleMoves, possibleRotations) \\
+\begin{state}
+possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
+possibleRotations : \power Rotation
+\end{state}
+\end{class}
+
+\begin{class}{Robot}
+\upharpoonright (rules) \\
+\begin{state}
+rules : Rules
+\end{state}
+\end{class}
+
+\begin{class}{Viewer}
+\begin{state}
+controller : Controller
+\end{state}
+\end{class}
+
+\begin{class}{Controller}
+\begin{state}
+board : Board \\
+robots : \power Robot
+viewer : Viewer
+\end{state}
+\end{class}
+
+\end{document} 
