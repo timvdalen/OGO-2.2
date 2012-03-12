@@ -418,8 +418,8 @@ localCoords? : RelativeCoord \\
 robot? : Robot \\
 output! : BoardResponse
 \where
-\IF robot?.rule.possibleMoves(localCoords?, robots(robot?)) = possiblePath(robot?) \\ \t1
-rotation? = 0 \\
+\IF robot?.rule.possibleMoves(localCoords?, robots(robot?)) = \\ \t1
+possiblePath(robot?) \wedge rotation? = 0 \\
 \THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
 \IF absoluteCoord = Null \\ \t1
 \THEN output! = FAILED \\ \t1
@@ -485,12 +485,12 @@ bool = \true \\ \t4
 output! = bool
 \end{schema} \\
 \begin{schema}{firstConveyor}
-firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \rightarrow AbsoluteCoord
+firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \fun \\ \t1 AbsoluteCoord
 \where
 \exists absoluteCoord : AbsoluteCoord |  \\ \t1
 \exists (int, coord): seq RelativeCoord |  \\ \t2
 (tiles(addAbtoRel(absoluteCoord, coord).type = conveyorTile \\ \t2
-conveyorInPath(absoluteCoord, (int, coord)) = addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
+conveyorInPath(absoluteCoord, (int, coord)) = \\ \t3 addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
 \forall (int1, coord1): seq RelativeCoord | \\ \t3
 \IF tiles(addAbtoRel(absoluteCoord, coord1).type = conveyorTile \\ \t3
 \THEN int <= int1
@@ -520,7 +520,28 @@ A Robot has knowledge of the Controller and maintains a rule-attribute, describi
 \begin{state}
 rules : Rules \\
 controller : Controller
-\end{state}
+hint : Hints
+\end{state}\\
+\begin{schema}{initialize}
+\Delta (controller, rules, hint) \\
+controller? : Controller \\
+rules? : Rules
+\where
+controller' = controller? \\
+rules' = rules? \\
+hint' = Null.selfRef
+\end{schema}\\
+\begin{schema}{notifyAutoMovement}
+\Delta (hint)
+\where
+hint' = Null.selfRef
+\end{schema}\\
+\begin{schema}{notifyHint}
+\Delta (hint) \\
+hint? : Hint
+\where
+hint' = \{hint?\} \union hint
+\end{schema}
 \end{class}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller. The variable 'boardChanged' is used as a flag to indicate that the board has changed and the Viewer has not yet updated the view.
@@ -528,7 +549,35 @@ The Viewer has no knowledge of the Board; every change of the Board must be comm
 \begin{state}
 controller : Controller \\
 boardChanged : \bool
-\end{state}
+\end{state}\\
+\begin{schema}{initialize}
+\Delta (controller)
+\where
+\exists a : addViewer | a.viewer? = self \implies \\ \t1
+a.output! = controller' \\ \t1
+boardChanged' = \false
+\end{schema}\\
+\begin{schema}{notifyGameOver}
+robot? : Robot
+\where
+Fireworks
+\end{schema}\\
+\begin{schema}{notifyStateChange}
+\Delta (boardChanged)
+\where
+boardChanged' = \true
+\end{schema}\\
+\begin{schema}{updateView}
+\Delta (controller, snapShot)
+\where
+\IF boardChanged = \true \\
+\THEN \exists r: requestBoardStatus | output! = snapShot' \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller \\
+\ELSE snapShot' = snapShot \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller
+\end{schema}
 \end{class}
 
 The controller has knowledge about the Board and the Viewer; it also maintains a list of the robots.
@@ -537,7 +586,76 @@ The controller has knowledge about the Board and the Viewer; it also maintains a
 board : Board \\
 robots : \power Robot
 viewer : Viewer
-\end{state}
+\end{state}\\
+\begin{schema}{addViewer}
+\Delta (viewer) \\
+viewer? : Viewer \\
+output! : Controller
+\where
+\IF viewer = Null \\
+\THEN viewer' = viewer? \\ \t1
+output! = self \\
+\ELSE output! = Null.selfRef
+\end{schema}\\
+\begin{schema}{notifyAutoMovement}
+robot? : Robot
+\where
+robot?.notifyAutomovement
+\end{schema}\\
+\begin{schema}{moveRequest}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+ouput! : BoardResponse
+\where
+\exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
+m.robot? = robot? \\ \t1
+m.rotation? = rotation? \\ \t1
+m.output! = output! \\ \t1
+\IF output! = WIN \\ \t1
+\THEN \forall r : Robot | r.terminate \\ \t2
+\exists n : viewer.notifyGameOver | n.robot? = robot? \\ \t2
+board.canReset \\ \t2
+terminate
+\end{schema}\\
+\begin{schema}{notifyHint}
+hint? : Hint \\
+robot? : Robot
+\where
+\exists n : robot.notifyHint | n.hint? = hint?
+\end{schema}\\
+\begin{schema}{notifyView}
+\where
+\exists n : notifyStateChange
+\end{schema}
+\znewpage
+\begin{schema}{preInitialize}
+\Delta (board, robots, vieuwer)
+\where
+board' = Null.selfRef \\
+robots' = Null.selfRef \\
+viewer' = Null.selfRef
+\end{schema}\\
+\begin{schema}{postInitialize}
+\Delta (board, robots) \\
+board? : Board \\
+robots? : \power Robot
+\where
+board' = board \\
+robots' = robots?
+\end{schema}\\
+\begin{schema}{removeViewer}
+\Delta (viewer, robots, board)
+\where
+viewer' = Null.selfRef \\
+robots' = robots \\
+board' = board
+\end{schema}\\
+\begin{schema}{requestBoardStatus}
+output! : BoardSnapShot
+\where
+\exists r : requestSnapShot | r.output! = output!
+\end{schema}
 \end{class}
 
 \end{document}
