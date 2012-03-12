@@ -1,14 +1,1 @@
-The first thing the robot class has to do is initialize, after that it arrives in the NOP
-state, from there a lot of things can happen. The first thing that can happen is that the
-controllor notifies the robot that an other has won, then this robot has to terminate 
-because the game is over. The the controller can also notify this robot that it has been
-moved, this is possible because the controller can randomly exchange 2 tiles, and if a 
-robot is on one of those tiles it is exchanged allong with the tile, to notify the robot 
-of this event, the notifyAutoMovement() function is used. The other 2 things a robot can
-do is request move and request turn, both can be declined or allowed by the controller. If
-a turn is allowed the robot simply executes the turn. If a move is allowed it is also
-executed, but the robot can encounter a conveyer belt, in this case the robot is moved to
-a new position and notified of this with teh notifyAutoMovement() function. If the robot 
-encounters a hint tile it receives a hint, if the robot encounters it's hometile it has
-won and calls terminate(). If a robot hasn't encountered it's hometile it returns to the
-NOP state and begins all over again.
+The robot class gets initialized by the controller, it starts at a randomly picked spot, which can be a normal tile, a hint tile or a conveyer tile. The robot receives a notifyAutomovement() every time it gets moved, this can happen in 2 ways: the robot steps on a conveyer belt or the robot gets moved via a tileswitch. Whenever a robot is on a tile It can request a move which can result in 3 ways: success, failed or win. If a move request is a success, the move is made, if a move request is a failure, the move is not made because the desired path of the moved Is blocked, if a move request results in a win it means that the robot has reached its hometile the game ends and this robot has won. When another robot wins this robot gets a terminate request from the controller and the game is over. The robot can also encounter hint tiles which point the robot to the location of its hometile.
