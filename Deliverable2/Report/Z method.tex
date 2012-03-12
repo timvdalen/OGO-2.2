@@ -11,39 +11,100 @@
 
 
 BEGIN BOARD
+Gegevens worden ingelezen vanuit file
+\begin{schema}{initialize}
+\Delta Board
+\where
+tiles' = tiles \\
+robots' = robots \\
+controller.preInitialize \\
+\forall r : Robot | r \in \dom(Robots) \implies \\ \t1
+r.initialize(controller)
+\end{schema}
+
+\begin{schema}{canReset}
+\Delta Board
+\where
+\IF \exists t : Tile | t.type = HomeTile \\ \t1
+t.occupier = t.target \\
+\THEN board.reset
+\end{schema}
+
+\begin{schema}{reset}
+\Delta Board
+\where
+tiles' = Null \\
+robots' = Null
+\end{schema}
+
+\begin{schema}{requestSnapShot}
+\Xi Board \\
+boardSnapshot : BoardSnapShot \\
+output! : BoardSnapshot
+\where
+\forall t : Tile |  \\ \t1
+\exists abCoord : AbsoluteCoord | tiles(abCoord) = t \implies \\ \t2
+\exists c : cloneTile | c.tile? = t \\ \t3
+boardSnapshot(abCoord) = c.output! \\
+output! = boardSnapshot
+\end{schema}
+
+\begin{schema}{cloneTile}
+\Delta Tile \\
+tile? : Tile \\
+output! : Tile 
+\where
+tile? \not = output! \\
+tile?.type = output!.type \\
+tile?.occupier = output!.occupier 
+\end{schema}
+
+
 \begin{schema}{getHint}
 \Xi Board \\
 robot? : Robot \\
 output!: Hint
 \where
-\exists t, t1: Tile | t.occupies = robot? @\\ \t1
+\exists t, t1: Tile | t.occupier = robot? @\\ \t1
 t1.type = HomeTile @ t1.target = robot? \\ \t1
 \exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
-tiles(coord1) = t1 \\ \t2
-\IF coord.x = coord1.x \\ \t3
-coord.x < coord1.x \\ \t2
-\THEN output! = EAST \\ \t2
-\IF coord.x = coord1.x \\ \t3
-coord.x > coord1.x \\ \t2
-\THEN output! = WEST \\ \t2
-\IF coord.y = coord1.y \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN output! = SOUTH \\ \t2
-\IF coord.y = coord1.y \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN output! = NORTH \\ \t2
-\IF coord.x < coord1.x \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t2
-\IF coord.x < coord1.x \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint \\ \t2
+\IF coord.x = coord1.x \\ \t2
+\THEN \\ \t3
+\IF coord.y < coord1.y \\ \t3
+\THEN output! = SOUTH \\ \t3
+\ELSE output! = NORTH \\ \t2
+\ELSE \\ \t3
 \IF coord.x > coord1.x \\ \t3
-coord.y < coord1.y \\ \t2
-\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t2
-\IF coord.x > coord1.x \\ \t3
-coord.y > coord1.y \\ \t2
-\THEN \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\THEN output! = getHintLeft(coord , coord1) \\ \t3
+\ELSE output! = getHintRight(coord, coord1)
+\end{schema}
+
+\begin{schema}{getHintLeft}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint 
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = WEST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\end{schema}
+
+\begin{schema}{getHintRight}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = EAST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint
 \end{schema}
 
 Rekening houdende met de invariant...
@@ -70,17 +131,17 @@ tiles(abCoord1) = tile1 \implies \\ \t3
 tiles(abCoord)' = tile1 \\ \t3
 tiles(abCoord1)' = tile \\ \t3
 \exists n : notifyView \\ \t3
-\exists r : Robot | tile.occupies = r \implies \\ \t4
+\exists r : Robot | tile.occupier = r \implies \\ \t4
 \exists rotation : Rotation | robots(r)' = rotation \\ \t4
 \exists n : notifyStateChange | n.input? = r \\ \t3
-\exists r1 : Robot | tile1.occupies = r \implies \\ \t4
+\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
 \exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
 \exists n1: notifyStateChange | n1.input? = r1 \\ \t3
-\IF tile.occupies = Null \\ \t4
-tile1.occupies \not = Null\\ \t3
+\IF tile.occupier = Null \\ \t4
+tile1.occupier \not = Null\\ \t3
 \THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1 \\ \t3
-\IF tile1.occupies = Null \\ \t4
-tile.occupies \not = Null \\ \t3
+\IF tile1.occupier = Null \\ \t4
+tile.occupier \not = Null \\ \t3
 \THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1
 \end{schema}
 
@@ -90,37 +151,26 @@ PRE: tile with absoluteCoord? is empty
 absoluteCoord? : AbsoluteCoord \\
 relCoord : RelativeCoord
 \where
-relCoord.x = 0 \\
-relCoord.y = 1 \\
+moveConveyorSwitchSub(0,1) \\
+moveConveyorSwitchSub(1,0) \\
+moveConveyorSwitchSub(0,-1) \\
+moveConveyorSwitchSub(-1,0) \\
+\end{schema}
+
+\begin{schema}{moveConveyorSwitchSub}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+x? : int \\
+y? : int \\
+relCoord : RelativeCoord
+\where
+relCoord.x = x? \\
+relCoord.y = y? \\
 \IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
-\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\ 
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
-\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
-s.robot? = r \\
-relCoord.x = 1 \\
-relCoord.y = 0 \\
-\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
-tiles(absoluteCoord?).occupies \not = Null \\ \t1
-\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\ 
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
-\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
-s.robot? = r \\
-relCoord.x = 0 \\
-relCoord.y = -1 \\
-\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
-tiles(absoluteCoord?).occupies \not = Null \\ \t1
-\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
-\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
-s.robot? = r \\
-relCoord.x = -1 \\
-relCoord.y = 0 \\
-\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
-tiles(absoluteCoord?).occupies \not = Null \\ \t1
-\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
-\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
-s.robot? = r \\
+tiles(absoluteCoord?).occupier = Null \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupier = r \\
+\THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
+saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
 \end{schema}
 
 BEGIN OK, SAVE LOCATIONS NECESSARY
@@ -163,28 +213,28 @@ n1.robot? = robot? \\ \t3
 output! = SUCCESS
 \end{schema}
 
-\begin{schema}{SaveLocation}
+\begin{schema}{saveLocation}
 \Xi Board \\
 \Delta Tile \\
 absCoords? : AbsoluteCoord \\
 robot? : Robot
 \where
-\exists t : clearTile | t.occupies = robot?\\ \t1
-\exists s : put | s.input? = robot? \\
-\exists n : notifyView
+\exists t : Tile | t.occupier = robot? \implies clearTile(t)\\
+put(tiles(absCoords?), robot?) \\
+viewer.notifyView
 \end{schema}
 
 \begin{schema}{clearTile}
 \Delta Tile \\
 \where
-occupies' = Null
+occupier' = Null
 \end{schema}
 
 \begin{schema}{put}
 \Delta Tile \\
 input? : Robot
 \where
-occupies' = input?
+occupier' = input?
 \end{schema}
 
 This one should be done. Gets the path for the move it wants to do. Gets coordinate, then for all tiles it holds that if he can't pass, a conveyor tile should be in front of the obstruction (the first conveyor). Else null
@@ -192,24 +242,37 @@ This one should be done. Gets the path for the move it wants to do. Gets coordin
 \Xi Board \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
+absoluteCoord : AbsoluteCoord \\
+output! : (AbsoluteCoord \union Null) 
+\where
+\IF checkPath(localCoords?, robot?) \\
+\THEN absoluteCoord = firstConveyor(c, path) \\ \t1
+\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
+output! = s.output! \\
+\ELSE output! = Null
+\end{schema}
+
+\begin{schema}{checkPath}
+\Xi Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
 path : seq RelativeCoord \\
 absoluteCoord : AbsoluteCoord \\
-output! : (AbsoluteCoord \union Null) \\
+bool : \bool \\
+output! : \bool
 \where
+bool = false \\
 path = robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) \\
-\exists (c, t) : tiles | t.occupies = robot? \implies \\ \t1
-\IF
+\exists (c, t) : tiles | t.occupier = robot? \implies \\ \t1
 \forall (int, coord) : path | \\ \t2
-(addAbtoRel(c, coord) = Null \vee \\ \t2
+((addAbtoRel(c, coord) = Null \vee \\ \t2
 (tiles(addAbtoRel(c, coord).type = BrokenRobotTile) \vee \\ \t2
-\exists r: Robot | tiles(addAbtoRel(c, coord).occupies = r )\implies \\ \t3
+\exists r: Robot | tiles(addAbtoRel(c, coord).occupier = r )\implies \\ \t3
 \exists (int1, coord1) : path | int1 < int \\ \t3
 tiles(addAbtoRel(c, coord1).type = ConveyorTile \\ \t3
-absoluteCoord = addAbtoRel(c, coord1) \\ \t1
-\THEN absoluteCoord = firstConveyor(c, path) \\ \t2
-\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
-output! = s.output! \\ \t1
-\ELSE output! = Null
+absoluteCoord = addAbtoRel(c, coord1)) \implies \\ \t4
+bool = \true \\ \t4
+output! = bool
 \end{schema}
 
 
@@ -256,26 +319,10 @@ output! = self \\
 \ELSE output! = Null
 \end{schema}
 
-Rotatie moet hier in het klasse diagram nog aan toegevoegd worden. Verder heeft deze functie weinig zin, zit al in moveRequest in Board.. ROTATION? nog te verkrijgen, misschien desbetreffende robot toevoegen of kijken of er een rotatie is waarbij het kan?
-\begin{schema}{canMakeMove}
-\Xi Controller \\
-localCoords? : RelativeCoord \\
-rotation? : Rotation \\
-rule? : Rule \\
-output! : \bool
-\where
-\IF rule?.possibleRotations = rotation? \\
-\THEN output! = \true \\
-\ELSE \\ \t1
-\IF rule?.possibleMoves(localCoords? \cross ROTATION?) \not = Null \\ \t1
-\THEN output! = \true \\ \t1
-\ELSE output! = \false
-\end{schema}
 
 geeft door aan robot dat die fucked is
 \begin{schema}{notifyAutoMovement}
 \Xi Controller \\
-boardResponse? : BoardResponse \\
 robot? : Robot
 \where
 robot?.notifyAutomovement
@@ -295,7 +342,10 @@ m.robot? = robot? \\ \t1
 m.rotation? = rotation? \\ \t1
 m.output! = output! \\ \t1
 \IF output! = WIN \\ \t1
-\THEN \exists n : notifyGameOver | n.robot? = robot?
+\THEN \forall r : Robot | r.terminate \\ \t2
+\exists n : viewer.notifyGameOver | n.robot? = robot? \\ \t2
+board.canReset \\ \t2
+terminate
 \end{schema}
 
 onderscheid tussen robot notifyHint en die van controller
@@ -313,6 +363,23 @@ robot? : Robot
 \Delta Viewer
 \where
 \exists n : notifyStateChange
+\end{schema}
+
+\begin{schema}{preInitialize}
+\Delta Controller
+\where
+board' = Null \\
+robots' = Null \\
+viewer' = Null
+\end{schema}
+
+\begin{schema}{postInitialize}
+\Delta Controller \\
+board? : Board \\
+robots? : \power Robot 
+\where
+board' = board \\
+robots' = robots?
 \end{schema}
 
 \begin{schema}{removeViewer}

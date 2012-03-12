@@ -1,5 +1,1 @@
-The controller is the class that manages all communication between all the other classes.
-This class also can't do anything without being initialized, so the first thing it does
-is initialize. It passes all the messages between the board and the robots. It can also 
-call the function switchtiles which selects 2 random tiles and, if there aren't any home- 
-and hinttiles, switches them around.
+The controller initializes in 2 phases, the first phase is the preInitialize() function and the second phase is the postInitialize() function. After the postInitialize the class is in the NOP state from which all events take place, the controller can pass on the requestSnapshot() function from the board on to the viewer class. The controller also passes on move requests from the robot to the board, but because the  board has to answer the request the controller goes to a MoveRequestProcessed during which he waits for the board to answer. After the moverequest has been answered and it was successful 2 tiles are switched and, if needed, the moved robots receive a notifyAutoMovement(), after the tiles have been switched, the controller returns to the NOP state and it can do everything all over again. If a robot requests a move and the board class answers that the robot has reached its hometile the control will terminate because the game is over.
