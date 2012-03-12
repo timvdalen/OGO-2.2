@@ -34,8 +34,8 @@ t.occupier = t.target \\
 \begin{schema}{reset}
 \Delta Board
 \where
-tiles' = Null \\
-robots' = Null
+tiles' = Null.selfRef \\
+robots' = Null.selfRef
 \end{schema}
 
 \begin{schema}{requestSnapShot}
@@ -218,7 +218,7 @@ output! : BoardResponse
 \IF robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
 rotation? = 0 \\
 \THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
-\IF absoluteCoord = null \\ \t1
+\IF absoluteCoord = Null \\ \t1
 \THEN output! = FAILED \\ \t1
 \ELSE output! = checkTile(absoluteCoord?, robot?)\\ \t2
 \ELSE output! = FAILED
@@ -256,7 +256,7 @@ viewer.notifyView
 \begin{schema}{clearTile}
 \Delta Tile \\
 \where
-occupier' = Null
+occupier' = Null.selfRef
 \end{schema}
 
 \begin{schema}{put}
@@ -278,7 +278,7 @@ output! : (AbsoluteCoord \union Null)
 \THEN absoluteCoord = firstConveyor(c, path) \\ \t1
 \exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
 output! = s.output! \\
-\ELSE output! = Null
+\ELSE output! = Null.selfRef
 \end{schema}
 
 \begin{schema}{checkPath}
@@ -330,7 +330,7 @@ addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \u
 \THEN
 addAbtoRel(a,b).x = a.x + b.x \\ \t2
 addAbtoRel(a,b).y = a.y + b.y \\ \t1
-\ELSE addAbtoRel(a,b) = Null
+\ELSE addAbtoRel(a,b) = Null.selfRef
 \end{axdef}
 
 
@@ -345,7 +345,7 @@ output! : Controller
 \IF viewer = Null \\
 \THEN viewer' = viewer? \\ \t1
 output! = self \\
-\ELSE output! = Null
+\ELSE output! = Null.selfRef
 \end{schema}
 
 
@@ -397,9 +397,9 @@ robot? : Robot
 \begin{schema}{preInitialize}
 \Delta Controller
 \where
-board' = Null \\
-robots' = Null \\
-viewer' = Null
+board' = Null.selfRef \\
+robots' = Null.selfRef \\
+viewer' = Null.selfRef
 \end{schema}
 
 \begin{schema}{postInitialize}
@@ -414,7 +414,7 @@ robots' = robots?
 \begin{schema}{removeViewer}
 \Delta Controller 
 \where
-viewer' = Null \\
+viewer' = Null.selfRef \\
 robots' = robots \\
 board' = board
 \end{schema}
@@ -437,14 +437,14 @@ rules? : Rules
 \where
 controller' = controller? \\
 rules' = rules? \\
-hint' = \{Null\}
+hint' = Null.selfRef
 \end{schema}
 
 deze functie doet wist in principe eventuele hints, robot heeft dus een hint nodig lijkt me..
 \begin{schema}{notifyAutoMovement}
 \Delta Robot
 \where
-hint' = \{Null\}
+hint' = Null.selfRef
 \end{schema}
 
 ook hier hint heel handig
