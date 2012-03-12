@@ -22,17 +22,6 @@
 \section{Basic Axiomatic definitions}
 We define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
 In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
-\begin{class}{Null}
-\upharpoonright (selfRef)
-\begin{classcom}
-This is a class representing nothing.
-\end{classcom} \\
-\begin{schema}{selfRef}
-output! : Null
-\where
-output! = self
-\end{schema}
-\end{class}
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -48,6 +37,18 @@ Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST
 
 \section{Classes}
 We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
+
+\begin{class}{Null}
+\upharpoonright (selfRef) \\
+\begin{classcom}
+This is a class representing nothing.
+\end{classcom} \\
+\begin{schema}{selfRef}
+output! : Null
+\where
+output! = self
+\end{schema}
+\end{class}
 
 \begin{class}{AbsoluteCoord}
 \upharpoonright (x, y, BoardWith, BoardHeight) \\
@@ -179,14 +180,12 @@ output! = ConveyorDest(coordA?) = coordB? \: \vee \\ \t1 (\exists c : AbsoluteCo
 tiles' = createTiles \\
 robots' = createRobots \\
 controller'.preInitialize \\
-\forall r : Robot | r \in \dom(Robots) \implies \\ \t1
-r.initialize(controller)
+\forall r : \dom Robots | r.initialize(controller)
 \end{schema} \\
 \begin{classcom}
 The method below creates a set of robots from a file. This is not further specified.
 \end{classcom} \\
 \begin{schema}{createRobots}
-controller? : Controller
 output! : \power (Robot \fun Rotation)
 \end{schema} \\
 \begin{classcom}
@@ -198,8 +197,7 @@ output! : \power (AbsoluteCoord \fun Tile)
 \begin{schema}{canReset}
 \where
 (\exists t : Tile | t.type = HomeTile \\ \t1
-t.occupier = t.target) \Rightarrow \\
-board.reset
+t.occupier = t.target) \Rightarrow board.reset
 \end{schema} \\
 \begin{schema}{reset}
 \Delta (tiles, robots)
@@ -271,26 +269,83 @@ output! = (t \cross t1)
 \end{schema}
 \znewpage
 \begin{schema}{requestTilesExchange}
-output! : ({Robot \union Null} \cross {Robot \union Null})
+\Delta (tiles)
+output! : ({Robot \union Null} \cross {Robot \union Null}) \\
+(tile, tile1) : Tile \cross Tile
 \where
-\exists (tile \cross tile1) : getValidTiles | \\ \t1
-\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t2
-tiles(abCoord1) = tile1 \implies \\ \t3
-tiles(abCoord)' = tile1 \\ \t3
-tiles(abCoord1)' = tile \\ \t3
-\exists n : notifyView \\ \t3
-\exists r : Robot | tile.occupier = r \implies \\ \t4
-\exists rotation : Rotation | robots(r)' = rotation \\ \t4
-\exists n : notifyStateChange | n.input? = r \\ \t3
-\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
-\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
-\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
-\IF tile.occupier = Null.selfRef \\ \t4
-tile1.occupier \not = Null.selfRef\\ \t3
-\THEN \exists m : moveConveyorSwitch | \\ \t3 \t2 m.absoluteCoord? = abCoord1 \\ \t3
-\IF tile1.occupier = Null.selfRef \\ \t4
-tile.occupier \not = Null.selfRef \\ \t3
-\THEN \exists m : moveConveyorSwitch | \\ \t3 \t2 m.absoluteCoord? = abCoord1
+(tile, tile1)  = getValidTile \\
+\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t1
+tiles(abCoord1) = tile1 \implies \\ \t2
+tiles(abCoord)' = tile1 \\ \t2
+tiles(abCoord1)' = tile \\ \t2
+\exists n : notifyView \\ \t2
+\exists r : Robot | tile.occupier = r \implies \\ \t3
+\exists rotation : Rotation | robots(r)' = rotation \\ \t3
+\exists n : notifyStateChange | n.input? = r \\ \t2
+\exists r1 : Robot | tile1.occupier = r \implies \\ \t3
+\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t3
+\exists n1: notifyStateChange | n1.input? = r1 \\ \t2
+\IF tile.occupier = Null.selfRef \\ \t3
+tile1.occupier \not = Null.selfRef\\ \t2
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t1 m.absoluteCoord? = abCoord1 \\ \t3
+\IF tile1.occupier = Null.selfRef \\ \t3
+tile.occupier \not = Null.selfRef \\ \t2
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t1 m.absoluteCoord? = abCoord1
+\end{schema} \\
+\begin{schema}{specialExchange}
+\Delta (robots)
+tile? : Tile
+\where
+\exists r : Robot | tile.occupier = r \implies \\ \t1
+controller.notifyAutoMovement(r) \\ \t1
+\exists rotation : Rotation | robots(r)' = rotation
+\end{schema} \\
+\begin{schema}{moveConveyorSwitch}
+absoluteCoord? : AbsoluteCoord \\
+\where
+moveConveyorSwitchSub(absoluteCoord?, 0,1) \\
+moveConveyorSwitchSub(absoluteCoord?, 1,0) \\
+moveConveyorSwitchSub(absoluteCoord?, 0,-1) \\
+moveConveyorSwitchSub(absoluteCoord?, -1,0) \\
+\end{schema}
+\znewpage
+\begin{schema}{moveConveyorSwitchSub}
+absoluteCoord? : AbsoluteCoord \\
+x? : int \\
+y? : int \\
+relCoord : RelativeCoord
+\where
+relCoord.x = x? \\
+relCoord.y = y? \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupier = Null \\ \t1
+\exists r : Robot | \\ \t2 tiles(addAbtoRel(absoluteCoord?, relCoord)).occupier = r \\
+\THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
+saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
+\end{schema}
+\begin{schema}{moveRequest}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+absoluteCoord : AbsoluteCoord \\
+output! : BoardResponse
+\where
+\IF rotation? \not = 0 \\
+\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
+\ELSE response! = moveWalk(localCoords?, robot?)
+\end{schema}
+\begin{schema}{moveRotate}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+output! : BoardResponse
+\where
+\IF localCoords.x = 0 \\ \t1
+localCoords.y = 0 \\ \t1
+ \exists r : robot?.rule.possibleRotations | r = rotation?\\
+\THEN output! = SUCCESS \\ \t1
+robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
+\ELSE output! = FAILED
 \end{schema}
 \end{class}
 
@@ -308,7 +363,19 @@ A Rule consists of a list of possible moves and a list of possible rotations. Th
 \begin{state}
 possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
-\end{state}
+\end{state} \\
+\begin{schema}{moveRequest}
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+absoluteCoord : AbsoluteCoord \\
+output! : BoardResponse
+\where
+\IF rotation? \not = 0 \\
+\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
+\ELSE response! = moveWalk(localCoords?, robot?)
+\end{schema}
 \end{class}
 
 A Robot has knowledge of the Controller and maintains a rule-attribute, describing the ruleset of the Robot.
