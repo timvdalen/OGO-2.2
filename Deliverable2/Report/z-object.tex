@@ -50,6 +50,18 @@ output! = self
 \end{schema}
 \end{class}
 
+\begin{axdef}
+addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \union Null)
+\where
+\forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
+\IF (0 <= a.x + b.x < BoardWidth \\ \t2
+0 <= a.x + b.x < BoardHeigth) \\ \t1
+\THEN
+addAbtoRel(a,b).x = a.x + b.x \\ \t2
+addAbtoRel(a,b).y = a.y + b.y \\ \t1
+\ELSE addAbtoRel(a,b) = Null.selfRef
+\end{axdef}
+
 \begin{class}{AbsoluteCoord}
 \upharpoonright (x, y, BoardWith, BoardHeight) \\
 \begin{axdef}
@@ -81,7 +93,18 @@ Tile class has five specializations: NormalTile, HomeTile, HintTile, ConveyerTil
 \begin{state}
 type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
 occupier : Robot \cup Null
-\end{state}
+\end{state} \\
+\begin{schema}{clear}
+\Delta (occupier) \\
+\where
+occupier' = Null.selfRef
+\end{schema} \\
+\begin{schema}{put}
+\Delta (occupier) \\
+input? : Robot
+\where
+occupier' = input?
+\end{schema}
 \end{class}
 
 \begin{class}{NormalTile}
@@ -104,7 +127,7 @@ A HomeTile always belongs to one specific Robot, the target robot.
 \end{classcom} \\
 \begin{state}
 target : Robot
-\end{state}
+\end{state} \\
 \end{class}
 
 \begin{class}{ConveyorTile}
@@ -322,7 +345,7 @@ tiles(absoluteCoord?).occupier = Null \\ \t1
 \exists r : Robot | \\ \t2 tiles(addAbtoRel(absoluteCoord?, relCoord)).occupier = r \\
 \THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
 saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
-\end{schema}
+\end{schema} \\
 \begin{schema}{moveRequest}
 localCoords? : RelativeCoord \\
 robot? : Robot \\
@@ -333,7 +356,7 @@ output! : BoardResponse
 \IF rotation? \not = 0 \\
 \THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
 \ELSE response! = moveWalk(localCoords?, robot?)
-\end{schema}
+\end{schema} \\
 \begin{schema}{moveRotate}
 localCoords? : RelativeCoord \\
 robot? : Robot \\
@@ -346,6 +369,89 @@ localCoords.y = 0 \\ \t1
 \THEN output! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 \ELSE output! = FAILED
+\end{schema} \\
+\znewpage
+\begin{schema}{moveWalk}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
+\IF robot?.rule.possibleMoves(localCoords?, robots(robot?)) = possiblePath(robot?) \\ \t1
+rotation? = 0 \\
+\THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
+\IF absoluteCoord = Null \\ \t1
+\THEN output! = FAILED \\ \t1
+\ELSE output! = checkTile(absoluteCoord?, robot?)\\ \t2
+\ELSE output! = FAILED
+\end{schema} \\
+\begin{schema}{checkTile}
+absoluteCoord? : AbsoluteCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
+saveLocation(absoluteCoord?, robot?) \\
+\IF tiles(absoluteCoord?).type = HomeTile \\ \t1
+tiles(absoluteCoord?).target = robot? \\
+\THEN output! = WIN \\ \
+\ELSE  \\ \t1
+\IF tiles(absoluteCoord?).type = ConveyorTile \\ \t1
+\THEN controller.notifyAutomovement(robot?) \\ \t1
+\IF tiles(absoluteCoord?).type = HintTile \\ \t1
+\THEN controller.notifyHint(Board.getHint(robot?), robot?) \\ \t1
+output! = SUCCESS
+\end{schema} \\
+\begin{schema}{saveLocation}
+absCoords? : AbsoluteCoord \\
+robot? : Robot
+\where
+\exists t : Tile | t.occupier = robot? \wedge t.clear\\
+tiles(absCoords?).put(robot) \\
+viewer.notifyView
+\end{schema}
+\znewpage
+\begin{schema}{calculateNewLocation}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+absoluteCoord : AbsoluteCoord \\
+output! : (AbsoluteCoord \union Null)
+\where
+\IF checkPath(localCoords?, robot?) \\
+\THEN absoluteCoord = firstConveyor(c, path) \\ \t1
+\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
+output! = s.output! \\
+\ELSE output! = Null.selfRef
+\end{schema} \\
+\begin{schema}{checkPath}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+path : seq RelativeCoord \\
+absoluteCoord : AbsoluteCoord \\
+bool : \bool \\
+output! : \bool
+\where
+bool = false \\
+path = robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) \\
+\exists (c, t) : tiles | t.occupier = robot? \implies \\ \t1
+\forall (int, coord) : path | \\ \t2
+((addAbtoRel(c, coord) = Null \vee \\ \t2
+(tiles(addAbtoRel(c, coord).type = BrokenRobotTile) \vee \\ \t2
+\exists r: Robot | tiles(addAbtoRel(c, coord).occupier = r )\implies \\ \t3
+\exists (int1, coord1) : path | int1 < int \\ \t3
+tiles(addAbtoRel(c, coord1).type = ConveyorTile \\ \t3
+absoluteCoord = addAbtoRel(c, coord1)) \implies \\ \t4
+bool = \true \\ \t4
+output! = bool
+\end{schema} \\
+\begin{schema}{firstConveyor}
+firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \rightarrow AbsoluteCoord
+\where
+\exists absoluteCoord : AbsoluteCoord |  \\ \t1
+\exists (int, coord): seq RelativeCoord |  \\ \t2
+(tiles(addAbtoRel(absoluteCoord, coord).type = conveyorTile \\ \t2
+conveyorInPath(absoluteCoord, (int, coord)) = addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
+\forall (int1, coord1): seq RelativeCoord | \\ \t3
+\IF tiles(addAbtoRel(absoluteCoord, coord1).type = conveyorTile \\ \t3
+\THEN int <= int1
 \end{schema}
 \end{class}
 
@@ -364,18 +470,6 @@ A Rule consists of a list of possible moves and a list of possible rotations. Th
 possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
 \end{state} \\
-\begin{schema}{moveRequest}
-\Delta Board \\
-localCoords? : RelativeCoord \\
-robot? : Robot \\
-rotation? : Rotation \\
-absoluteCoord : AbsoluteCoord \\
-output! : BoardResponse
-\where
-\IF rotation? \not = 0 \\
-\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
-\ELSE response! = moveWalk(localCoords?, robot?)
-\end{schema}
 \end{class}
 
 A Robot has knowledge of the Controller and maintains a rule-attribute, describing the ruleset of the Robot.
