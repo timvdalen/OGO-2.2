@@ -50,18 +50,6 @@ output! = self
 \end{schema}
 \end{class}
 
-\begin{axdef}
-addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \union Null)
-\where
-\forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
-\IF (0 <= a.x + b.x < BoardWidth \\ \t2
-0 <= a.x + b.x < BoardHeigth) \\ \t1
-\THEN
-addAbtoRel(a,b).x = a.x + b.x \\ \t2
-addAbtoRel(a,b).y = a.y + b.y \\ \t1
-\ELSE addAbtoRel(a,b) = Null.selfRef
-\end{axdef}
-
 \begin{class}{AbsoluteCoord}
 \upharpoonright (x, y, BoardWith, BoardHeight) \\
 \begin{axdef}
@@ -86,6 +74,18 @@ x : \num \\
 y : \num
 \end{state}
 \end{class}
+
+\begin{axdef}
+addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \union Null)
+\where
+\forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
+\IF (0 <= a.x + b.x < BoardWidth \\ \t2
+0 <= a.x + b.x < BoardHeigth) \\ \t1
+\THEN
+addAbtoRel(a,b).x = a.x + b.x \\ \t2
+addAbtoRel(a,b).y = a.y + b.y \\ \t1
+\ELSE addAbtoRel(a,b) = Null.selfRef
+\end{axdef}
 
 Tile class has five specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A Tile has a type, which is either of the above specializations, and a field 'occupier', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile.
 \begin{class}{Tile}
@@ -221,7 +221,7 @@ The method below creates a set of tiles from a file. This is not further specifi
 output! : \power (AbsoluteCoord \fun Tile)
 \end{schema} \\
 \begin{classcom}
-CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot. 
+CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot.
 \end{classcom} \\
 \begin{schema}{canReset}
 \where
