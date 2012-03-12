@@ -2,10 +2,6 @@ MSCs suggesties:
 - Uitleg over de verschillende soorten pijlen? Waarom gebruiken we soms signals en soms method calls?
 - Viewer_initialize
   ~ Inconsistentie met classe diagram: initialize uit Viewer heeft ook de Controller nodig!!
-- Viewer_update
-  ~ Persoonlijk zou ik in Board nog een interne actie "make snapshot" toevoegen, vóór de return van BoardSnapshot.
-- Initialize
-  ~ Uitleg waarom wij gekozen hebben voor een preInitialize() en postInitialize() in Controller!
 - Robotmove_to_conveyer
   ~ Net als in Robotmove_to_hint: kan er hier een coregion gebruikt worden bij de laatste twee notify's?
 
