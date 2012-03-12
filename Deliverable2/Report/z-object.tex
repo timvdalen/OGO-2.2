@@ -111,6 +111,8 @@ rotation : Rotation
 \end{state}
 \end{class}
 
+The Board class maintains several invariants and has a variety of methods, since it is one of the major components of the game.
+
 \begin{class}{Board}
 \upharpoonright (tiles, robots) \\
 \begin{state}
@@ -173,6 +175,7 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 \end{state}
 \end{class}
 
+A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. Since each robot has a certain rotation, possibleMoves maps relative coordinates and rotations to each possible relative coordinate that the robot can move to. The list of possible rotations is simply a list of all rotations.
 \begin{class}{Rule}
 \upharpoonright (possibleMoves, possibleRotations) \\
 \begin{state}

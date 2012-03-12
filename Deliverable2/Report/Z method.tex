@@ -91,7 +91,7 @@ output! : Hint
 \ELSE \\ \t1
 \IF absCoord?.y < absCoord1.y \\ \t1
 \THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t1
-\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\ELSE \exists hint: \{NORTH, WEST, NORTH\_WEST\} | output! = hint
 \end{schema}
 
 \begin{schema}{getHintRight}
@@ -104,7 +104,7 @@ output! : Hint
 \THEN output! = EAST \\
 \ELSE \\ \t1
 \IF absCoord?.y < absCoord1.y \\ \t1
-\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, SOUTH\_EAST\} | output! = hint \\ \t1
 \ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint
 \end{schema}
 
@@ -131,20 +131,25 @@ output! : ({Robot \union Null} \cross {Robot \union Null})
 tiles(abCoord1) = tile1 \implies \\ \t3
 tiles(abCoord)' = tile1 \\ \t3
 tiles(abCoord1)' = tile \\ \t3
-\exists n : notifyView \\ \t3
-\exists r : Robot | tile.occupier = r \implies \\ \t4
-\exists rotation : Rotation | robots(r)' = rotation \\ \t4
-\exists n : notifyStateChange | n.input? = r \\ \t3
-\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
-\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
-\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
+specialExchange(tile) \\ \t3
+specialExchange(tile1) \\ \t3
+viewer.stateChange \\ \t3
 \IF tile.occupier = Null \\ \t4
 tile1.occupier \not = Null\\ \t3
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1 \\ \t3
+\THEN moveConveyorSwitch(abCoord1) \\ \t3
 \IF tile1.occupier = Null \\ \t4
 tile.occupier \not = Null \\ \t3
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1
+\THEN moveConveyorSwitch(abCoord)
 \end{schema}
+
+\begin{schema}{specialExchange}
+\Delta Board \\
+tile? : Tile
+\where
+\exists r : Robot | tile.occupier = r \implies \\ \t1
+\exists rotation : Rotation | robots(r)' = rotation 
+\end{schema}
+
 
 PRE: tile with absoluteCoord? is empty
 \begin{schema}{moveConveyorSwitch}
