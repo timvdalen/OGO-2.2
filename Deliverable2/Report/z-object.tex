@@ -40,6 +40,7 @@ BoardResponse == \{FAILED, SUCCESS, WIN\}
 Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 EAST\_SOUTH, SOUTH\_WEST, WEST\_NORTH\}
 \end{axdef}
 
+\section{Classes}
 We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
 \begin{class}{AbsoluteCoord}
@@ -67,7 +68,14 @@ y : \num
 \end{state}
 \end{class}
 
-\section{Classes and invariants}
+Tile class has five specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A Tile has a type, which is either of the above specializations, and a field 'occupier', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile.
+\begin{class}{Tile}
+\upharpoonright (type, occupier) \\
+\begin{state}
+type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
+occupier : Robot \cup Null
+\end{state}
+\end{class}
 
 \begin{class}{NormalTile}
 Tile
@@ -84,6 +92,9 @@ Tile
 \begin{class}{HomeTile}
 Tile \\
 \upharpoonright (target) \\
+\begin{classcom}
+A HomeTile always belongs to one specific Robot, the target robot.
+\end{classcom} \\
 \begin{state}
 target : Robot
 \end{state}
@@ -92,18 +103,15 @@ target : Robot
 \begin{class}{ConveyorTile}
 Tile \\
 \upharpoonright (rotation) \\
+\begin{classcom}
+A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
+\end{classcom} \\
 \begin{state}
 rotation : Rotation
 \end{state}
 \end{class}
 
-\begin{class}{Tile}
-\upharpoonright (type, occupier) \\
-\begin{state}
-type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
-occupier : Robot \cup Null
-\end{state}
-\end{class}
+The Board class maintains several invariants and has a variety of methods, since it is one of the major components of the game.
 
 \begin{class}{Board}
 \upharpoonright (tiles, robots) \\
@@ -167,6 +175,7 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 \end{state}
 \end{class}
 
+A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. Since each robot has a certain rotation, possibleMoves maps relative coordinates and rotations to each possible relative coordinate that the robot can move to. The list of possible rotations is simply a list of all rotations.
 \begin{class}{Rule}
 \upharpoonright (possibleMoves, possibleRotations) \\
 \begin{state}
