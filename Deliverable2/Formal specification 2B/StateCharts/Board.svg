@@ -213,14 +213,12 @@
       /><line y2="56" fill="none" x1="199" clip-path="url(#clipPath15)" x2="187" y1="50"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(182,172)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="80" fill="none" x1="160" clip-path="url(#clipPath16)" x2="160" y1="50"
-      /><line y2="80" fill="none" x1="160" clip-path="url(#clipPath16)" x2="50" y1="80"
+    ><path fill="none" d="M160 50 L160 73 C160 73 160 80 153 80 M153 80 L50 80" clip-path="url(#clipPath16)"
       /><line y2="86" fill="none" x1="50" clip-path="url(#clipPath16)" x2="62" y1="80"
       /><line y2="74" fill="none" x1="50" clip-path="url(#clipPath16)" x2="62" y1="80"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(41,232)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="70" fill="none" x1="141" clip-path="url(#clipPath17)" x2="141" y1="50"
-      /><line y2="70" fill="none" x1="141" clip-path="url(#clipPath17)" x2="50" y1="70"
+    ><path fill="none" d="M141 50 L141 63 C141 63 141 70 134 70 M134 70 L50 70" clip-path="url(#clipPath17)"
       /><line y2="76" fill="none" x1="50" clip-path="url(#clipPath17)" x2="62" y1="70"
       /><line y2="64" fill="none" x1="50" clip-path="url(#clipPath17)" x2="62" y1="70"
     /></g
@@ -230,15 +228,12 @@
       /><line y2="56" fill="none" x1="62" clip-path="url(#clipPath18)" x2="48" y1="56"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(122,62)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="50" fill="none" x1="220" clip-path="url(#clipPath19)" x2="220" y1="119"
-      /><line y2="50" fill="none" x1="220" clip-path="url(#clipPath19)" x2="50" y1="50"
+    ><path fill="none" d="M220 119 L220 57 C220 57 220 50 213 50 M213 50 L50 50" clip-path="url(#clipPath19)"
       /><line y2="56" fill="none" x1="50" clip-path="url(#clipPath19)" x2="62" y1="50"
       /><line y2="44" fill="none" x1="50" clip-path="url(#clipPath19)" x2="62" y1="50"
     /></g
     ><g font-size="11" stroke-linecap="butt" transform="translate(-8,62)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1"
-    ><line y2="200" fill="none" x1="159" clip-path="url(#clipPath20)" x2="50" y1="200"
-      /><line y2="50" fill="none" x1="50" clip-path="url(#clipPath20)" x2="50" y1="200"
-      /><line y2="50" fill="none" x1="50" clip-path="url(#clipPath20)" x2="79" y1="50"
+    ><path fill="none" d="M159 200 L57 200 C57 200 50 200 50 193 M50 193 L50 57 C50 57 50 50 57 50 M57 50 L79 50" clip-path="url(#clipPath20)"
       /><line y2="44" fill="none" x1="79" clip-path="url(#clipPath20)" x2="67" y1="50"
       /><line y2="56" fill="none" x1="79" clip-path="url(#clipPath20)" x2="67" y1="50"
     /></g
@@ -341,108 +336,6 @@
       >requestTilesExchange() [Robot on moved tiles] / Controller.notifyAutoMovement()</text
     ></g
     ><g font-size="10" transform="rotate(-45) translate(-245.3663,0)" fill-opacity="1" fill="rgb(120,120,120)" text-rendering="geometricPrecision" stroke="rgb(120,120,120)" stroke-opacity="1"
-    ><text x="0" xml:space="preserve" y="0" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="0" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="0" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="56" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="56" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="56" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="112" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="112" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="112" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="168" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="168" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="168" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="224" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="224" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="224" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="280" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="280" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="280" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="336" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="336" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="336" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="392" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="392" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="392" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="448" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="448" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="448" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="504" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="504" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="504" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="560" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="560" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="560" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="616" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="616" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="616" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="672" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="672" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="672" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="728" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="728" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="728" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="784" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="784" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="784" stroke="none"
-      ></text
-      ><text x="100" xml:space="preserve" y="840" stroke="none"
-      ></text
-      ><text x="445" xml:space="preserve" y="840" stroke="none"
-      ></text
-      ><text x="790" xml:space="preserve" y="840" stroke="none"
-      ></text
-      ><text x="0" xml:space="preserve" y="896" stroke="none"
-      ></text
-      ><text x="345" xml:space="preserve" y="896" stroke="none"
-      ></text
-      ><text x="690" xml:space="preserve" y="896" stroke="none"
-      ></text
     ></g
   ></g
 ></svg
