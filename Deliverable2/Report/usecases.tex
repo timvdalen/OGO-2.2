@@ -27,7 +27,8 @@
 	\input{MSC-files/viewer_update.tex}
 
 	\subsubsection{Initialize}
-	When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots, which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. All entities are now initialized.
+	When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots, which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. All entities are now initialized. \\
+We introduced a separate pre- and post-initialize method, because the controller can not fully initialize without the robots and the robots, in turn, must be initialized with the controller. So, the pre-initialize is used to create the controller and the post-initialize is used to store all the robots that have been initialized by the board.
   	
 	\input{MSC-files/initialize.tex}
     	
