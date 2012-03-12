@@ -14,6 +14,10 @@
 
 	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
 
+	We are using the following MSC syntax:
+
+	\input{MSC-files/uitleg.tex}
+
 	Note: the symbol $\vdots$ denotes the start and end of a co-region.
 
 	\subsubsection{Initialize viewer}
@@ -64,7 +68,7 @@ We introduced a separate pre- and post-initialize method, because the controller
 	\input{MSC-files/robotmove_reject.tex}
 
 
-	\advance\count17 by -6
+	%\advance\count17 by -6
 
 	\subsubsection{Ordinary exchange}
 	The controller requests the board to do a tile exchange. The board will get two valid tiles (internally, this function relies on the rule entities), swap them and returns an empty RobotPair to signal that there were no robots on the tiles.

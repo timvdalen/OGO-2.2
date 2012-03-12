@@ -13,10 +13,10 @@ c box c [label=""];
 
 d => c [label="requestBoardSnapshot()"];
 c => b [label="requestBoardStatus()"];
-b rbox b [label="make snapshot"];
+b box b [label="make snapshot"];
 b >> c [label="BoardSnapshot"];
 c >> d [label="BoardSnapshot"];
-d rbox d [label="updateView()"];
+d box d [label="updateView()"];
 
 |||;
 
