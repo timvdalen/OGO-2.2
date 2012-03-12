@@ -5,41 +5,290 @@
 \usepackage[english]{babel}
 \usepackage{ltcadiz}
 \begin{document}
-\today
 \title{Z schemas (methods)}
 \author{J. Peters, s102231}
 \maketitle
 
-BEGIN OK, enable moves
+
+BEGIN BOARD
+Gegevens worden ingelezen vanuit file
+\begin{schema}{initialize}
+\Delta Board
+\where
+tiles' = tiles \\
+robots' = robots \\
+controller.preInitialize \\
+\forall r : Robot | r \in \dom(Robots) \implies \\ \t1
+r.initialize(controller)
+\end{schema}
+
+\begin{schema}{canReset}
+\Delta Board
+\where
+\IF \exists t : Tile | t.type = HomeTile \\ \t1
+t.occupier = t.target \\
+\THEN board.reset
+\end{schema}
+
+\begin{schema}{reset}
+\Delta Board
+\where
+tiles' = Null \\
+robots' = Null
+\end{schema}
+
+\begin{schema}{requestSnapShot}
+\Xi Board \\
+boardSnapshot : BoardSnapShot \\
+output! : BoardSnapshot
+\where
+\forall t : Tile |  \\ \t1
+\exists abCoord : AbsoluteCoord | tiles(abCoord) = t \implies \\ \t2
+\exists c : cloneTile | c.tile? = t \\ \t3
+boardSnapshot(abCoord) = c.output! \\
+output! = boardSnapshot
+\end{schema}
+
+\begin{schema}{cloneTile}
+\Delta Tile \\
+tile? : Tile \\
+output! : Tile 
+\where
+tile? \not = output! \\
+tile?.type = output!.type \\
+tile?.occupier = output!.occupier 
+\end{schema}
+
+
+\begin{schema}{getHint}
+\Xi Board \\
+robot? : Robot \\
+output!: Hint
+\where
+\exists t, t1: Tile | t.occupier = robot? @\\ \t1
+t1.type = HomeTile @ t1.target = robot? \\ \t1
+\exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
+\IF coord.x = coord1.x \\ \t2
+\THEN \\ \t3
+\IF coord.y < coord1.y \\ \t3
+\THEN output! = SOUTH \\ \t3
+\ELSE output! = NORTH \\ \t2
+\ELSE \\ \t3
+\IF coord.x > coord1.x \\ \t3
+\THEN output! = getHintLeft(coord , coord1) \\ \t3
+\ELSE output! = getHintRight(coord, coord1)
+\end{schema}
+
+\begin{schema}{getHintLeft}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint 
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = WEST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\end{schema}
+
+\begin{schema}{getHintRight}
+\Xi Board \\
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = EAST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint
+\end{schema}
+
+Rekening houdende met de invariant...
+\begin{schema}{getValidTiles}
+\Xi Board \\
+output! : (Tile \cross Tile)
+\where
+\exists t,t1: Tile | t \not = t1  @ \\ \t1
+t.type \not = HomeTile \\ \t1
+t.type \not = HintTile \\ \t1
+t1.type \not = HomeTile \\ \t1
+t1.type \not = HintTile \implies \\ \t1
+output! = (t \cross t1)
+\end{schema}
+
+Tileswitch aanroep goed checken / kijken naar functieaanroep notifystatechange
+\begin{schema}{requestTilesExchange}
+\Delta Board \\
+output! : ({Robot \union Null} \cross {Robot \union Null})
+\where
+\exists (tile \cross tile1) : getValidTiles | \\ \t1
+\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t2
+tiles(abCoord1) = tile1 \implies \\ \t3
+tiles(abCoord)' = tile1 \\ \t3
+tiles(abCoord1)' = tile \\ \t3
+\exists n : notifyView \\ \t3
+\exists r : Robot | tile.occupier = r \implies \\ \t4
+\exists rotation : Rotation | robots(r)' = rotation \\ \t4
+\exists n : notifyStateChange | n.input? = r \\ \t3
+\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
+\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
+\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
+\IF tile.occupier = Null \\ \t4
+tile1.occupier \not = Null\\ \t3
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1 \\ \t3
+\IF tile1.occupier = Null \\ \t4
+tile.occupier \not = Null \\ \t3
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1
+\end{schema}
+
+PRE: tile with absoluteCoord? is empty
+\begin{schema}{moveConveyorSwitch}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+relCoord : RelativeCoord
+\where
+moveConveyorSwitchSub(0,1) \\
+moveConveyorSwitchSub(1,0) \\
+moveConveyorSwitchSub(0,-1) \\
+moveConveyorSwitchSub(-1,0) \\
+\end{schema}
+
+\begin{schema}{moveConveyorSwitchSub}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+x? : int \\
+y? : int \\
+relCoord : RelativeCoord
+\where
+relCoord.x = x? \\
+relCoord.y = y? \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupier = Null \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupier = r \\
+\THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
+saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
+\end{schema}
+
+BEGIN OK, SAVE LOCATIONS NECESSARY
 \begin{schema}{moveRequest}
 \Delta Board \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
 rotation? : Rotation \\
+absoluteCoord : AbsoluteCoord \\
 output! : BoardResponse
 \where
-\IF rotation? \not = 0 \\ \t1 
+\IF rotation? \not = 0 \\ \t1
 localCoords.x = 0 \\ \t1
 localCoords.y = 0 \\ \t1
  \exists r : robot?.rule.possibleRotations | r = rotation?\\
 \THEN response! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 \ELSE \\ \t1
-\IF robot?.Rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot
+\IF robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
+rotation? = 0 \\
+\THEN \exists l : calculateNewLocation | l.localCoords? = localCoords? \\ \t1
+l.robot? = robot? \\ \t1
+absoluteCoord = l.output! \\ \t1
+\IF absoluteCoord = null \\ \t1
+\THEN output! = FAILED \\ \t1
+\ELSE \\ \t2
+\IF tiles(absoluteCoord).type = HomeTile \\ \t3
+tiles(absoluteCoord).target = robot? \\ \t2
+\THEN SAVELOCATION \\ \t3
+output! = WIN \\ \t2
+\ELSE SAVELOCATION \\ \t3
+\IF tiles(absoluteCoord).type = ConveyorTile \\ \t3
+\THEN \exists n : notifyAutomovement | n.boardResponse? = SUCCESS \\ \t4
+n.robot? = robot? \\ \t3
+\IF tiles(absoluteCoord).type = HintTile \\ \t3
+\THEN \exists n1 : notifyHint | \\ \t4
+\exists hint : getHint | hint.robot? = robot? \\ \t5
+hint.output! = n1.hint? \\ \t5
+n1.robot? = robot? \\ \t3
+output! = SUCCESS
 \end{schema}
 
-WORKING ON IT, check ADD
-\begin{schema}{canPlaceRobot}
+\begin{schema}{saveLocation}
+\Xi Board \\
+\Delta Tile \\
+absCoords? : AbsoluteCoord \\
+robot? : Robot
+\where
+\exists t : Tile | t.occupier = robot? \implies clearTile(t)\\
+put(tiles(absCoords?), robot?) \\
+viewer.notifyView
+\end{schema}
+
+\begin{schema}{clearTile}
+\Delta Tile \\
+\where
+occupier' = Null
+\end{schema}
+
+\begin{schema}{put}
+\Delta Tile \\
+input? : Robot
+\where
+occupier' = input?
+\end{schema}
+
+This one should be done. Gets the path for the move it wants to do. Gets coordinate, then for all tiles it holds that if he can't pass, a conveyor tile should be in front of the obstruction (the first conveyor). Else null
+\begin{schema}{calculateNewLocation}
+\Xi Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+absoluteCoord : AbsoluteCoord \\
+output! : (AbsoluteCoord \union Null) 
+\where
+\IF checkPath(localCoords?, robot?) \\
+\THEN absoluteCoord = firstConveyor(c, path) \\ \t1
+\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
+output! = s.output! \\
+\ELSE output! = Null
+\end{schema}
+
+\begin{schema}{checkPath}
 \Xi Board \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
 path : seq RelativeCoord \\
 absoluteCoord : AbsoluteCoord \\
-output! : \bool \\
+bool : \bool \\
+output! : \bool
 \where
-path = robot?.rule.possibleMoves(RelativeCoord \cross robots(robot?)) \\
-\exists (coord1, t) : tiles | t.occupies = robot? \implies \\ \t1
-\forall (int, coord) : path | 
+bool = false \\
+path = robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) \\
+\exists (c, t) : tiles | t.occupier = robot? \implies \\ \t1
+\forall (int, coord) : path | \\ \t2
+((addAbtoRel(c, coord) = Null \vee \\ \t2
+(tiles(addAbtoRel(c, coord).type = BrokenRobotTile) \vee \\ \t2
+\exists r: Robot | tiles(addAbtoRel(c, coord).occupier = r )\implies \\ \t3
+\exists (int1, coord1) : path | int1 < int \\ \t3
+tiles(addAbtoRel(c, coord1).type = ConveyorTile \\ \t3
+absoluteCoord = addAbtoRel(c, coord1)) \implies \\ \t4
+bool = \true \\ \t4
+output! = bool
+\end{schema}
+
+
+seq of RelativeCoord should contain conveyorTile which is not blocked (no brokenTiles / occupied tiles on path in front of conveyorTile)
+Specifies that, for a given path with conveyor tile, there exists such a conveyor tile that the int is minimal. This is the AbsoluteCoord given back by the function
+\begin{schema}{firstConveyor}
+\Xi Board \\
+firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \rightarrow AbsoluteCoord
+\where
+\exists absoluteCoord : AbsoluteCoord |  \\ \t1
+\exists (int, coord): seq RelativeCoord |  \\ \t2
+(tiles(addAbtoRel(absoluteCoord, coord).type = conveyorTile \\ \t2
+conveyorInPath(absoluteCoord, (int, coord)) = addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
+\forall (int1, coord1): seq RelativeCoord | \\ \t3
+\IF tiles(addAbtoRel(absoluteCoord, coord1).type = conveyorTile \\ \t3
+\THEN int <= int1
 \end{schema}
 
 DONE
@@ -49,9 +298,166 @@ addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \u
 \forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
 \IF (0 <= a.x + b.x < BoardWidth \\ \t2
 0 <= a.x + b.x < BoardHeigth) \\ \t1
-\THEN 
+\THEN
 addAbtoRel(a,b).x = a.x + b.x \\ \t2
 addAbtoRel(a,b).y = a.y + b.y \\ \t1
 \ELSE addAbtoRel(a,b) = Null
 \end{axdef}
-\end{document}
+
+
+BEGIN CONTROLLER
+
+meerdere viewers mogelijk?
+\begin{schema}{addViewer}
+\Delta Controller \\
+viewer? : Viewer \\
+output! : Controller 
+\where
+\IF viewer = Null \\
+\THEN viewer' = viewer? \\ \t1
+output! = self \\
+\ELSE output! = Null
+\end{schema}
+
+
+geeft door aan robot dat die fucked is
+\begin{schema}{notifyAutoMovement}
+\Xi Controller \\
+robot? : Robot
+\where
+robot?.notifyAutomovement
+\end{schema}
+
+Onderscheid tussen moveRequest board en controller..
+\begin{schema}{moveRequest}
+\Xi Controller \\
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+ouput! : BoardResponse
+\where
+\exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
+m.robot? = robot? \\ \t1
+m.rotation? = rotation? \\ \t1
+m.output! = output! \\ \t1
+\IF output! = WIN \\ \t1
+\THEN \forall r : Robot | r.terminate \\ \t2
+\exists n : viewer.notifyGameOver | n.robot? = robot? \\ \t2
+board.canReset \\ \t2
+terminate
+\end{schema}
+
+onderscheid tussen robot notifyHint en die van controller
+\begin{schema}{notifyHint}
+\Xi Controller \\
+\Delta Robot \\
+hint? : Hint \\
+robot? : Robot
+\where
+\exists n : robot.notifyHint | n.hint? = hint?
+\end{schema}
+
+\begin{schema}{notifyView}
+\Xi Controller \\
+\Delta Viewer
+\where
+\exists n : notifyStateChange
+\end{schema}
+
+\begin{schema}{preInitialize}
+\Delta Controller
+\where
+board' = Null \\
+robots' = Null \\
+viewer' = Null
+\end{schema}
+
+\begin{schema}{postInitialize}
+\Delta Controller \\
+board? : Board \\
+robots? : \power Robot 
+\where
+board' = board \\
+robots' = robots?
+\end{schema}
+
+\begin{schema}{removeViewer}
+\Delta Controller 
+\where
+viewer' = Null \\
+robots' = robots \\
+board' = board
+\end{schema}
+
+\begin{schema}{requestBoardStatus}
+\Xi Controller \\
+output! : BoardSnapShot
+\where
+\exists r : requestSnapShot | r.output! = output!
+\end{schema}
+
+
+BEGIN ROBOT
+
+initialize geen rules nodig?
+\begin{schema}{initialize}
+\Delta Robot \\
+controller? : Controller \\
+rules? : Rules
+\where
+controller' = controller? \\
+rules' = rules? \\
+hint' = \{Null\}
+\end{schema}
+
+deze functie doet wist in principe eventuele hints, robot heeft dus een hint nodig lijkt me..
+\begin{schema}{notifyAutoMovement}
+\Delta Robot
+\where
+hint' = \{Null\}
+\end{schema}
+
+ook hier hint heel handig
+\begin{schema}{notifyHint}
+\Delta Robot \\
+hint? : Hint
+\where
+hint' = \{hint?\} \union hint
+\end{schema}
+
+VIEWER
+
+\begin{schema}{initialize}
+\Delta Viewer
+\where
+\exists a : addViewer | a.viewer? = self \implies \\ \t1
+a.output! = controller' \\ \t1
+boardChanged' = \false
+\end{schema}
+
+\begin{schema}{notifyGameOver}
+\Delta Viewer \\
+robot? : Robot
+\where
+\end{schema}
+
+\begin{schema}{notifyStateChange}
+\Delta Viewer 
+\where
+boardChanged' = \true
+\end{schema}
+
+\begin{schema}{updateView}
+\Delta Viewer
+\where
+\IF boardChanged = \true \\
+\THEN \exists r: requestBoardStatus | output! = snapShot' \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller \\ 
+\ELSE snapShot' = snapShot \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller
+\end{schema}
+
+\end{document} 

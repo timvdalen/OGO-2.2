@@ -16,10 +16,11 @@
 \maketitle
 
 \begin{abstract}
-
+In this section, we describe the state information, using Z schemas. We first describe the building blocks of our Z specification in the section 'basic axiomatic definitions'. In the section 'classes and invariants', we describe the entities of our class diagram, along with several invariants that should always hold, according to the specification. Hereafter, in the section 'BLA' we describe the methods of our class diagram, using Z.
 \end{abstract}
 
 \section{Basic Axiomatic definitions}
+Below, we define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a seperate set. The BoardWidth and BoardHeight attributes are defined as natural numbers.
 
 \begin{axdef}
 [Null]
@@ -32,6 +33,8 @@ BoardWith : \nat
 \begin{axdef}
 BoardHeight : \nat
 \end{axdef}
+
+In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -59,6 +62,7 @@ y : \num
 \end{schema}
 
 \section{Classes and invariants}
+We first describe the Tile class and all its specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A tile has a type, which is either of the above specializations, and a field 'occupies', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile. The HomeTile is different from the other tiles, since it always belongs to one specific robot, the target robot. A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
 
 \begin{schema}{NormalTile}
 Tile
@@ -87,6 +91,9 @@ type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} 
 occupies : Robot \cup Null
 \end{schema}
 
+The Board consists of a collection of tiles, which maps absolute coordinates to a specific tile. Since each robot may have a different rotation which must be maintained, the Board also has a list of robots and their current rotation. \\
+According to the informal specification, the following invariant must always be maintained: "Each robot has its own home tile and must always be able to reach this home tile." The Board is the one who decides whether a certain move request of a robot is possible, hence this invariant must be maintained by the Board.
+
 \begin{schema}{Board}
 tiles : \power (AbsoluteCoord \fun Tile) \\
 robots : \power (Robot \fun Rotation)
@@ -95,22 +102,34 @@ robots : \power (Robot \fun Rotation)
 \exists d : \dom tiles @ d.occupies = r \wedge Reachable((c, d))
 \end{schema}
 
+A BoardSnapshot is simply a copy of the current state of the board; therefore, the BoardSnapshot maintains a mapping of absolute coordinates to the tiles.
+
 \begin{schema}{BoardSnapshot}
 tiles : \power (AbsoluteCoord \fun Tile) \\
 \end{schema}
+
+A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. Since each robot has a certain rotation, possibleMoves maps relative coordinates and rotations to each possible relative coordinate that the robot can move to. The list of possible rotations is simply a list of all rotations.
 
 \begin{schema}{Rule}
 possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
 \end{schema}
 
-\begin{schema}{Robot}
-rules : Rules
-\end{schema}
+A Robot has no knowledge about its environment; it only knows which type of robot it is and this is maintained in rules.
 
-\begin{schema}{Viewer}
+\begin{schema}{Robot}
+rules : Rules \\
 controller : Controller
 \end{schema}
+
+The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller.
+
+\begin{schema}{Viewer}
+controller : Controller \\
+boardChanged : \bool
+\end{schema}
+
+The controller has knowledge about the Board, the Viewer and all the robots that are currently on the board.
 
 \begin{schema}{Controller}
 board : Board \\
@@ -181,4 +200,4 @@ output! : \bool
 \ELSE output! = \false
 \end{schema}
 
-\end{document}
+\end{document} 

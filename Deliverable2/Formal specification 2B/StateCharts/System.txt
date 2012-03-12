@@ -1,0 +1,1 @@
+This state charts shows how the complete system works first we have the board class, then the controller class, then the viewer class and the robot class is described as last.

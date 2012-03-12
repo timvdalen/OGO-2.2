@@ -1,56 +1,60 @@
-\digraph[scale=0.5]{classdiagram}{
-    fontname = "Sans"
-    fontsize = 8
-    splines = ortho
-    node [fontname = "Sans",fontsize = 8, shape = "record"]
-    edge [fontname = "Sans",fontsize = 8, arrowhead=open]
-#
-    BoardSnapshot [label="{BoardSnapshot||}"]
-    BoardSnapshot->Tile[headlabel="- snapTiles"]
-#
-    Board [label="{Board||}"]
-    Board->Tile [arrowtail=diamond,headlabel="- tiles"]
-    Board->Coord [style=dashed]
-#
-    Hint [label="{Hint|- NORTH\l- NORTH_EAST\l- EAST\l- EAST_SOUTH\l- SOUTH\l- SOUTH_WEST\l- WEST\l- WEST_NORTH|}"]
-#
-    BoardResponse [label="{BoardResponse|- FAILED\l- SUCCESS\l- WIN|}"]
-    Board->BoardResponse [style=dashed]
-    Board->Hint [style=dashed]
-#
-    Controller [label="{Controller||}"]
-    Controller->Board [headlabel="- board"]
-    Controller->Viewer [headlabel="- viewer",arrowhead=none,taillabel="- controller"]
-    Controller->Robot [headlabel="- robots",arrowhead=none,taillabel="- controller"]
-    Controller->Coord [style=dashed]
-#
-    Viewer [label="{Viewer||+ notifyStateChange()\l+ notifyGameOver(in robot : Robot)}"]
-    Viewer->BoardSnapshot [style=dashed]
-#
-    Tile [label="{Tile||}"]
-    Tile->Robot [headlabel="- occupied"]
-    TileTop [shape=point]
-    TileTop->Tile [arrowhead=empty]
-    NormalTile [label="{NormalTile||}"]
-    NormalTile->TileTop [arrowhead=none]
-    HomeTile [label="{HomeTile||}"]
-    HomeTile->TileTop [arrowhead=none]
-    HomeTile->Robot[headlable="- homeRobot"]
-    HintTile [label="{HintTile||}"]
-    HintTile->TileTop [arrowhead=none]
-    HintTile->Rotation [style=dashed]
-    ConveyorTile [label="{ConveyorTile|- rotation : Rotation|}"]
-    ConveyorTile->TileTop [arrowhead=none]
-    BrokenRobotTile [label="{BrokenRobotTile||}"]
-    BrokenRobotTile->TileTop [arrowhead=none]
-#
-    Robot [label="{Robot||+ initialize()\l+ notifyAutoMovement()\l+ notifyHint(in hint : Hint)\l+ terminate()}"]
-    Robot->AbstractRule [headlabel="- rule"]
-#
-    Coord [label="{Coord|- x : int\l- y : int|}"]
-#
-    Rotation [label="{Rotation|- 0DEG\l- 90DEG\l- 180DEG\l- 270DEG\l|}"]
-#
-    AbstractRule [label="{AbstractRule|- possibleMoves : CoordinateList\l- possibleRotations : RotationList|}"]
-    AbstractRule->Rotation [style=dashed]
+\let\l=\relax
+\let\<=\relax
+\let\>=\relax
+\digraph[scale=.5]{classdiagram}{
+margin=0
+fontsize=8
+fontname=Helvetica
+compound=true
+splines=ortho
+node [fontsize=8, font=Helvetica, shape=record]
+edge [fontsize=8, font=Helvetica, arrowhead=open, labeldistance=2]
+Board [label="{Board|- width : int\l- height : int\l|+ canReset() : bool\l+ getHint(r : Robot) : Hint\l+ Initialize()\l+ moveRequest(loc : RelativeCoord, r : Robot, rot : Rotation) : BoardResponse\l+ requestSnapshot() : BoardSnapshot\l+ requestTilesExchange() : RobotPair\l- calculateNewLocation(loc : RelativeCoord, r : Robot) :
+AbsoluteCoord\l- getValidTiles() : TilePair\l- reset()\l- saveLocation(loc : AbsoluteCoord, r : Robot)\l}"]
+Hint [label="{[Hint]| NORTH\l NORTH_EAST\l EAST\l EAST_SOUTH\l SOUTH\l SOUTH_WEST\l WEST\l WEST_NORTH\l}"]
+BoardResponse [label="{[BoardResponse]| FAILED\l SUCCESS\l WIN\l}"]
+Viewer [label="{Viewer||+ initialize()\l+ notifyGameOver(r : Robot)\l+ notifyStateChange()\l- updateView()\l}"]
+BoardSnapshot [label="{BoardSnapshot||}"]
+Controller [label="{Controller||+ addViewer(v : Viewer)\l+ moveRequest(loc : RelativeCoord, r : Robot, rot : Rotation) : BoardResponse\l+ notifyAutoMovement(r : Robot)\l+ notifyHint(h : Hint, r : Robot)\l+ notifyView()\l+ preInitialize()\l+ postInitialize(b : Board, rs : RobotList)\l+ removeViewer()\l+ requestBoardStatus() : BoardSnapshot\l- terminate()\l}"]
+AbsoluteCoord [label="{AbsoluteCoord|+ x : int\l+ y : int\l|}"]
+Tile [label="{Tile||}"]
+/**/
+subgraph cluster_Tiles {
+NormalTile [label="{NormalTile||}"]
+HomeTile [label="{HomeTile||}"]
+HintTile [label="{HintTile||}"]
+ConveyorTile [label="{ConveyorTile|- rot : Rotation|}"]
+BrokenRobotTile [label="{BrokenRobotTile||}"]
+}
+/**/
+Robot [label="{Robot||+ initialize(c : Controller, r : Rule)\l+ notifyAutoMovement()\l+ notifyHint(h : Hint)\l+ terminate()\l}"]
+RelativeCoord [label="{RelativeCoord|+ x : int\l+ y : int\l|}"]
+Rule [label="{\<\<Rule\>\>|- possibleMoves : RelativeCoordList\l- possibleRotations : RotataionList\l|}"]
+Rotation [label="{[Rotation]| 0DEG\l 90DEG\l 180DEG\l 270DEG\l}"]
+/**/
+Board->Controller [taillabel=1, headlabel="0..*"]
+Board->Tile [arrowtail=diamond,dir=both, taillabel=1,headlabel="*"]
+Board->Robot [taillabel=1, headlabel="0..*"]
+/**/
+Controller->Viewer [taillabel=1, headlabel=1, arrowhead=none]
+Controller->Robot [taillabel=1, headlabel="*", arrowhead=none]
+/**/
+Tile->Robot [taillabel=1, headlabel="              0..1 - occupier"]
+/**/
+HomeTile->Robot [taillabel=1, headlabel="              1 - homeRobot"]
+/**/
+Robot->Rule [taillabel="*", headlabel=1]
+/**/
+BoardSnapshot->Tile [taillabel=1, headlabel="*"]
+/**/
+NormalTile->Tile [ltail=cluster_Tiles,arrowhead=empty]
+/**/
+Board->Hint [style=dashed]
+Board->BoardResponse [style=dashed]
+Board->AbsoluteCoord [style=dashed]
+Viewer->BoardSnapshot [style=dashed]
+Controller->AbsoluteCoord [style=dashed]
+Robot->RelativeCoord [style=dashed]
+Rule->Rotation [style=dashed]
+ConveyorTile->Rotation [style=dashed]
 }
