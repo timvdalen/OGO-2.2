@@ -7,8 +7,8 @@ fontsize=8
 fontname=Helvetica
 compound=true
 splines=ortho
-node [fontsize=8, font=Helvetica, shape=record]
-edge [fontsize=8, font=Helvetica, arrowhead=open, labeldistance=2]
+node [fontsize=8, fontname=Helvetica, shape=record]
+edge [fontsize=8, fontname=Helvetica, arrowhead=open, labeldistance=2]
 Board [label="{Board|- width : int\l- height : int\l|+ canReset() : bool\l+ getHint(r : Robot) : Hint\l+ Initialize()\l+ moveRequest(loc : RelativeCoord, r : Robot, rot : Rotation) : BoardResponse\l+ requestSnapshot() : BoardSnapshot\l+ requestTilesExchange() : RobotPair\l- calculateNewLocation(loc : RelativeCoord, r : Robot) :
 AbsoluteCoord\l- getValidTiles() : TilePair\l- reset()\l- saveLocation(loc : AbsoluteCoord, r : Robot)\l}"]
 Hint [label="{[Hint]| NORTH\l NORTH_EAST\l EAST\l EAST_SOUTH\l SOUTH\l SOUTH_WEST\l WEST\l WEST_NORTH\l}"]
@@ -57,4 +57,4 @@ Controller->AbsoluteCoord [style=dashed]
 Robot->RelativeCoord [style=dashed]
 Rule->Rotation [style=dashed]
 ConveyorTile->Rotation [style=dashed]
-}
+} 
