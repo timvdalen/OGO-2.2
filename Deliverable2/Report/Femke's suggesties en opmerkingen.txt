@@ -15,7 +15,6 @@ MSCs suggesties:
   ~ Moet er niet een interne actie van Board bij, om de nieuwe locatie te berekenen en deze op te slaan?
 - End game
   ~ Typo: "... it can show THE end game animation."
-  ~ Hoe krijgt de winnende robot het seintje wanneer hij moet termineren?
 
 -----------------------------------------------------------------------------------------------------------------------
 
