@@ -125,7 +125,8 @@ controller : Controller
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller.
 
 \begin{schema}{Viewer}
-controller : Controller
+controller : Controller \\
+boardChanged : \bool
 \end{schema}
 
 The controller has knowledge about the Board, the Viewer and all the robots that are currently on the board.
