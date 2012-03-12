@@ -1,0 +1,77 @@
+BOARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+initialize
+\begin{classcom}
+Initialize is called from the outside world, when a new game has to be started. Note that the tiles and robots in this method are read from an input file. After the tiles and robots have been initiated, the Board pre-initializes the Controller and initializes all the robots. Finally, the Board post-initializes the Controller with the initialized Robots and the Board.
+\end{classcom}
+
+canReset
+\begin{classcom}
+CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot. 
+\end{classcom}
+
+reset
+\begin{classcom}
+When the Board resets itself, both the tiles and the robots are deleted.
+\end{classcom}
+
+requestSnapShot
+\begin{classcom}
+?
+\end{classcom}
+
+cloneTile
+\begin{classcom}
+This help-method is used by the Board to create a snapshot of a single Tile. It takes the tile that will be cloned as input-parameter. Note that the output is not the Tile itself, but simply a copy of the tile with the same attributes as the input tile.
+\end{classcom}
+
+getHint
+\begin{classcom}
+GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. The 
+\end{classcom}
+
+getValidTiles
+getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile.
+
+requestTilesExchange
+...
+
+moveConveyorSwitch
+...
+
+moveConveyorSwitchSub
+...
+
+moveRequest
+...
+
+saveLocation
+saveLocation corresponds to the private method in Board. It has two input-variables: absCoords, which is an absolute coordinate and robot, which is the robot that has been moved.  If we want to save the new location of the robot, the Tile that becomes the new location must be empty. The help-method put is used to place the robot on the empty Tile. After the location has been saved, the viewer is notified of the robot's location change, so it can redraw the Board.
+
+clearTile
+clearTile is a help-method that clears the occupies variable of a Tile.
+
+put
+put is a help-method that takes a robot as input-variable and sets the occupies-variable of a Tile to this robot.
+
+calculateNewLocation
+...
+
+checkPath
+..
+
+firstConveyor
+...
+
+CONTROLLER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+addViewer
+addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
+
+canMakeMove
+canMakeMove is a help-method for Board to determine whether a requested move is possible. It takes local coordinates, a rotation and the ruleset of the Robot that requested the move as input-parameters. It checks whether the requested rotation is possible, according to the possible rotations listed in the ruleset of the Robot. Otherwise, it checks whether the local coordinates, along with the rotation, form a move that is valid according to the Robot's ruleset.
+
+notifyAutoMovement
+notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile. 
+
+moveRequest
+moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended ....
