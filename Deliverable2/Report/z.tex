@@ -152,18 +152,16 @@ output! = \false
 
 \begin{schema}{ConveyorUnitDest}
 \Xi Board \\
-input? : AbsoluteCoord \\
-output! : AbsoluteCoord
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
 \where
-\IF \exists d : AbsoluteCoord @ \\ \t1
-    (\exists s : Occupied | s.coord? = d @ \neg s.output!) \; \; \wedge \\ \t2
-        tiles(input?).type = ConveyorTile \\ \t2
-        tiles(input?).rotation = 0 \Rightarrow \\ \t3 input?.x = d.x + 1 \wedge input?.y = d.y \\ \t2
-        tiles(input?).rotation = 90 \Rightarrow \\ \t3 input?.x = d.x \wedge input?.y = d.y - 1 \\ \t2
-        tiles(input?).rotation = 180 \Rightarrow \\ \t3 input?.x = d.x - 1 \wedge input?.y = d.y \\ \t2
-        tiles(input?).rotation = 270 \Rightarrow \\ \t3 input?.x = d.x \wedge input?.y = d.y + 1 \\ \t1
-    \THEN output! = d \\ \t1
-    \ELSE output! = input?
+output! = (\exists s : Occupied | s.coord? = d @ \neg s.output!) \; \; \wedge \\ \t2
+        tiles(input?).type = ConveyorTile \\ \t1
+        tiles(input?).rotation = 0 \Rightarrow \\ \t2 input?.x = output!.x + 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 90 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y - 1 \\ \t1
+        tiles(input?).rotation = 180 \Rightarrow \\ \t2 input?.x = output!.x - 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 270 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y + 1) \\ \t1
 \end{schema}
 
 \begin{schema}{ConveyorDest}

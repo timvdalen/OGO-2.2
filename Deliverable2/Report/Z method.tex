@@ -19,7 +19,8 @@ tiles' = tiles \\
 robots' = robots \\
 controller.preInitialize \\
 \forall r : Robot | r \in \dom(Robots) \implies \\ \t1
-r.initialize(controller)
+r.initialize(controller) \\ 
+controller.postInitialize(self, robots')
 \end{schema}
 
 \begin{schema}{canReset}
@@ -182,34 +183,56 @@ rotation? : Rotation \\
 absoluteCoord : AbsoluteCoord \\
 output! : BoardResponse
 \where
-\IF rotation? \not = 0 \\ \t1
-localCoords.x = 0 \\ \t1
+\IF rotation? \not = 0 \\
+\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
+\ELSE response! = moveWalk(localCoords?, robot?)
+\end{schema}
+
+\begin{schema}{moveRotate}
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+output! : BoardResponse
+\where
+\IF localCoords.x = 0 \\ \t1
 localCoords.y = 0 \\ \t1
  \exists r : robot?.rule.possibleRotations | r = rotation?\\
-\THEN response! = SUCCESS \\ \t1
+\THEN output! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
-\ELSE \\ \t1
+\ELSE output! = FAILED
+\end{schema}
+
+\begin{schema}{moveWalk}
+\Delta Board
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
 \IF robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
 rotation? = 0 \\
-\THEN \exists l : calculateNewLocation | l.localCoords? = localCoords? \\ \t1
-l.robot? = robot? \\ \t1
-absoluteCoord = l.output! \\ \t1
+\THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
 \IF absoluteCoord = null \\ \t1
 \THEN output! = FAILED \\ \t1
-\ELSE \\ \t2
-\IF tiles(absoluteCoord).type = HomeTile \\ \t3
-tiles(absoluteCoord).target = robot? \\ \t2
-\THEN SAVELOCATION \\ \t3
-output! = WIN \\ \t2
-\ELSE SAVELOCATION \\ \t3
-\IF tiles(absoluteCoord).type = ConveyorTile \\ \t3
-\THEN \exists n : notifyAutomovement | n.boardResponse? = SUCCESS \\ \t4
-n.robot? = robot? \\ \t3
-\IF tiles(absoluteCoord).type = HintTile \\ \t3
-\THEN \exists n1 : notifyHint | \\ \t4
-\exists hint : getHint | hint.robot? = robot? \\ \t5
-hint.output! = n1.hint? \\ \t5
-n1.robot? = robot? \\ \t3
+\ELSE output! = checkTile(absoluteCoord?, robot?)\\ \t2
+\ELSE output! = FAILED
+\end{schema}
+
+\begin{schema}{checkTile}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
+saveLocation(absoluteCoord?, robot?) \\ 
+\IF tiles(absoluteCoord?).type = HomeTile \\ \t1
+tiles(absoluteCoord?).target = robot? \\ 
+\THEN output! = WIN \\ \
+\ELSE  \\ \t1
+\IF tiles(absoluteCoord?).type = ConveyorTile \\ \t1
+\THEN controller.notifyAutomovement(robot?) \\ \t1
+\IF tiles(absoluteCoord?).type = HintTile \\ \t1
+\THEN controller.notifyHint(Board.getHint(robot?), robot?) \\ \t1
 output! = SUCCESS
 \end{schema}
 
