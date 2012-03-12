@@ -501,18 +501,6 @@
     ><g font-size="11" stroke-linecap="butt" transform="translate(112,992)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke-linejoin="round" stroke="black" stroke-opacity="1" stroke-miterlimit="0"
     ><rect x="0" y="0" clip-path="url(#clipPath12)" fill="none" width="80" rx="10" ry="10" height="40"
     /></g
-    ><g font-size="11" transform="translate(112,992)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
-      >Uninitialized</text
-    ></g
-    ><g font-size="11" transform="translate(112,812)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
-      >Uninitialized</text
-    ></g
-    ><g font-size="11" transform="translate(112,472)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
-      >Uninitialized</text
-    ></g
     ><g font-size="11" transform="translate(192,282)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="12" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
       >Game over</text
@@ -524,8 +512,8 @@
       >AndRobotAutoMoved</text
     ></g
     ><g font-size="11" transform="translate(582,1212)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="4" xml:space="preserve" y="12" clip-path="url(#clipPath23)" stroke="none"
-      >MoveRequested</text
+    ><text x="5" xml:space="preserve" y="12" clip-path="url(#clipPath23)" stroke="none"
+      >MoveRequest...</text
     ></g
     ><g font-size="11" transform="translate(792,1072)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="4" xml:space="preserve" y="12" clip-path="url(#clipPath24)" stroke="none"
@@ -545,6 +533,10 @@
     ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
       >OnHomeTile</text
     ></g
+    ><g font-size="11" transform="translate(112,992)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
+    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
+      >Uninitialized</text
+    ></g
     ><g font-size="11" transform="translate(114,1282)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath26)" stroke="none"
       >Victory</text
@@ -556,6 +548,10 @@
     ><g font-size="11" transform="translate(72,952)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="489" xml:space="preserve" y="12" clip-path="url(#clipPath27)" stroke="none"
       >Robot</text
+    ></g
+    ><g font-size="11" transform="translate(112,812)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
+    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
+      >Uninitialized</text
     ></g
     ><g font-size="11" transform="translate(282,802)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="28" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
@@ -572,6 +568,10 @@
     ><g font-size="11" transform="translate(462,582)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="5" xml:space="preserve" y="12" clip-path="url(#clipPath25)" stroke="none"
       >MoveRequestProcessed</text
+    ></g
+    ><g font-size="11" transform="translate(112,472)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
+    ><text x="9" xml:space="preserve" y="12" clip-path="url(#clipPath21)" stroke="none"
+      >Uninitialized</text
     ></g
     ><g font-size="11" transform="translate(112,222)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="7" xml:space="preserve" y="12" clip-path="url(#clipPath29)" stroke="none"
@@ -934,8 +934,8 @@
       >notifyStateChange() / updateView(); Controller.requestBoardStatus()</text
     ></g
     ><g font-size="11" transform="translate(332,1272)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath84)" stroke="none"
-      >Board.saveLocation() [Controller.moveRequest() == WIN]</text
+    ><text x="62" xml:space="preserve" y="12" clip-path="url(#clipPath84)" stroke="none"
+      >[Controller.moveRequest() == WIN]</text
     ></g
     ><g font-size="11" transform="translate(482,1132)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="14" xml:space="preserve" y="17" clip-path="url(#clipPath85)" stroke="none"
@@ -944,8 +944,10 @@
       >SUCCESS]</text
     ></g
     ><g font-size="11" transform="translate(682,1242)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="8" xml:space="preserve" y="19" clip-path="url(#clipPath86)" stroke="none"
-      >[Controller.moveRequest() == SUCCESS]</text
+    ><text x="12" xml:space="preserve" y="12" clip-path="url(#clipPath86)" stroke="none"
+      >[Controller.moveRequest() == FAILED ||</text
+      ><text x="12" xml:space="preserve" y="27" clip-path="url(#clipPath86)" stroke="none"
+      >Success]</text
     ></g
     ><g font-size="11" transform="translate(682,1202)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath87)" stroke="none"
@@ -960,12 +962,12 @@
       >Controller.postInitialize()</text
     ></g
     ><g font-size="11" transform="translate(559,1003)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath90)" stroke="none"
-      >terminate() [!this.robot.OnHomeTile]</text
+    ><text x="71" xml:space="preserve" y="12" clip-path="url(#clipPath90)" stroke="none"
+      >terminate()</text
     ></g
     ><g font-size="11" transform="translate(622,1042)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath90)" stroke="none"
-      >terminate() [!this.robot.OnHomeTile]</text
+    ><text x="71" xml:space="preserve" y="12" clip-path="url(#clipPath90)" stroke="none"
+      >terminate()</text
     ></g
     ><g font-size="11" transform="translate(432,142)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath91)" stroke="none"
@@ -986,8 +988,8 @@
       >notifyHint() / Robot.notifyHint(); Viewer.notifyStateChange(); Board.requestTilesExchange()</text
     ></g
     ><g font-size="11" transform="translate(412,102)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
-    ><text x="26" xml:space="preserve" y="19" clip-path="url(#clipPath95)" stroke="none"
-      >moveRequest() [Robot can be placed] / calculateNewLocation(); saveLocation()</text
+    ><text x="25" xml:space="preserve" y="19" clip-path="url(#clipPath95)" stroke="none"
+      >moveRequest() [Robot can be placed]  / calculateNewLocation(); saveLocation()</text
     ></g
     ><g font-size="11" transform="translate(221,222)" fill-opacity="1" fill="black" text-rendering="geometricPrecision" font-family="sans-serif" stroke="black" stroke-opacity="1"
     ><text x="10" xml:space="preserve" y="12" clip-path="url(#clipPath96)" stroke="none"
