@@ -12,7 +12,7 @@
 
 BEGIN BOARD
 \begin{schema}{getHint}
-\Delta Board \\
+\Xi Board \\
 robot? : Robot \\
 output!: Hint
 \where
@@ -67,12 +67,60 @@ output! : ({Robot \union Null} \cross {Robot \union Null})
 \exists (tile \cross tile1) : getValidTiles | \\ \t1
 \exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t2
 tiles(abCoord1) = tile1 \implies \\ \t3
-tiles(abCoord) = tile1 \\ \t3
-tiles(abCoord1) = tile \\ \t3
+tiles(abCoord)' = tile1 \\ \t3
+tiles(abCoord1)' = tile \\ \t3
+\exists n : notifyView \\ \t3
 \exists r : Robot | tile.occupies = r \implies \\ \t4
+\exists rotation : Rotation | robots(r)' = rotation \\ \t4
 \exists n : notifyStateChange | n.input? = r \\ \t3
 \exists r1 : Robot | tile1.occupies = r \implies \\ \t4
-\exists n1: notifyStateChange | n1.input? = r1
+\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
+\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
+\IF tile.occupies = Null \\ \t4
+tile1.occupies \not = Null\\ \t3
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1 \\ \t3
+\IF tile1.occupies = Null \\ \t4
+tile.occupies \not = Null \\ \t3
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1
+\end{schema}
+
+PRE: tile with absoluteCoord? is empty
+\begin{schema}{moveConveyorSwitch}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+relCoord : RelativeCoord
+\where
+relCoord.x = 0 \\
+relCoord.y = 1 \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\ 
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
+\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
+s.robot? = r \\
+relCoord.x = 1 \\
+relCoord.y = 0 \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupies \not = Null \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\ 
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
+\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
+s.robot? = r \\
+relCoord.x = 0 \\
+relCoord.y = -1 \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupies \not = Null \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
+\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
+s.robot? = r \\
+relCoord.x = -1 \\
+relCoord.y = 0 \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupies \not = Null \\ \t1
+\exists r : Robot | tiles(addAbtoRel(absoluteCoord?, relCoord)).occupies = r \\
+\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = addAbtoRel(absoluteCoord?, relCoord) \\ \t1
+\exists s : saveLocation | s.absCoords = absoluteCoord? \\ \t2
+s.robot? = r \\
 \end{schema}
 
 BEGIN OK, SAVE LOCATIONS NECESSARY
@@ -122,7 +170,8 @@ absCoords? : AbsoluteCoord \\
 robot? : Robot
 \where
 \exists t : clearTile | t.occupies = robot?\\ \t1
-\exists s : put | s.input? = robot?
+\exists s : put | s.input? = robot? \\
+\exists n : notifyView
 \end{schema}
 
 \begin{schema}{clearTile}
@@ -198,9 +247,13 @@ BEGIN CONTROLLER
 meerdere viewers mogelijk?
 \begin{schema}{addViewer}
 \Delta Controller \\
-viewer? : Viewer 
+viewer? : Viewer \\
+output! : Controller 
 \where
-viewer = viewer?
+\IF viewer = Null \\
+\THEN viewer' = viewer? \\ \t1
+output! = self \\
+\ELSE output! = Null
 \end{schema}
 
 Rotatie moet hier in het klasse diagram nog aan toegevoegd worden. Verder heeft deze functie weinig zin, zit al in moveRequest in Board.. ROTATION? nog te verkrijgen, misschien desbetreffende robot toevoegen of kijken of er een rotatie is waarbij het kan?
@@ -224,7 +277,7 @@ geeft door aan robot dat die fucked is
 \Xi Controller \\
 boardResponse? : BoardResponse \\
 robot? : Robot
-\where 
+\where
 robot?.notifyAutomovement
 \end{schema}
 
@@ -240,48 +293,104 @@ ouput! : BoardResponse
 \exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
 m.robot? = robot? \\ \t1
 m.rotation? = rotation? \\ \t1
-m.output! = output!
+m.output! = output! \\ \t1
+\IF output! = WIN \\ \t1
+\THEN \exists n : notifyGameOver | n.robot? = robot?
 \end{schema}
 
 onderscheid tussen robot notifyHint en die van controller
 \begin{schema}{notifyHint}
 \Xi Controller \\
-\Delta Robot \\ 
+\Delta Robot \\
 hint? : Hint \\
 robot? : Robot
 \where
 \exists n : robot.notifyHint | n.hint? = hint?
 \end{schema}
 
+\begin{schema}{notifyView}
+\Xi Controller \\
+\Delta Viewer
+\where
+\exists n : notifyStateChange
+\end{schema}
+
+\begin{schema}{removeViewer}
+\Delta Controller 
+\where
+viewer' = Null \\
+robots' = robots \\
+board' = board
+\end{schema}
+
+\begin{schema}{requestBoardStatus}
+\Xi Controller \\
+output! : BoardSnapShot
+\where
+\exists r : requestSnapShot | r.output! = output!
+\end{schema}
+
+
 BEGIN ROBOT
 
 initialize geen rules nodig?
 \begin{schema}{initialize}
 \Delta Robot \\
+controller? : Controller \\
 rules? : Rules
 \where
-rules = rules? \\
-hint = Null
+controller' = controller? \\
+rules' = rules? \\
+hint' = \{Null\}
 \end{schema}
 
 deze functie doet wist in principe eventuele hints, robot heeft dus een hint nodig lijkt me..
 \begin{schema}{notifyAutoMovement}
 \Delta Robot
 \where
-hint = Null
+hint' = \{Null\}
 \end{schema}
 
 ook hier hint heel handig
 \begin{schema}{notifyHint}
 \Delta Robot \\
-hint? : Hint 
+hint? : Hint
 \where
-hint = hint?
+hint' = \{hint?\} \union hint
 \end{schema}
 
-wat is het nut van deze functie? Doet intern eigenlijk niks...
-\begin{schema}{terminate}
-\Xi Robot
+VIEWER
+
+\begin{schema}{initialize}
+\Delta Viewer
+\where
+\exists a : addViewer | a.viewer? = self \implies \\ \t1
+a.output! = controller' \\ \t1
+boardChanged' = \false
+\end{schema}
+
+\begin{schema}{notifyGameOver}
+\Delta Viewer \\
+robot? : Robot
 \where
 \end{schema}
-\end{document}
+
+\begin{schema}{notifyStateChange}
+\Delta Viewer 
+\where
+boardChanged' = \true
+\end{schema}
+
+\begin{schema}{updateView}
+\Delta Viewer
+\where
+\IF boardChanged = \true \\
+\THEN \exists r: requestBoardStatus | output! = snapShot' \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller \\ 
+\ELSE snapShot' = snapShot \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller
+\end{schema}
+
+\end{document} 
