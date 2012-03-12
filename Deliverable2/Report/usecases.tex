@@ -26,7 +26,7 @@
 	\input{MSC-files/viewer_initialize.tex}
 
     	\subsubsection{Update viewer}
-	During the game execution, the view will keep requesting the current board snapshot from the controller. This happens concurrently to the rest of the process. It can also request the board snapshot when it gets notified by the controller that the board has changed.
+	During the game execution, the viewer will keep requesting the current board snapshot from the controller. This happens concurrently to the rest of the process. It can also request the board snapshot when it gets notified by the controller that the board has changed.
     	
 	\input{MSC-files/viewer_update.tex}
 
@@ -68,7 +68,7 @@ We introduced a separate pre- and post-initialize method, because the controller
 	\input{MSC-files/robotmove_reject.tex}
 
 
-	%\advance\count17 by -6
+	\advance\count17 by -6
 
 	\subsubsection{Ordinary exchange}
 	The controller requests the board to do a tile exchange. The board will get two valid tiles (internally, this function relies on the rule entities), swap them and returns an empty RobotPair to signal that there were no robots on the tiles.
@@ -86,6 +86,6 @@ We introduced a separate pre- and post-initialize method, because the controller
 	\input{MSC-files/notify_robots.tex}
 
 	\subsubsection{End game}
-	The controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the view which robot won the game, so it can show the end game animation. When the animation is done, the call will return and the controller will send a message to the board that everything it done and the board can reset and will then terminate. The winning robot will also terminate. The board can then choose to either reset to start a new game or terminate.
+	The controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the viewer which robot won the game, so it can show the end game animation. When the animation is done, the call will return and the controller will send a message to the board that everything it done and the board can reset and will then terminate. The winning robot will also terminate. The board can then choose to either reset to start a new game or terminate.
 
 	\input{MSC-files/end_game.tex}

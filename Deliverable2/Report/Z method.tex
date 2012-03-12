@@ -19,7 +19,8 @@ tiles' = tiles \\
 robots' = robots \\
 controller.preInitialize \\
 \forall r : Robot | r \in \dom(Robots) \implies \\ \t1
-r.initialize(controller)
+r.initialize(controller) \\ 
+controller.postInitialize(self, robots')
 \end{schema}
 
 \begin{schema}{canReset}
@@ -33,8 +34,8 @@ t.occupier = t.target \\
 \begin{schema}{reset}
 \Delta Board
 \where
-tiles' = Null \\
-robots' = Null
+tiles' = Null.selfRef \\
+robots' = Null.selfRef
 \end{schema}
 
 \begin{schema}{requestSnapShot}
@@ -90,7 +91,7 @@ output! : Hint
 \ELSE \\ \t1
 \IF absCoord?.y < absCoord1.y \\ \t1
 \THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | output! = hint \\ \t1
-\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | output! = hint
+\ELSE \exists hint: \{NORTH, WEST, NORTH\_WEST\} | output! = hint
 \end{schema}
 
 \begin{schema}{getHintRight}
@@ -103,7 +104,7 @@ output! : Hint
 \THEN output! = EAST \\
 \ELSE \\ \t1
 \IF absCoord?.y < absCoord1.y \\ \t1
-\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | output! = hint \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, SOUTH\_EAST\} | output! = hint \\ \t1
 \ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | output! = hint
 \end{schema}
 
@@ -130,20 +131,26 @@ output! : ({Robot \union Null} \cross {Robot \union Null})
 tiles(abCoord1) = tile1 \implies \\ \t3
 tiles(abCoord)' = tile1 \\ \t3
 tiles(abCoord1)' = tile \\ \t3
-\exists n : notifyView \\ \t3
-\exists r : Robot | tile.occupier = r \implies \\ \t4
-\exists rotation : Rotation | robots(r)' = rotation \\ \t4
-\exists n : notifyStateChange | n.input? = r \\ \t3
-\exists r1 : Robot | tile1.occupier = r \implies \\ \t4
-\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t4
-\exists n1: notifyStateChange | n1.input? = r1 \\ \t3
+specialExchange(tile) \\ \t3
+specialExchange(tile1) \\ \t3
+viewer.stateChange \\ \t3
 \IF tile.occupier = Null \\ \t4
 tile1.occupier \not = Null\\ \t3
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1 \\ \t3
+\THEN moveConveyorSwitch(abCoord1) \\ \t3
 \IF tile1.occupier = Null \\ \t4
 tile.occupier \not = Null \\ \t3
-\THEN \exists m : moveConveyorSwitch | m.absoluteCoord? = abCoord1
+\THEN moveConveyorSwitch(abCoord)
 \end{schema}
+
+\begin{schema}{specialExchange}
+\Delta Board \\
+tile? : Tile
+\where
+\exists r : Robot | tile.occupier = r \implies \\ \t1
+controller.notifyAutoMovement(r) \\ \t1
+\exists rotation : Rotation | robots(r)' = rotation 
+\end{schema}
+
 
 PRE: tile with absoluteCoord? is empty
 \begin{schema}{moveConveyorSwitch}
@@ -182,34 +189,56 @@ rotation? : Rotation \\
 absoluteCoord : AbsoluteCoord \\
 output! : BoardResponse
 \where
-\IF rotation? \not = 0 \\ \t1
-localCoords.x = 0 \\ \t1
+\IF rotation? \not = 0 \\
+\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
+\ELSE response! = moveWalk(localCoords?, robot?)
+\end{schema}
+
+\begin{schema}{moveRotate}
+\Delta Board \\
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+output! : BoardResponse
+\where
+\IF localCoords.x = 0 \\ \t1
 localCoords.y = 0 \\ \t1
  \exists r : robot?.rule.possibleRotations | r = rotation?\\
-\THEN response! = SUCCESS \\ \t1
+\THEN output! = SUCCESS \\ \t1
 robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
-\ELSE \\ \t1
+\ELSE output! = FAILED
+\end{schema}
+
+\begin{schema}{moveWalk}
+\Delta Board
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
 \IF robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) = possiblePath(robot?) \\ \t1
 rotation? = 0 \\
-\THEN \exists l : calculateNewLocation | l.localCoords? = localCoords? \\ \t1
-l.robot? = robot? \\ \t1
-absoluteCoord = l.output! \\ \t1
-\IF absoluteCoord = null \\ \t1
+\THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
+\IF absoluteCoord = Null \\ \t1
 \THEN output! = FAILED \\ \t1
-\ELSE \\ \t2
-\IF tiles(absoluteCoord).type = HomeTile \\ \t3
-tiles(absoluteCoord).target = robot? \\ \t2
-\THEN SAVELOCATION \\ \t3
-output! = WIN \\ \t2
-\ELSE SAVELOCATION \\ \t3
-\IF tiles(absoluteCoord).type = ConveyorTile \\ \t3
-\THEN \exists n : notifyAutomovement | n.boardResponse? = SUCCESS \\ \t4
-n.robot? = robot? \\ \t3
-\IF tiles(absoluteCoord).type = HintTile \\ \t3
-\THEN \exists n1 : notifyHint | \\ \t4
-\exists hint : getHint | hint.robot? = robot? \\ \t5
-hint.output! = n1.hint? \\ \t5
-n1.robot? = robot? \\ \t3
+\ELSE output! = checkTile(absoluteCoord?, robot?)\\ \t2
+\ELSE output! = FAILED
+\end{schema}
+
+\begin{schema}{checkTile}
+\Delta Board \\
+absoluteCoord? : AbsoluteCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
+saveLocation(absoluteCoord?, robot?) \\ 
+\IF tiles(absoluteCoord?).type = HomeTile \\ \t1
+tiles(absoluteCoord?).target = robot? \\ 
+\THEN output! = WIN \\ \
+\ELSE  \\ \t1
+\IF tiles(absoluteCoord?).type = ConveyorTile \\ \t1
+\THEN controller.notifyAutomovement(robot?) \\ \t1
+\IF tiles(absoluteCoord?).type = HintTile \\ \t1
+\THEN controller.notifyHint(Board.getHint(robot?), robot?) \\ \t1
 output! = SUCCESS
 \end{schema}
 
@@ -227,7 +256,7 @@ viewer.notifyView
 \begin{schema}{clearTile}
 \Delta Tile \\
 \where
-occupier' = Null
+occupier' = Null.selfRef
 \end{schema}
 
 \begin{schema}{put}
@@ -249,7 +278,7 @@ output! : (AbsoluteCoord \union Null)
 \THEN absoluteCoord = firstConveyor(c, path) \\ \t1
 \exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
 output! = s.output! \\
-\ELSE output! = Null
+\ELSE output! = Null.selfRef
 \end{schema}
 
 \begin{schema}{checkPath}
@@ -301,7 +330,7 @@ addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \u
 \THEN
 addAbtoRel(a,b).x = a.x + b.x \\ \t2
 addAbtoRel(a,b).y = a.y + b.y \\ \t1
-\ELSE addAbtoRel(a,b) = Null
+\ELSE addAbtoRel(a,b) = Null.selfRef
 \end{axdef}
 
 
@@ -316,7 +345,7 @@ output! : Controller
 \IF viewer = Null \\
 \THEN viewer' = viewer? \\ \t1
 output! = self \\
-\ELSE output! = Null
+\ELSE output! = Null.selfRef
 \end{schema}
 
 
@@ -368,9 +397,9 @@ robot? : Robot
 \begin{schema}{preInitialize}
 \Delta Controller
 \where
-board' = Null \\
-robots' = Null \\
-viewer' = Null
+board' = Null.selfRef \\
+robots' = Null.selfRef \\
+viewer' = Null.selfRef
 \end{schema}
 
 \begin{schema}{postInitialize}
@@ -385,7 +414,7 @@ robots' = robots?
 \begin{schema}{removeViewer}
 \Delta Controller 
 \where
-viewer' = Null \\
+viewer' = Null.selfRef \\
 robots' = robots \\
 board' = board
 \end{schema}
@@ -408,14 +437,14 @@ rules? : Rules
 \where
 controller' = controller? \\
 rules' = rules? \\
-hint' = \{Null\}
+hint' = Null.selfRef
 \end{schema}
 
 deze functie doet wist in principe eventuele hints, robot heeft dus een hint nodig lijkt me..
 \begin{schema}{notifyAutoMovement}
 \Delta Robot
 \where
-hint' = \{Null\}
+hint' = Null.selfRef
 \end{schema}
 
 ook hier hint heel handig
