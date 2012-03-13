@@ -1,4 +1,18 @@
+- Statecharts en MSC's worden niet genoemd in de inleiding
 - Plaatjes zijn te klein
 - Geen inhoudsopgave
 - Geen usecases
 - Geen design decisions
+- Onlogische volgorder: Z moet eigenlijk pas na statecharts en MSC's
+Onlogische volgorde van definities: Eerst piece die weet waar hij op het board zit terwijl board nog niet gedefinieerd is
+- Alle pieces zijn van het type animal, even later staat: Pieces van het type Dolphin, pieces hebben geen type Dolphin maar een diersoort
+- piece: Waarom gebruik je Pieces die allemaal het type Animal zijn ipv Animals?
+- piece: een piece kan buiten de grenzen van het board?
+- DoMove/DoKill: waar komt ?s vandaan?
+- DoKill: zjin de 2 pieces wel van verschillende spelers?
+- Tile: x en y mogen buiten de grenzen van het board zijn?
+- Board: een brug/tunnel kan naar zichzelf of de buurman gaan? redelijk zinloos lijkt mij
+- Board: de termen dagen en beurten worden door elkaar heen gebruikt zonder dat aangegeven wordt hoeveel beurten 1 dag is
+- Waarom definieer je eerst dat een piece maar 1 hokje tegelijk mag bewegen terwijl je ook zou kunnen zeggen dat hij alleen naar een neighbour mag van de huidige tile
+- Z specificatie: goed onderverdeeld in meerdere stukken
+- inRage: waarom wordt nu p.species gebruikt terwijl het eerst juist een type was?
