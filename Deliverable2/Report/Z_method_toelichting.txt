@@ -12,12 +12,12 @@ CanReset is used by the Controller to let the Board know that the game has ended
 
 reset
 \begin{classcom}
-When the Board resets itself, both the tiles and the robots are deleted.
+When the Board resets itself, the tiles, the controller and the robots are deleted.
 \end{classcom}
 
 requestSnapShot
 \begin{classcom}
-?
+We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
 \end{classcom}
 
 cloneTile
@@ -27,51 +27,176 @@ This help-method is used by the Board to create a snapshot of a single Tile. It 
 
 getHint
 \begin{classcom}
-GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. The 
+GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. It checks where the HomeTile of the robot is and according to that gives the appropiate hint.
+\end{classcom}
+
+getHintLeft
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the left of the robot.
+\end{classcom}
+
+getHintRight
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the right of the robot.
 \end{classcom}
 
 getValidTiles
-getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile.
+\begin{classcom}
+getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile. Off course, the invariant also holds for this function.
+\end{classcom}
 
 requestTilesExchange
-...
+\begin{classcom}
+Method to exchange the positions of two tiles on the board. These tiles should be valid. If a robot is on one of the tiles, it moves along.
+\end{classcom}
+
+specialExchange
+\begin{classcom}
+Method to deal with the fact that a robot is part of a tile exchange.
+\end{classcom}
 
 moveConveyorSwitch
-...
+\begin{classcom}
+Make sure that a robot on a conveyor belt is moved to the proper tile.
+\end{classcom}
 
 moveConveyorSwitchSub
-...
+\begin{classcom}
+Subfunction of moveConveyorSwitch, does the actual calculation of the placement of the robot.
+\end{classcom}
 
 moveRequest
-...
+\begin{classcom}
+This functions deals with the moveRequest of the controller
+\end{classcom}
+
+moveRotate
+\begin{classcom}
+Used to deal with rotations a robot wants to make.
+\end{classcom}
+
+moveWalk
+\begin{classcom}
+Used to deal with other movements a robot wants to make.
+\end{classcom}
+
+checkTile
+\begin{classcom}
+Subfunction of moveWalk, used to check on which tile the robot will end and gives the proper response.
+\end{classcom}
 
 saveLocation
+\begin{classcom}
 saveLocation corresponds to the private method in Board. It has two input-variables: absCoords, which is an absolute coordinate and robot, which is the robot that has been moved.  If we want to save the new location of the robot, the Tile that becomes the new location must be empty. The help-method put is used to place the robot on the empty Tile. After the location has been saved, the viewer is notified of the robot's location change, so it can redraw the Board.
+\end{classcom}
 
 clearTile
+\begin{classcom}
 clearTile is a help-method that clears the occupies variable of a Tile.
+\end{classcom}
 
 put
+\begin{classcom}
 put is a help-method that takes a robot as input-variable and sets the occupies-variable of a Tile to this robot.
+\end{classcom}
 
 calculateNewLocation
-...
+\begin{classcom}
+Function to calculate the location of a robot according to it's path.
+\end{classcom}
 
 checkPath
-..
+\begin{classcom}
+Function to check if the path is free (if not, a ConveyorTile should be in front of the obstacle in order to let the path be valid). Calculate new coordinates as well
+\end{classcom}
 
 firstConveyor
-...
+\begin{classcom}
+Calculate the first occuring ConveyorTile for a given path
+\end{classcom}
+
+addAbtoRel
+\begin{classcom}
+Calculate the absolute coordinate from an absolute coordinate and a relative coordinate, taking the height / width of the bord into account.
+\end{classcom}
 
 CONTROLLER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 addViewer
+\begin{classcom}
 addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
-
-canMakeMove
-canMakeMove is a help-method for Board to determine whether a requested move is possible. It takes local coordinates, a rotation and the ruleset of the Robot that requested the move as input-parameters. It checks whether the requested rotation is possible, according to the possible rotations listed in the ruleset of the Robot. Otherwise, it checks whether the local coordinates, along with the rotation, form a move that is valid according to the Robot's ruleset.
+\end{classcom}
 
 notifyAutoMovement
+\begin{classcom}
 notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile. 
+\end{classcom}
 
 moveRequest
-moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended ....
+\begin{classcom}
+moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate.
+\end{classcom}
+
+notifyHint
+\begin{classcom}
+Notify the controller of an appropriate hint.
+\end{classcom}
+
+notifyView
+\begin{classcom}
+Notify the viewer that the board has changed.
+\end{classcom}
+
+preInitialize
+\begin{classcom}
+Initialize the controller so that it can be referred to.
+\end{classcom}
+
+postInitialize
+\begin{classcom}
+The real initialization of the controller, giving it a board and robots.
+\end{classcom}
+
+removeViewer
+\begin{classcom}
+Remove a viewer (so that eventually, a new one can be added).
+\end{classcom}
+
+requestBoardStatus
+\begin{classcom}
+Function to get a snapshot of the board.
+\end{classcom}
+
+ROBOT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+initialize
+\begin{classcom}
+The initialize of the Robot uses the parameters controller and rules. The controller-parameter is the initialized Controller; the rules-parameter is the set of rules that determine the possible moves and rotations. In the initialize, all the provided input-values are saved and the list of hints is initially empty, since the Robot has not yet received any hints.
+\end{classcom}
+
+\begin{classcom}
+NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its Home Tile is.
+\end{classcom}
+
+\begin{classcom}
+NotifyHint is used by the Controller to pass the hint of the Board to the Robot. Since each Robot may store a list with all the hints it has received, the new hint is simply added to the list of hints.
+\end{classcom}
+
+VIEWER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+initialize 
+\begin{classcom}
+In initialize, the Viewer attaches itself to the Controller, using the addViewer-method; the viewer parameter in addViewer is this Viewer. ???
+\end{classcom}
+
+notifyGameOver
+\begin{classcom}
+When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode.
+\end{classcom}
+
+notifyStateChange
+\begin{classcom}
+With notifyStateChange, the Viewer is notified by the Controller that the Board has changed. The Viewer sets boardChanged to true, to indicate that it has not yet updated the view.
+\end{classcom}
+
+updateView
+\begin{classcom}
+The updateView-method uses the value of boardChanged to update the view. If this variable is true, then the Viewer requests a new snapshot from the Board, via the Controller, and updates the view. After the update, boardChanged is set to false. If boardChanged is false, then the previous snapshot is still up-to-date and nothing is changed. Note that the variable controller in Viewer never changes here, because it is simply used to request a board snapshot.
+\end{classcom}
