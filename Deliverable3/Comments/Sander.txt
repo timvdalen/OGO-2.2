@@ -1,7 +1,8 @@
+- Onlogische indelding: geen aparte sectie voor statecharts en MSC's
 - Statecharts en MSC's worden niet genoemd in de inleiding
 - Plaatjes zijn te klein
 - Geen inhoudsopgave
-- Geen usecases
+- Geen usecases (en bijbehorende statecharts en MSC's)
 - Geen design decisions
 - Onlogische volgorder: Z moet eigenlijk pas na statecharts en MSC's
 Onlogische volgorde van definities: Eerst piece die weet waar hij op het board zit terwijl board nog niet gedefinieerd is
@@ -15,4 +16,11 @@ Onlogische volgorde van definities: Eerst piece die weet waar hij op het board z
 - Board: de termen dagen en beurten worden door elkaar heen gebruikt zonder dat aangegeven wordt hoeveel beurten 1 dag is
 - Waarom definieer je eerst dat een piece maar 1 hokje tegelijk mag bewegen terwijl je ook zou kunnen zeggen dat hij alleen naar een neighbour mag van de huidige tile
 - Z specificatie: goed onderverdeeld in meerdere stukken
-- inRage: waarom wordt nu p.species gebruikt terwijl het eerst juist een type was?
+- inRange: waarom wordt nu p.species gebruikt terwijl het eerst juist een type was?
+- inRange: Er staat eigenlijk 2 keer hetzelfde, het is overzichtelijker als je van de herhaalde code een functie maakt en die 2 keer aanroept.
+- MakeMove: waarom is er een MakeMove terwijl er ook al een DoMove is?
+- MakeMove: waarom geef je aan OccupiedBySameAnimal een diersoort mee terwijl er een piece gevraagd wordt? (komt ook voor bij ShortcutPossible)
+- MakeMove: moet er geen rekening gehouden worden met of dit dier wel mag bewegen (land/water)
+- RequestMove: waarom gedefinieerd na DoMove en MakeMove? Onlogische volgorde
+- Init: Een speler kan beginnen met 0 pieces? Wie heeft er gewonnen bij 0 pieces?
+- Init: Ik zie over de laatste regel nergens commentaar, graag toevoegen
