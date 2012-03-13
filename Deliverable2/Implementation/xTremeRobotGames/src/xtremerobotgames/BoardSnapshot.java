@@ -1,13 +1,13 @@
 package xtremerobotgames;
 
 public class BoardSnapshot{
-	private tiles;
+	private Tile[][] tiles;
 
 	BoardSnapshot(Tile[][] _tiles){
 		this.tiles = _tiles;
 	}
 
-	public getTiles(){
+	public Tile[][] getTiles(){
 		return this.tiles;
 	}
 }
