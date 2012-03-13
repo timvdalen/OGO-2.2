@@ -8,7 +8,7 @@ public class Robot{
 
 	private ArrayList<Hint> hints;
 
-	Robot(Controller _c, Rule _r){
+	Robot(Controller _c, Rule _r, AbsoluteCoord abscoord){
 		this.c = _c;
 		this.r = _r;
 		hints = new ArrayList<Hint>();

@@ -15,9 +15,11 @@ public class Board {
     private int height;
     private Tile[][] tiles;
     private Controller controller;
+    private RobotCoord robotcoord;
 
     //TO DO constructor
     Board(int w, int h){
+        controller = new Controller();
 
     }
 
@@ -62,9 +64,11 @@ public class Board {
 
     }
 
-    //TO DO
     private void saveLocation(AbsoluteCoord abs, Robot r){
-
+        AbsoluteCoord coord = robotcoord.getAbsoluteCoord(r);
+        tiles[coord.getX()][coord.getY()].occupier = null;
+        tiles[abs.getX()][abs.getY()].occupier = r;
+        robotcoord.changePosition(r, abs);
     }
 
 }
