@@ -1,0 +1,14 @@
+Inleiding weinig nut
+
+PLAYER & PIECES
+
+pieces bevatten coordinaten, niet nodig (kan in player), maar niet fout
+pieces kunnen schuin verplaatsen. Verder notatie van ! ipv ? bij method MoveRequest
+?s ipv ?p bij DoMove
+s bij DoKill komt nergens vandaan?
+
+Moet bij DoMove geen check komen of het hokje al bezet is? En dit suggereert dat player de move doet, terwijl dat eigenlijk het board is...
+
+BOARD
+
+Logische variabel namen (vooral bij Board)

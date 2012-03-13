@@ -1,1 +1,4 @@
 - Plaatjes zijn te klein
+- Geen inhoudsopgave
+- Geen usecases
+- Geen design decisions
