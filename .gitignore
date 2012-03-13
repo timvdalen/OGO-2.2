@@ -13,4 +13,8 @@ Deliverable2/Report/graph/
 
 # Backups #
 *.bak
+
+# Implementation #
 /Deliverable2/Implementation/xTremeRobotGames/nbproject/private/
+/Deliverable2/Implementation/xTremeRobotGames/build/
+*.class
