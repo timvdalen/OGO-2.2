@@ -1,0 +1,59 @@
+~ Z ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+Consistentie
+- boolean is een bestaande set (B met twee streepjes); als je die niet gebruikt, moet je zelf "boolean" definiëren.
+- Volgorde van uitleg inconsistent met volgorde in Z-schema. Enigszins verwarrend!
+
+- Number of moves = automagisch???
+
+INCONSISTENTIE: voor dolfijnen moet de bridge een cave zijn!
+INCONSISTENTIE: de ene keer input/output met ?/! voor de naam, daarna erachter. HET MOET ERACHTER!
+
+
+Aansluiting bij informele specificatie
+- Hoofdfunctionaliteit is er.
+
+- MoveRequest VS Request Move? Waarom wordt in de Player-move request al gecheckt of deze mag? Dat is toch de taak van Board? In de request move van Board moet dus ook rekening gehouden worden met het adjacent zijn van vakjes.
+- Het aantal vossen/dolfijnen kan vooraf worden ingesteld door de spelers. Is dat die n? in Init? Zo ja: uitleg, s.v.p.!
+- De grootte van het speelbord is afhankelijk van het aantal spelers!?
+- Alle vossen initieel op het land; alle dolfijnen initieel in het water!?
+- De notie van veiligheid van een vakje voor vossen/dolfijnen wordt niet doorgevoerd bij het opeten van een dier. 
+- Initieel mogen ook geen twee vossen/dolfijnen op hetzelfde vakje. Wordt nu alleen afgevangen in moveRequest.
+- Waar is gameEnded? Hoe weet je nou wanneer het spel is afgelopen en hoe wordt dit verder afgehandeld?
+
+- BEURTEN? Naar aanleiding van beurten had je Tide, Natural events, etc.
+- Waar wordt de invariant "Twee adjacent tiles mogen maximaal twee units in elevation schelen" in stand gehouden?
+
+Volledigheid
+- Één van de spelers heeft Fox, de ander heeft Dolphin; moet dat niet gespecificeerd in Z?
+- MoveRequest doorgeven aan Controller/Board? Heeft MoveRequest geen Piece en x, y als input-parameters?
+- DoKill houdt geen rekening met verschillen tussen Fox en Dolphin? Geen twee Foxes en geen twee Dolphins op één vakje! Fox + Dolphin mag wel, dan gebeurd dat DoKill.
+- kansen niet gemodeleerd? Uit de omschrijving lijkt alsof het wel zo is.
+- neighbour van een neighbour zie ik niet terug in het schema voor "InRange".
+- Mist er een conjunctie in "MakeMove" tussen p.species = dolphin en hetgene daarboven?
+- Wel een NrOfMoves, maar wordt daar rekening mee gehouden in moveRequest/doMove?
+
+Begeleidende informele uitleg
+- Wat stellen de input- en output parameters voor?
+- Z specificatie en begeleidende info staan een beetje door elkaar. Er staat soms een hele lap tekst en daarna een Z-schema, waarbij het grootste gedeelte van de tekst niet direct op het schema slaat. 
+- Tekst na het schema? Enigszins verwarrend!
+- Neighbours een "geparametriseerde tile"? Wat bedoelen jullie daar nou mee?
+- VOLGORDE is erg vreemd! Jullie zeggen dat Tiles van het type Z zijn, maar pas in Board snap ik hoe 't zit.
+- Hoezo kan Flood nu twee keer worden aangeroepen? Waar staat dat in Z?
+- "Occupied by same Animal" Zodra dit het geval is, mag de move dus NIET; het klopt dat occupied dan True is.
+
+- Goed dat jullie bij een flink schema alle onderdelen los toelichten. Jammer dat ze in vreemde volgorde staan.
+- Duidelijke plaatjes!
+- Opdeling van "Moves" in subdelen is erg verstandig. Maakt het geheel een stuk overzichtelijker en zo kun je de lezer begeleiden op wat komen gaat.
+
+~ StateDiagram ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Consistentie
+
+Aansluiting informele specificatie
+
+Volledigheid
+
+Begeleidende informele uitleg
+- Ontbreekt er iets in de zin "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
+
+~ MSCs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
