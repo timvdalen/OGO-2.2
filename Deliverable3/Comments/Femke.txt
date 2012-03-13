@@ -47,13 +47,29 @@ Begeleidende informele uitleg
 
 ~ StateDiagram ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Consistentie
+- Inconsistent met Z; zie opmerkingen Z.
 
 Aansluiting informele specificatie
+- Wij zeggen niks over eerst speler 1, dan speler 2. Als jullie dit zo willen hebben, vraag het ons en motiveer het, zodat wij kunnen nalezen.
+- Nu lijkt het alsof elke beurt een nieuwe Natural Event gestart wordt. Dat is niet zo, hebben jullie in Z ook al staan!
 
 Volledigheid
+- Afgezien van WIN redelijk volledig.
 
 Begeleidende informele uitleg
 - Ontbreekt er iets in de zin "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
+- Uitleggen notatie bij keuze uit meerdere trigger-events. Mag die notatie überhaupt?
 
 ~ MSCs ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Consistentie
+
+Aansluiting informele specificatie
+- Wij specificeren niet dat een beurt begint met een aanroep van Controller naar Board. De speler doet een move request, vervolgens forward de Controller dit aan het board en het Board checkt of dit mag a.d.v. de request en het aantal moves dat de robot over heeft.
+- Waarom gaat "request move" van Player naar Controller? De Player vraagt dat toch juist als eerste?
+- De "opt"-box moet ook om de "kill-piece" van Board naar Controller.
+
+Volledigheid
+
+
+Begeleidende informele uitleg
 
