@@ -1,0 +1,58 @@
+{
+    "framecount": "1",
+    "snapshot": [
+        [
+            {
+                "row": "1",
+                "col": "1",
+                "type": "NormalTile"
+            },
+            {
+                "row": "1",
+                "col": "2",
+                "type": "HomeTile",
+		"owner": "1"
+            },
+            {
+                "row": "1",
+                "col": "3",
+                "type": "NormalTile"
+            }
+        ],
+        [
+            {
+                "row": "2",
+                "col": "1",
+                "type": "HintTile"
+            },
+            {
+                "row": "2",
+                "col": "2",
+                "type": "ConveyorTile",
+		"orientation": "R0DEG"
+            },
+            {
+                "row": "2",
+                "col": "3",
+                "type": "NormalTile"
+            }
+        ],
+        [
+            {
+                "row": "3",
+                "col": "1",
+                "type": "NormalTile"
+            },
+            {
+                "row": "3",
+                "col": "2",
+                "type": "NormalTile"
+            },
+            {
+                "row": "3",
+                "col": "3",
+                "type": "NormalTile"
+            }
+        ]
+    ]
+}
