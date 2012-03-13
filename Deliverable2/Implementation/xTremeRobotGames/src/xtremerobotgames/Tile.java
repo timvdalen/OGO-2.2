@@ -9,7 +9,7 @@ package xtremerobotgames;
  *
  * @author s102231
  */
-public class Tile {
+public abstract class Tile {
 
     public Robot occupier;
 
