@@ -1,19 +1,23 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package xtremerobotgames;
 
-/**
- *
- * @author tim
- */
+import xtremerobotgames.*;
+
 public class XTremeRobotGames {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("Hoi.");
+	if(Hint.WEST == Hint.WEST){
+		System.out.println("Hint: Alles prima.");
+	}
+	if(Rotation.R0DEG == Rotation.R270DEG){
+		System.out.println("Ratation: Failed");
+	}else{
+		System.out.println("Rotation: Works");
+	}
+	BoardResponse rep;
+	rep = BoardResponse.FAILED;
+	if(rep == BoardResponse.FAILED){
+		System.out.println("BoardResponse werkt ook");
+	}
     }
 }
