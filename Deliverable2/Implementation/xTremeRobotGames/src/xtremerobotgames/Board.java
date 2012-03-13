@@ -33,7 +33,8 @@ public class Board {
 
     //TO DO
     public BoardSnapshot requestSnapshot(){
-        return null;
+        BoardSnapshot snapshot = new BoardSnapshot(tiles.clone());
+        return snapshot;
     }
 
     //TO DO
