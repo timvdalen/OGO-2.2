@@ -1,0 +1,47 @@
+Inleiding is te kort en gaat volgens mijn alleen over de eerste deel met de z-specificatie van de document.
+
+Z-specificatie
+De operatie DoKill klopt niet helemaal volgens mij. wat is precies element {s}?
+
+Moet ? niet ! zijn in DoKill.
+
+Board:
+
+De invariant van de standaardwaarden van waterhoogtes is een beetjes verwarrend. Als de x-waarde van een nEvent tussen -20 en 20 moet liggen, waarom mag de x-waarde in de invariant alleen natuurlijke nummer hebben.
+
+Statechart:
+
+Er is geen class diagram, waardoor de structuur van de systeem niet duidelijk is. Het is ook niet bekend welke methodes er allemaal zijn en bij welke class het toebehoort. ook is de visibility van de methodes onbekend. 
+
+refereren naar de msc in een statechart is niet toegestaan. Alle msc's zal eigenlijk naar statecharts verwerkt moeten worden.
+
+Er is nergens een final states voor de einde van de spel.
+
+Veel label's worden op de verkeerde manier gebruikt. Zoals bij de label "MSC for P1 / End P1" van Player 1 is "/ End P1" overbodig, "/ P2" kan alleen worden uitgevoerd als "Turn Completed" actief wordt.
+
+Er worden veel triggers gebruikt die geen methodes zijn, zoals NEvent in Main. is dat een soort notificatie die rondgestuurt wordt?
+
+In View zit een pijl zonder label, wordt die pijl meteen doorlopen als de state Updated actief wordt of wordt die op een random tijdstip doorlopen?
+
+De triggers in View klopt niet, wat er nu staat is dat het updaten van de view en updaten van de flood tegeijkertijd gebeurt, het lijkt mij logischer dat ze sequentieel gebeurt.
+De triggers MSC for P1 en MSC for P2 kloppen ook niet.
+
+---------------------------------
+
+The invariant of de standart value of de height of water is bit confusing. If the x-value of a nEevent must be in between -20 and 20, how can it be that it's value in the invariant is of the domain of the natural numbers.
+
+statechart:
+
+The structure of the entire system is not clear since there is no class diagram. The visibilities of the methodes are not specified.
+
+Reference from a statechart to a message sequence chart should be avoided. For every message sequence chart there should be a statechart which correspondents to it.
+
+All statecharts should have a final state which the statechart can terminate with.
+
+A lot transition labels are incorrect, for instance the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" unneeded, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
+
+There is a transition in View that does not have a label, does it mean that it is executed immediately after the state "Updated" becomes active, or will it be randomly executed.
+
+Many triggers in transitions are not in the form of a methode, like "NEvent" in Main. Is it a notification that is send from a class to another?
+
+The triggers of the transition in View are incorrect. According to the current statechart the update of the view and the update of the flood are executed concurrently, however it seems more logical that they executes sequentially.
