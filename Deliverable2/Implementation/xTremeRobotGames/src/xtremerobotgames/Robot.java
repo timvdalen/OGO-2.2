@@ -3,15 +3,22 @@ package xtremerobotgames;
 import java.util.ArrayList;
 
 public class Robot{
+	int id;
+
 	private Rule r;
 	private Controller c;
 
 	private ArrayList<Hint> hints;
 
-	Robot(Controller _c, Rule _r, AbsoluteCoord abscoord){
+	Robot(int _id, Controller _c, Rule _r, AbsoluteCoord abscoord){
+		this.id = _id;
 		this.c = _c;
 		this.r = _r;
 		hints = new ArrayList<Hint>();
+	}
+
+	getID(){
+		return this.id;
 	}
 
 	public void notifyAutoMovement(){
