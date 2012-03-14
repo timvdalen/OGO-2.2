@@ -1,5 +1,5 @@
 \documentclass[a4paper,11pt]{article}
-\usepackage{graphicx,listings,a4wide}
+\usepackage{graphicx,listings,a4wide,dsfont}
 %\usepackage[firstpage]{draftwatermark}
 %\SetWatermarkLightness{0.5}
 %\SetWatermarkScale{4}
@@ -20,7 +20,7 @@
 \maketitle
 
 \begin{abstract}
-ToDo: something about the purpose and structure of this document.
+This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification. In the sections hereafter, we provide our remarks about the Z-specification, the state diagram and the MSC's; here, we distinguish between general remarks and individual remarks about specific parts of the specification. Finally, we give our judgement of the formal description and grade the formal description.
 \end{abstract}
 
 \newpage
@@ -30,28 +30,56 @@ ToDo: something about the purpose and structure of this document.
 	
 	\section{General remarks}
 	%\input{questions}
+    We were not content with the following things in the overall report:
     \begin{itemize}
-        \item The order of sections is illogical: the Z specification should be after the MSC's and the Statecharts.
+        \item The order of sections is not logical: the Z specification should be after the MSC's and the Statecharts.
         \item The abstract is missing.
         \item There is no content page.
-        \item The introduction is short and doesn't tell what is coming next, so it isn't what an introduction should be like.
-        \item The Statecharts and the MSC's aren't mentioned in the introduction.
-        \item There aren't any use case scenario's (and also no matching statecharts and MSC's).
-        \item The design decisions that have been made aren't documented.
+        \item The introduction is short and does not tell what is coming next, so it isn't what an introduction should be like. For example, the state diagrams and MSC's are not mentioned.
+        \item There are no any use case scenario's (and also no matching state diagrams and MSC's).
+        \item The design decisions that have been made aren not documented.
+        \item The class diagram is missing.
+        \item It is not specified how a game ends and how the individual components of the game (Controller, Board, etc.) can conclude and react to this.
     \end{itemize}
 	
 	\section{Remarks about the Z-specification}
+    In this section, we organize our individual comments according to the order of the Z-schemas in the formal specification.
     \subsection{Complete Z-specification}
-    ToDo
-    
+    \begin{itemize}
+        \item The description of your coordinate-system is very nice and understandable.
+        \item Splitting the "MoveRequest" in Controller in several pieces was a wise decision; this way, you can keep things organized and introduce the reader step-by-step to the whole concept.
+        \item Boolean is a pre-defined set in Z. The correct notation for the set of booleans is $\mathds{B}$.
+        \item In sections 2 to  3.5, input-/output-variables are prefixed with a ?/!. In the remaining sections of the Z-specification, the input-/output-variables are postfixed with a ?/!. This is inconsistent and partly incorrect; input/output-variables should be postfixed with a ?/!.
+        \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what it's type is. The same holds for the $s?$-variable in DoMove.
+        \item The MoveRequest in player is actually not part of the player-entity/class. It is requested by a player via the Controller. The MoveRequest in player also checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
+        \item The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
+        \item The notion of turns is explained informally, but not reflected formally in the Z-specification. For example, the tides occur once each player has no moves left.
+        \item The invariant "Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation" is not maintained in the Z-specification.
+        \item You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
+        \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
+        \item It is not always clear where the input-, output- and dummy-variables are used for in the Z-schemas. Additional explanation would be appreciated.
+    \end{itemize}
+
     \subsection{Pieces and players}
-    ToDo
+    \begin{itemize}
+        \item One player has all pieces of type 'fox' and one player has all pieces of type 'dolphin'. You only specify that each player has pieces of the same type.
+    \end{itemize}
 
     \subsection{Board}
-    ToDo
+    \begin{itemize}
+        \item In the informal explanation of Flood, you state you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
+        \item In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. You state the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case, the move is, of course, not possible.
+        \item In MakeMove, a conjunction is missing between the parts of the fox and the dolphin.
+        \item In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
+        \item In Init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
+        \item In the informal explanation of getNrMoves, you say that the operation calculates the number of moves "automagically".
+    \end{itemize}
 
     \subsection{Viewer and Controller}
-    ToDo
+    \begin{itemize}
+        \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$-variable in init; if it is, explain this in the informal description.
+        \item In Init, all foxes should be placed on the land and all dolphins in the water. 
+    \end{itemize}
 
 	\section{Remarks about the State Diagram}
 	%\input{design}
