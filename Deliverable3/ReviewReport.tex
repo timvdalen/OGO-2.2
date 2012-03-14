@@ -49,7 +49,7 @@ This document contains the review of the formal specification of group 3. We fir
         \item Boolean is a pre-defined set in Z. The correct notation for the set of booleans is $\mathds{B}$.
         \item In sections 2 to  3.5, input-/output-variables are prefixed with a ?/!. In the remaining sections of the Z-specification, the input-/output-variables are postfixed with a ?/!. This is inconsistent and partly incorrect; input/output-variables should be postfixed with a ?/!.
         \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what it's type is. The same holds for the $s?$-variable in DoMove.
-        \item The MoveRequest in player is actually not part of the player-entity/class. It is requested by a player via the Controller. The MoveRequest in player also checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
+        \item The MoveRequest in player checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
         \item The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
         \item The notion of rounds is explained informally, but not reflected formally in the Z-specification. For example, the tides occur after completion of a round.
         \item The invariant "Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation" is not maintained in the Z-specification.
@@ -66,7 +66,7 @@ This document contains the review of the formal specification of group 3. We fir
     \subsection{Board}
     \begin{itemize}
         \item The invariant of the standard value of de height of water is bit confusing. First, you state that the x-value of a nEvent must be between -20 and 20. However, in the invariant of the standard value of the height of the water, you say that the x- and y-variables of nEvent are both natural numbers.
-        \item In the informal explanation of Flood, you state you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
+        \item In the informal explanation of Flood, you state that you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
         \item In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. You state the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case, the move is, of course, not possible.
         \item In MakeMove, a conjunction is missing between the parts of the fox and the dolphin.
         \item In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
@@ -86,7 +86,7 @@ This document contains the review of the formal specification of group 3. We fir
         \item The state diagrams of the individual components are missing. The individual state diagrams reflect the communication within an entity (internal actions) and to the entities it "knows about"; the system state diagram is used to show how the individual entities communicate with each other.
         \item In the state diagram, it is reflected that there always is an initial flood, after the board and all its components have been initialized. There always is a flood after a round has been completed; not necessarily before the first round.
         \item A reference from a state diagram to a message sequence chart should be avoided. For every message sequence chart, there should be a state diagram which correspondents to it.
-        \item All state diagrams should have a terminating state.
+        \item All state diagrams should have a terminating state, because the game can end.
         \item A lot transition labels are incorrect. For instance, the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" not needed, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
         \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means.
         \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. Explain what this label means; for example, that it is a notification that is send from one class to another
