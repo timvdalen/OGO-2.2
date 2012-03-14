@@ -1,0 +1,28 @@
+Inleiding is te kort en gaat volgens mijn alleen over de eerste deel met de z-specificatie van de document.
+
+Z-specificatie
+De operatie DoKill klopt niet helemaal volgens mij. wat is precies element {s}?
+
+Moet ? niet ! zijn in DoKill.
+
+Board:
+
+De invariant van de standaardwaarden van waterhoogtes is een beetjes verwarrend. Als de x-waarde van een nEvent tussen -20 en 20 moet liggen, waarom mag de x-waarde in de invariant alleen natuurlijke nummer hebben.
+
+Statechart:
+
+Er is geen class diagram, waardoor de structuur van de systeem niet duidelijk is. Het is ook niet bekend welke methodes er zijn en bij welke class het toebehoort. ook is de visibility van de methodes onbekend. 
+
+refereren naar de msc in een statechart is niet toegestaan. Alle msc's zal eigenlijk naar statecharts verwerkt moeten worden.
+
+Er is nergens een final states voor de einde van de spel.
+
+Veel label's worden op de verkeerde manier gebruikt. Zoals bij de label "MSC for P1 / End P1" van Player 1 is "/ End P1" overbodig, "/ P2" kan alleen worden uitgevoerd als "Turn Completed" actief wordt.
+
+Er worden veel triggers gebruikt die geen methodes zijn, zoals NEvent in Main. is dat een soort notificatie die rondgestuurt wordt?
+
+In View zit een pijl zonder label, wordt die pijl meteen doorlopen als de state Updated actief wordt of wordt die op een random tijdstip doorlopen?
+
+De triggers in View klopt niet, wat er nu staat is dat het updaten van de view en updaten van de flood tegeijkertijd gebeurt, het lijkt mij logischer dat ze sequentieel gebeurt.
+De triggers MSC for P1 en MSC for P2 kloppen ook niet.
+
