@@ -4,7 +4,7 @@ public class FrameData{
 	private int framecount;
 	private BoardSnapshot snapshot;
 
-	FrameData(int _framecount, _snapshot){
+	FrameData(int _framecount, BoardSnapshot _snapshot){
 		this.framecount = _framecount;
 		this.snapshot = _snapshot;
 	}
@@ -13,7 +13,7 @@ public class FrameData{
 		String returnStr = "";
 		returnStr += "{ \"framecount\" : \"" + this.framecount + "\", ";
 		returnStr += "\"snapshot:\" : [";
-		Tiles[][] tiles = snapshot.getTiles();
+		Tile[][] tiles = snapshot.getTiles();
 		int rows = tiles.length;
 		int cols = tiles[0].length;
 		for(int i=0; i < rows; i++){
@@ -48,5 +48,6 @@ public class FrameData{
 			}
 		}
 		returnStr += "]}";
+                return returnStr;
 	}
 }
