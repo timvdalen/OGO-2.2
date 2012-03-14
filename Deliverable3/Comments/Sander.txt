@@ -24,3 +24,5 @@ Onlogische volgorde van definities: Eerst piece die weet waar hij op het board z
 - RequestMove: waarom gedefinieerd na DoMove en MakeMove? Onlogische volgorde
 - Init: Een speler kan beginnen met 0 pieces? Wie heeft er gewonnen bij 0 pieces?
 - Init: Ik zie over de laatste regel nergens commentaar, graag toevoegen
+
+Aangepast
