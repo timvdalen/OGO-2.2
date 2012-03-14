@@ -20,7 +20,7 @@
 \maketitle
 
 \begin{abstract}
-This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification. In the sections hereafter, we provide our remarks about the Z-specification, the state diagram and the MSC's; here, we distinguish between general remarks and individual remarks about specific parts of the specification. Finally, we give our judgement of the formal description and grade the formal description.
+This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification. In the sections hereafter, we provide our remarks about the Z-specification, the state diagram and the MSC's; here, we distinguish between general remarks and individual remarks about specific parts of the specification. We provide our remarks as lists, to keep them organized and readable. Finally, we give our judgement of the formal description and grade the formal description.
 \end{abstract}
 
 \newpage
@@ -44,7 +44,7 @@ This document contains the review of the formal specification of group 3. We fir
 	
 	\section{Remarks about the Z-specification}
     In this section, we organize our individual comments according to the order of the Z-schemas in the formal specification.
-    \subsection{Complete Z-specification}
+    \subsection{Overall remarks Z-specification}
     \begin{itemize}
         \item The description of your coordinate-system is very nice and understandable.
         \item Splitting the "MoveRequest" in Controller in several pieces was a wise decision; this way, you can keep things organized and introduce the reader step-by-step to the whole concept.
@@ -78,7 +78,7 @@ This document contains the review of the formal specification of group 3. We fir
     \subsection{Viewer and Controller}
     \begin{itemize}
         \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$-variable in init; if it is, explain this in the informal description.
-        \item In Init, all foxes should be placed on the land and all dolphins in the water. 
+        \item In Init, all foxes should be placed on the land and all dolphins in the water.
     \end{itemize}
 
 	\section{Remarks about the State Diagram}
