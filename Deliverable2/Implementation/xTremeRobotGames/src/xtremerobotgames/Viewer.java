@@ -12,13 +12,14 @@ package xtremerobotgames;
 public class Viewer {
 
     private Controller controller;
-    private boolean changed;
     private BoardSnapshot boardsnapshot;
 
+    private int frameid;
+
     Viewer(Controller c){
-        changed = false;
-        boardsnapshot = null;
-        controller = c.addViewer(this);
+        this.boardsnapshot = null;
+        this.controller = c.addViewer(this);
+	this.frameid = 0;
     }
 
     public void notifyGameOver(Robot r){
@@ -26,13 +27,14 @@ public class Viewer {
     }
 
     public void notifyStateChange(){
-        changed = true;
+        this.updateView();
     }
 
     private void updateView(){
         boardsnapshot = controller.requestBoardSnapshot();
-        //JSON hier nog
-
+        FrameData data = new FrameData(this.frameid, boardsnapshot);
+	System.out.println(data.encode());
+	this.frameid++;
     }
 
 }

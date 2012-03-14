@@ -1,4 +1,7 @@
 <?php
+	//Player settings
+	$colors = array("blue", "red", "yellow");
+
 	//Read input
 	$input = array();
 	$line = readline("");
@@ -12,19 +15,36 @@
 		$object = json_decode($frame);
 		$snapshot = $object->snapshot;
 		$frameid = $object->framecount;
+		$norows = count($snapshot);
+		$nocols = count($snapshot[0]);
 		$im = new Imagick();
-		$im->newImage(321, 321, new ImagickPixel('white'));
+		$im->newImage(100* $norows + 1, 100* $nocols + 1, new ImagickPixel('white'));
 		$draw = new ImagickDraw();
 		$draw->setStrokeColor(new ImagickPixel('black'));
 		$rowid = 0;
 		foreach($snapshot as $row){
 			$cellid = 0;
 			foreach($row as $cell){
-				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10 , $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + $rowid * 10);
-				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10 , $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
-				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10 , $cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10 );
-				$draw->line($cellid * 100 + 100 + $cellid * 10, $rowid * 100 + $rowid * 10 ,  $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10 );
-				$im->annotateImage($draw, $cellid * 100 + $cellid * 10 + 35,  $rowid * 100 + $rowid * 10 + 35, 45, "r: $rowid, c: $cellid");
+				//print_r($cell);
+				if(isset($cell->occupier)){
+					$draw->setStrokeColor($colors[$cell->occupier]);
+					$draw->setStrokeWidth(5);
+					$draw->line($cellid * 100, $rowid * 100, $cellid * 100 + 100, $rowid * 100 + 100);
+					$draw->line($cellid * 100 + 100, $rowid * 100, $cellid * 100, $rowid * 100 + 100);
+					$draw->setStrokeColor('black');
+					$draw->setStrokeWidth(1);
+				}
+				if($cell->type == "HomeTile"){
+					$draw->setFillColor($colors[$cell->owner]);
+                                        $draw->rectangle($cellid * 100, $rowid * 100, $cellid * 100 + 100, $rowid * 100 + 100);
+					$draw->setFillColor('black');
+				}
+
+				$draw->line($cellid * 100, $rowid * 100 , $cellid * 100 + 100, $rowid * 100);
+				$draw->line($cellid * 100, $rowid * 100 + 100, $cellid * 100 + 100, $rowid * 100 + 100);
+				$draw->line($cellid * 100, $rowid * 100, $cellid * 100, $rowid * 100 + 100);
+				$draw->line($cellid * 100 + 100, $rowid * 100,  $cellid * 100 + 100, $rowid * 100 + 100);
+				$im->annotateImage($draw, $cellid * 100 + 35,  $rowid * 100 + 35, 45, "r: $rowid, c: $cellid");
 				$cellid++;
 			}
 			$rowid++;
