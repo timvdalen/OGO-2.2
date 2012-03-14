@@ -21,4 +21,3 @@
 - MakeMove: waarom is er een MakeMove terwijl er ook al een DoMove is?
 - MakeMove: waarom geef je aan OccupiedBySameAnimal een diersoort mee terwijl er een piece gevraagd wordt? (komt ook voor bij ShortcutPossible)
 - Init: Een speler kan beginnen met 0 pieces? Wie heeft er gewonnen bij 0 pieces?
-
