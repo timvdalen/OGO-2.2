@@ -21,6 +21,7 @@ public class Board {
     private Controller controller;
     private RobotCoord robots;
     private HashMap<Robot, Tile> home;
+    private HashMap<Robot, Rotation> robotRotation;
 
     //TO DO constructor
     Board(int w, int h, RobotCoord robot, HashMap<Robot, Tile> hometiles){
@@ -30,8 +31,18 @@ public class Board {
         home = hometiles;
     }
 
-    //TO DO
+    //might be a better way to solve this
     public boolean canReset(){
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                if(tiles[i][j].getClass() == HomeTile.class){
+                    HomeTile ht = (HomeTile) tiles[i][j];
+                    if(ht.homeRobot == ht.occupier){
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -40,13 +51,19 @@ public class Board {
         return null;
     }
 
-    //TO DO
+    //DONE
     public BoardSnapshot requestSnapshot(){
-        BoardSnapshot snapshot = new BoardSnapshot(tiles.clone());
+        Tile[][] tiles2 = new Tile[width][height];
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                tiles2[i][j] = tiles[i][j].clone();
+            }
+        }
+        BoardSnapshot snapshot = new BoardSnapshot(tiles2);
         return snapshot;
     }
 
-    //TO DO
+    //should be done
     public RobotPair requestTilesExchange(){
         TilePair switchTiles = getValidTiles();
         AbsoluteCoord coord1 = null;
@@ -70,17 +87,11 @@ public class Board {
 
         //calculate new positions
         if (switchTiles.tile1.occupier != null){
-            newPosition(coord2, switchTiles.tile1.occupier);
-            if(tiles[coord2.getX()][coord2.getY()].getClass() == HintTile.class){       //if hint then notify
-                controller.notifyHint(getHint(switchTiles.tile1.occupier), switchTiles.tile1.occupier);
-            }
+            saveLocation(calculateNewLocation(coord2, switchTiles.tile1.occupier), switchTiles.tile1.occupier);
             controller.notifyAutoMovement(switchTiles.tile1.occupier);                  //always notify of automovement
         }
         if (switchTiles.tile2.occupier != null){
-            newPosition(coord1, switchTiles.tile2.occupier);
-            if(tiles[coord1.getX()][coord1.getY()].getClass() == HintTile.class){
-                controller.notifyHint(getHint(switchTiles.tile2.occupier), switchTiles.tile2.occupier);
-            }
+            saveLocation(calculateNewLocation(coord1, switchTiles.tile2.occupier), switchTiles.tile2.occupier);
             controller.notifyAutoMovement(switchTiles.tile2.occupier);
         }
 
@@ -89,11 +100,11 @@ public class Board {
     }
 
     //get new position of robot
-    public void newPosition(AbsoluteCoord absCoord, Robot r){
+    public AbsoluteCoord calculateNewLocation(AbsoluteCoord absCoord, Robot r){
         if(tiles[absCoord.getX()][absCoord.getY()].getClass() == ConveyorTile.class ){
-            saveLocation(conveyorMove(absCoord, r), r);
+            return conveyorMove(absCoord, r);
         } else {
-            saveLocation(absCoord, r);
+            return absCoord;
         }
     }
 
@@ -107,6 +118,8 @@ public class Board {
             return absCoord;
         } else {
             destination = conveyorMove(destination, r);
+            saveLocation(destination, r);
+            controller.viewer.notifyStateChange();
             RelativeCoord checkConveyor = new RelativeCoord(0, -1);
             checkConveyor(addAbstoRel(absCoord, checkConveyor));
             checkConveyor = new RelativeCoord(0,1);
@@ -132,8 +145,9 @@ public class Board {
         }
     }
 
-    //DONE
+    //need to take rotation of robot in account....
     public Hint getHint(Robot r){
+        Hint hint;
         AbsoluteCoord coordRobot;
         AbsoluteCoord coordHome = null;
         coordRobot = robots.getAbsoluteCoord(r);
@@ -152,49 +166,117 @@ public class Board {
         //determine hint, robot to the right of hometile, robot.x > hometile.x
         if(coordRobot.getX() > coordHome.getX()){
             if(coordRobot.getY() == coordHome.getY()){
-                return Hint.WEST;
+                hint = Hint.WEST;
             } else if(coordRobot.getY() < coordHome.getY()){
                 hints.add(Hint.WEST);
                 hints.add(Hint.SOUTH);
                 hints.add(Hint.SOUTH_WEST);
-                return pickHint(hints);
+                hint = pickHint(hints);
             } else {
                 hints.add(Hint.WEST);
                 hints.add(Hint.NORTH);
                 hints.add(Hint.NORTH_WEST);
-                return pickHint(hints);
+                hint = pickHint(hints);
             }
 
         //determine hint, robot to the left of hometile, robot.x < hometile.x
         } else if(coordRobot.getX() < coordHome.getX()){
             if(coordRobot.getY() == coordHome.getY()){
-                return Hint.EAST;
+                hint = Hint.EAST;
             } else if(coordRobot.getY() < coordHome.getY()){
                 hints.add(Hint.EAST);
                 hints.add(Hint.SOUTH);
                 hints.add(Hint.SOUTH_EAST);
-                return pickHint(hints);
+                hint = pickHint(hints);
             } else {
                 hints.add(Hint.EAST);
                 hints.add(Hint.NORTH);
                 hints.add(Hint.NORTH_EAST);
-                return pickHint(hints);
+                hint = pickHint(hints);
             }
 
         //robot north / south of hometile, same x
         } else {
             if(coordRobot.getY() > coordHome.getY()){
-                return Hint.SOUTH;
+                hint = Hint.SOUTH;
             } else {
-                return Hint.NORTH;
+                hint = Hint.NORTH;
             }
         }
+        return calculateHint(hint, robotRotation.get(r));
     }
 
     //sub function to randomly pick a hint from a list
     private Hint pickHint(ArrayList<Hint> hints){
         int pick = new Random().nextInt(hints.size());
         return hints.get(pick);
+    }
+
+    private Hint calculateHint(Hint hint, Rotation r){
+        int hintnumber;
+        if(r == Rotation.R0DEG){
+            hintnumber = 0;
+        } else if (r == Rotation.R90DEG){
+            hintnumber = 3;
+        } else if (r == Rotation.R180DEG){
+            hintnumber = 2;
+        } else{
+            hintnumber = 1;
+        }
+
+        if(getInt(hint) > 3){
+            return getHint(((getInt(hint) + hintnumber) % 4) + 4);
+        } else {
+            return getHint(getInt(hint) + hintnumber % 4);
+        }
+
+
+    }
+
+    //maping from ints to hints
+    public Hint getHint(int i){
+        if(i==0){
+            return Hint.NORTH;
+        } else if(i == 1){
+            return Hint.EAST;
+        } else if(i == 2){
+            return Hint.SOUTH;
+        } else if(i == 3){
+            return Hint.WEST;
+        } else if(i == 4){
+            return Hint.NORTH_EAST;
+        } else if(i == 5){
+            return Hint.SOUTH_EAST;
+        } else if(i == 6){
+            return Hint.SOUTH_WEST;
+        } else if(i == 7){
+            return Hint.NORTH_WEST;
+        } else {
+            return null;
+        }
+    }
+
+    //mapping from hints to ints
+    public int getInt(Hint h){
+        if(h == Hint.NORTH){
+            return 0;
+        } else if(h == Hint.EAST){
+            return 1;
+        } else if(h == Hint.SOUTH){
+            return 2;
+        } else if(h == Hint.WEST){
+            return 3;
+        } else if(h == Hint.NORTH_EAST){
+            return 4;
+        } else if(h == Hint.SOUTH_EAST){
+            return 5;
+        } else if(h == Hint.SOUTH_WEST){
+            return 6;
+        } else if(h == Hint.NORTH_WEST){
+            return 7;
+        } else {
+            return -1;
+        }
     }
 
     //TO DO
