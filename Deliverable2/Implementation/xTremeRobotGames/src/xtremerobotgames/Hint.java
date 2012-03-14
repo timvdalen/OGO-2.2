@@ -10,3 +10,4 @@ public enum Hint{
 	SOUTH_EAST,
 	SOUTH_WEST,
 }
+

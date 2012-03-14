@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Controller {
 
-    private Viewer viewer;
+    public Viewer viewer;
     private ArrayList<Robot> robots;
     private Board board;
 
