@@ -37,7 +37,7 @@ This document contains the review of the formal specification of group 3. We fir
         \item There is no content page.
         \item The introduction is short and does not tell what is coming next, so it isn't what an introduction should be like. For example, the state diagrams and MSC's are not mentioned.
         \item There are no any use case scenario's (and also no matching state diagrams and MSC's).
-        \item The design decisions that have been made aren not documented.
+        \item The design decisions that have been made are not documented. For example, in our informal specification, we did not specify that player 1 always makes it turn before player 2. We would expect that you would document and motivate this decision.
         \item The class diagram is missing.
         \item It is not specified how a game ends and how the individual components of the game (Controller, Board, etc.) can conclude and react to this.
     \end{itemize}
@@ -53,7 +53,7 @@ This document contains the review of the formal specification of group 3. We fir
         \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what it's type is. The same holds for the $s?$-variable in DoMove.
         \item The MoveRequest in player is actually not part of the player-entity/class. It is requested by a player via the Controller. The MoveRequest in player also checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
         \item The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
-        \item The notion of turns is explained informally, but not reflected formally in the Z-specification. For example, the tides occur once each player has no moves left.
+        \item The notion of rounds is explained informally, but not reflected formally in the Z-specification. For example, the tides occur after completion of a round.
         \item The invariant "Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation" is not maintained in the Z-specification.
         \item You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
         \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
@@ -67,6 +67,7 @@ This document contains the review of the formal specification of group 3. We fir
 
     \subsection{Board}
     \begin{itemize}
+        \item The invariant of the standard value of de height of water is bit confusing. First, you state that the x-value of a nEvent must be between -20 and 20. However, in the invariant of the standard value of the height of the water, you say that the x- and y-variables of nEvent are both natural numbers.
         \item In the informal explanation of Flood, you state you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
         \item In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. You state the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case, the move is, of course, not possible.
         \item In MakeMove, a conjunction is missing between the parts of the fox and the dolphin.
@@ -81,20 +82,25 @@ This document contains the review of the formal specification of group 3. We fir
         \item In Init, all foxes should be placed on the land and all dolphins in the water.
     \end{itemize}
 
-	\section{Remarks about the State Diagram}
+	\section{Remarks about the state diagram}
     \begin{itemize}
-        \item The invariant of de standard value of de height of water is bit confusing. If the x-value of a nEevent must be in between -20 and 20, how can it be that it's value in the invariant is of the domain of the natural numbers.
-        \item The structure of the entire system is not clear since there is no class diagram. The visibility of the methodes are not specified.
-        \item Reference from a statechart to a message sequence chart should be avoided. For every message sequence chart there should be a statechart which correspondents to it.
-        \item All statecharts should have a final state which the statechart can terminate with.
-        \item A lot transition labels are incorrect, for instance the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" unneeded, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
-        \item There is a transition in View that does not have a label, does it mean that it is executed immediately after the state "Updated" becomes active, or will it be randomly executed.
-        \item Many triggers in transitions are not in the form of a methode, like "NEvent" in Main. Is it a notification that is send from a class to another?
-        \item The triggers of the transition in View are incorrect. According to the current statechart the update of the view and the update of the flood are executed concurrently, however it seems more logical that they executes sequentially.
+        \item The order of the informal explanation is inconsistent with the order of explanation in the Z-specification. In the Z-specification, you first provide the Z-schema and thereafter the explanation; in the state diagram and MSC, you first provide the explanation and thereafter the diagrams. This is inconsistent and also confusing.
+        \item The state diagrams of the individual components are missing. The individual state diagrams reflect the communication within an entity (internal actions) and to the entities it "knows about"; the system state diagram is used to show how the individual entities communicate with each other.
+        \item In the state diagram, it is reflected that there always is an initial flood, after the board and all its components have been initialized. There always is a flood after a round has been completed; not necessarily before the first round.
+        \item A reference from a state diagram to a message sequence chart should be avoided. For every message sequence chart, there should be a state diagram which correspondents to it.
+        \item All state diagrams should have a terminating state.
+        \item A lot transition labels are incorrect. For instance, the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" not needed, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
+        \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means.
+        \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. Explain what this label means; for example, that it is a notification that is send from one class to another
+        \item The triggers of the transition in View are incorrect. According to the current state diagram, the update of the view and the update of the flood are executed concurrently, however it seems more logical that they execute sequentially.
+        \item We believe a part of the following sentence is missing: "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
     \end{itemize}
     \section{Remarks about Message Sequence Chart}
 	%\input{design}
-    ToDo
+    \begin{itemize}
+        \item In the MSC is shown that a round begins with a call from the controller to the board, to request the number of moves of a player. We did not state this in our informal specification. A player first makes a move request, the controller then forwards this request to the board. Since the board knows the number of moves for each player, it can internally determine whether a move request is valid, based upon these number of moves.
+        \item The "request move"-message from controller to player should go the other way around. As explained above, the player requests a move; the controller does not ask the player whether it wants to move.
+    \end{itemize}
 
     \section{Judgement and grading}
     \subsection{Consistency}
