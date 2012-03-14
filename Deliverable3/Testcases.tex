@@ -1,0 +1,35 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{graphicx,listings,a4wide}
+%\usepackage[firstpage]{draftwatermark}
+%\SetWatermarkLightness{0.5}
+%\SetWatermarkScale{4}
+\setcounter{tocdepth}{2}
+
+\newcommand{\question}[2]{\medskip\par\noindent\textbf{#1}\\\hangindent=0.5cm#2}
+
+\title{Report on OGO 2.2 \\ Software specification\\ Testcases for group 3}
+\author{
+        Tim van Dalen, Tony Nan, Ferry Timmers, \\ Lasse Blaauwbroek, Femke Jansen, \\Jeroen Peters and Sander Breukink\\ OGO 2.2 group 6 \\
+                Department of Computer Science\\
+        Technical University Eindhoven\\
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+	
+	\section{0 Pieces}
+    Input: each player has 0 pieces.\\
+    Output: error, each player has to begin with at least 1 piece.
+
+	\section{Fox eats dolphin in water}
+    Input: a fox is 2 tiles away from the land and there is a dolphin between the fox and the land. The fox moves towards the land and onto the tile that is occupied by the dolphin.\\
+    Output: despite of being in the water, the fox will still eat the dolphin.\\
+    Note: this also goes the other way around.\\
+    
+    \section{Fox eats dolphin at bridge}
+    Input: a bridge has been flooded, and while it was flooded a dolphin swam to one end of it, but the tide lowered and the dolphin can't move anymore. A fox goes up to the bridge from the other side.\\
+    Output: because the fox will go to the same tile as the dolphin is currently, the fox will eat the dolphin.\\
+    Note: this also goes the other way around.\\
+\end{document} 
