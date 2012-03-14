@@ -1,0 +1,32 @@
+Z ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Algemene Z
++ The majority of the functionality is specified.
++ The description of your coordinate-system is very nice and understandable. 
++ Splitting the "MoveRequest" in Controller in several pieces was a wise decision; this way, you can keep things organized and introduce the reader step-by-step to the whole concept.
+
+- Boolean is a pre-defined set in Z. The correct notation for the set of booleans is $\bool$.
+- In sections 2 to  3.5, input-/output-variables are prefixed with a ?/!. In the remaining sections of the Z-specification, the input-/output-variables are postfixed with a ?/!. This is inconsistent and partly incorrect; input/output-variables should be postfixed with a ?/!.
+- Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what it's type is. The same holds for the $s?$-variable in DoMove.
+- The MoveRequest in player is actually not part of the player-entity/class. It is requested by a player via the Controller. The MoveRequest in player also checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid. 
+- The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
+- The notion of turns is explained informally, but not reflected formally in the Z-specification. For example, the tides occur once each player has no moves left.
+- The invariant "Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation" is not maintained in the Z-specification.
+- You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
+- The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
+- It is not always clear where the input-, output- and dummy-variables are used for in the Z-schemas. Additional explanation would be appreciated.
+
+Pieces & Player (2)
+- One player has all pieces of type 'fox' and one player has all pieces of type 'dolphin'. You only specify that each player has pieces of the same type.
+
+Board (3)
+- In the informal explanation of Flood, you state you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
+- In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. You state the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case, the move is, of course, not possible.
+- In MakeMove, a conjunction is missing between the parts of the fox and the dolphin. 
+- In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
+- In init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
+- In the informal description of getNrMoves, you say that the operation calculates the number of moves "automagically".
+
+
+Viewer& Controller (4)
+- The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$-variable in init; if it is, explain this in the informal description.
+- In init, all foxes should be placed on the land and all dolphins in the water. 

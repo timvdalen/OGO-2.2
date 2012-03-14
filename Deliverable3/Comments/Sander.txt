@@ -1,4 +1,28 @@
-- Plaatjes zijn te klein
-- Geen inhoudsopgave
-- Geen usecases
-- Geen design decisions
+﻿*- Z specification: the division over the functions is good, the functions are not to long.
+- All pieces have the type animal, but later on the pieces have Dolphin as type, this is inconsistent.
+- 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+- piece: Waarom gebruik je Pieces die allemaal het type Animal zijn ipv Animals?
+- piece: een piece kan buiten de grenzen van het board?
+- DoKill: zijn de 2 pieces wel van verschillende spelers?
+- Board: maar 1 speler op een vakje staat nergens gespesificeerd
+- Player: Pieces is niet gedefinieerd, alleen piece.
+- Tile: x en y mogen buiten de grenzen van het board zijn?
+- Board: een brug/tunnel kan naar zichzelf of de buurman gaan? redelijk zinloos lijkt mij
+- Board: de termen dagen en beurten worden door elkaar heen gebruikt zonder dat aangegeven wordt hoeveel beurten 1 dag is
+- MoveRequest: waarom maak je hier geen gebruik van de functie neighbours
+- inRange: waarom wordt nu p.species gebruikt terwijl het eerst juist een type was?
+- inRange: Er staat eigenlijk 2 keer hetzelfde, het is overzichtelijker als je van de herhaalde code een functie maakt en die 2 keer aanroept.
+- MakeMove: waarom is er een MakeMove terwijl er ook al een DoMove is?
+- MakeMove: waarom geef je aan OccupiedBySameAnimal een diersoort mee terwijl er een piece gevraagd wordt? (komt ook voor bij ShortcutPossible)
+- Init: Een speler kan beginnen met 0 pieces? Wie heeft er gewonnen bij 0 pieces?
+
+- State chart: Board: wat betekent die P1 van Flood updated naar Idle
+- State chart: alle classes worden niet geïnitialiseerd danwel getermineerd
+- State chart: algemeen: waarom staat er soms wel () achter een functie en soms niet?
+- State chart: MSC for P1 kan je niet gebruiken in een statechart
+- MSC: veel te klein afgebeeld
+- MSC: wanneer is het spel afgelopen?
+- Tiles: verstandig dat ze X en Y coordinaten hebben gebruikt

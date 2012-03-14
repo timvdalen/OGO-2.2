@@ -13,12 +13,14 @@ import java.util.ArrayList;
  */
 public class Controller {
 
-    private Viewer viewer;
+    public Viewer viewer;
     private ArrayList<Robot> robots;
+    private Board board;
 
     Controller(){
         viewer = null;
         robots = null;
+        board = null;
     }
 
     public Controller addViewer(Viewer v){
@@ -30,12 +32,36 @@ public class Controller {
         }
     }
 
+    public BoardResponse moveRequest(RelativeCoord loc, Robot r, Rotation rot){
+        return board.moveRequest(loc, r, rot);
+    }
+
     public void notifyAutoMovement(Robot r){
         r.notifyAutoMovement();
     }
 
     public void notifyHint(Hint h, Robot r){
         r.notifyHint(h);
+    }
+
+    public void notifyView(){
+        viewer.notifyStateChange();
+    }
+
+    public void postInitialize(Board b, ArrayList<Robot> rs){
+        board = b;
+    }
+
+    public void removeViewer(){
+        viewer = null;
+    }
+
+    public BoardSnapshot requestBoardSnapshot(){
+        return board.requestSnapshot();
+    }
+
+    private void terminate(){
+
     }
 
 }

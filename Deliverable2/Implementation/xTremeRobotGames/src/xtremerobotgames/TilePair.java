@@ -9,10 +9,14 @@ package xtremerobotgames;
  *
  * @author s102231
  */
-public class NormalTile extends Tile{
+public class TilePair {
 
-    NormalTile(){
+    public Tile tile1;
+    public Tile tile2;
 
+    TilePair(Tile t1, Tile t2){
+        tile1 = t1;
+        tile2 = t2;
     }
 
 }
