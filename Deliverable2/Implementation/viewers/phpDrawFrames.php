@@ -1,4 +1,7 @@
 <?php
+	//Player settings
+	$colors = array("blue", "red", "yellow");
+
 	//Read input
 	$input = array();
 	$line = readline("");
@@ -20,6 +23,20 @@
 		foreach($snapshot as $row){
 			$cellid = 0;
 			foreach($row as $cell){
+				//print_r($cell);
+				if(isset($cell->occupied)){
+					$draw->setStrokeColor($colors[$cell->occupied]);
+					$draw->setStrokeWidth(5);
+					$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10, $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
+					$draw->line($cellid * 100 + 100 + $cellid * 10, $rowid * 100 + $rowid * 10, $cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
+					$draw->setStrokeColor('black');
+					$draw->setStrokeWidth(1);
+				}
+				if($cell->type == "HomeTile"){
+					$draw->setFillColor($colors[$cell->owner]);
+                                        $draw->rectangle($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10, $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
+				}
+
 				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10 , $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + $rowid * 10);
 				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10 , $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
 				$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10 , $cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10 );
