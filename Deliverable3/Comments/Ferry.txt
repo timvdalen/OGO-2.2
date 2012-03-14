@@ -4,3 +4,5 @@ The abstract is missing.
 
 2)
 "Players" and "Player" are used intermixed which is not really consistent
+
+In the definition of Player "Pieces" are mentioned while this type is not defined
