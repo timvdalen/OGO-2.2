@@ -1,10 +1,4 @@
-- Onlogische indelding: geen aparte sectie voor statecharts en MSC's
-- Statecharts en MSC's worden niet genoemd in de inleiding
-- Plaatjes zijn te klein
-- Geen inhoudsopgave
 - Geen usecases (en bijbehorende statecharts en MSC's)
-- Geen design decisions
-- Onlogische volgorde: Z moet eigenlijk pas na statecharts en MSC's
 - Z specificatie: goed onderverdeeld in meerdere stukken
 - Alle pieces zijn van het type animal, even later staat: Pieces van het type Dolphin, pieces hebben geen type Dolphin maar een diersoort
 - piece: Waarom gebruik je Pieces die allemaal het type Animal zijn ipv Animals?
@@ -21,3 +15,11 @@
 - MakeMove: waarom is er een MakeMove terwijl er ook al een DoMove is?
 - MakeMove: waarom geef je aan OccupiedBySameAnimal een diersoort mee terwijl er een piece gevraagd wordt? (komt ook voor bij ShortcutPossible)
 - Init: Een speler kan beginnen met 0 pieces? Wie heeft er gewonnen bij 0 pieces?
+
+- State chart: Board: wat betekent die P1 van Flood updated naar Idle
+- State chart: alle classes worden niet geïnitialiseerd danwel getermineerd
+- State chart: algemeen: waarom staat er soms wel () achter een functie en soms niet?
+- State chart: MSC for P1 kan je niet gebruiken in een statechart
+- MSC: veel te klein afgebeeld
+- MSC: wanneer is het spel afgelopen?
+- Tiles: verstandig dat ze X en Y coordinaten hebben gebruikt
