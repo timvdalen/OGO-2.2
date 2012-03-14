@@ -19,10 +19,11 @@
 		$allframes[] = $object;
 	}
 	$stringversion = json_encode($allframes);
-?>
+	$stringversion = addslashes($stringversion);
+	$html = <<<ENDHTML
 <html>
 	<script type="text/javascript">
-		var jsonstring = "<?=$stringversion?>";
+		var jsonstring = "$stringversion";
 		var frames = JSON.parse(jsonstring);
 	</script>
 	<!-- Hier de code om de frames te handlen includen -->
@@ -30,3 +31,6 @@
 		<canvas id="draw"></canvas>
 	</div>
 </html>
+ENDHTML;
+	file_put_contents("output.html", $html);
+?>
