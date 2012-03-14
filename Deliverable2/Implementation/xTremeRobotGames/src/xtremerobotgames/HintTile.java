@@ -9,7 +9,7 @@ package xtremerobotgames;
  *
  * @author s102231
  */
-public class HintTile {
+public class HintTile extends Tile{
 
     HintTile(){
 

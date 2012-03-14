@@ -9,7 +9,7 @@ package xtremerobotgames;
  *
  * @author s102231
  */
-public class NormalTile {
+public class NormalTile extends Tile{
 
     NormalTile(){
 

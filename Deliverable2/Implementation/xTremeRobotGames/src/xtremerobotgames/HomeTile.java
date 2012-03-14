@@ -9,12 +9,12 @@ package xtremerobotgames;
  *
  * @author s102231
  */
-public class HomeTile {
+public class HomeTile extends Tile{
 
-    public Robot target;
+    public Robot homeRobot;
 
     HomeTile(Robot robot){
-        target = robot;
+        homeRobot = robot;
     }
 
 }
