@@ -21,13 +21,25 @@ public class FrameData{
 			for(int j=0; j < cols; j++){
 				returnStr += "{";
 				Robot occupier = tiles[i][j].occupier;
-				//Robot needs to get his own ID or something like that.
-				returnStr += "\"row\":\"" + i + "\", \"col\":\"" + j + "\", \"type\":\"" + tiles[i][j].getClass().getName() + "\"";
+				String type = tiles[i][j].getClass().getName();
+				returnStr += "\"row\":\"" + i + "\", \"col\":\"" + j + "\", \"type\":\"" + type + "\"";
+
+				if(occupier != null){
+					returnStr += ", \"occupier\":\"" + occupier.getID() + "\"";
+				}
+
+				if(type == "HomeTile"){
+					returnStr += ", \"owner\": \"" + tiles[i][j].homeRobot.getID() + "\"";
+				}else if(type == "ConveyorTile"){
+					returnStr += ", \"rotation\": \"" + tiles[i][j].rot.toString()  + "\";
+				}
+
 				if(j != (cols-1)){
 					returnStr += "},";
 				}else{
 					returnStr += "}";
 				}
+
 			}
 			if(i != (rows-1)){
 				returnStr += "],";
