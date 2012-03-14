@@ -18,6 +18,10 @@
 \begin{document}
 
 \maketitle
+
+    \begin{abstract}
+    This document contains several non-trivial use cases, based upon the formal specification of group 6. The use cases are each informally described with an input and expected output. ToDo: beschrijven input alleen specifiek die entiteiten waarvan de settings anders zijn.
+    \end{abstract}
 	
 	\section{0 Pieces}
     Input: each player has 0 pieces.\\
@@ -26,23 +30,23 @@
 	\section{Fox eats dolphin in water}
     Input: a fox is 2 tiles away from the land and there is a dolphin between the fox and the land. The fox moves towards the land and onto the tile that is occupied by the dolphin.\\
     Output: despite of being in the water, the fox will still eat the dolphin.\\
-    
+
     \section{Fox eats dolphin at bridge}
     Input: a bridge has been flooded, and while it was flooded a dolphin swam to one end of it, but the tide lowered and the dolphin can't move anymore. A fox goes up to the bridge from the other side.\\
     Output: because the fox will go to the same tile as the dolphin is currently, the fox will eat the dolphin.\\
-    
+
     \section{Fox wants to go into the water}
     Input: a fox is currently on the land but wants to go into the water.\\
     Output: because the fox $\leq$ 2 tiles away from land it can still move and thus go into the water. If there is a dolphin on the water tile, the fox kills the dolphin.\\
-    
+
     \section{A player has won}
     Input: player 1 has eliminated the last animal of player 2.\\
     Output: player 1 has won and the game ends.\\
-    
+
     \section{Fox doesn't drown}
     Input: a silly fox goes into the water and goes in to deep and can't move anymore.\\
     output: no matter how long it takes for the tide to change back, the fox stays alive unless it gets eaten by a dolphin.\\
-    
-    
+
+
     Note: because we want to keep it a fair game, all testcases for foxes are also valid for the dolphin in the other way around.\\
 \end{document} 
