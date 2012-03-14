@@ -24,8 +24,8 @@
 			$cellid = 0;
 			foreach($row as $cell){
 				//print_r($cell);
-				if(isset($cell->occupied)){
-					$draw->setStrokeColor($colors[$cell->occupied]);
+				if(isset($cell->occupier)){
+					$draw->setStrokeColor($colors[$cell->occupier]);
 					$draw->setStrokeWidth(5);
 					$draw->line($cellid * 100 + $cellid * 10, $rowid * 100 + $rowid * 10, $cellid * 100 + 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
 					$draw->line($cellid * 100 + 100 + $cellid * 10, $rowid * 100 + $rowid * 10, $cellid * 100 + $cellid * 10, $rowid * 100 + 100 + $rowid * 10);
