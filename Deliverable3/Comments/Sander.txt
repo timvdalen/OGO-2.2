@@ -1,4 +1,4 @@
-- Z specification: the division over the functions is good, the functions are not to long.
+﻿*- Z specification: the division over the functions is good, the functions are not to long.
 - All pieces have the type animal, but later on the pieces have Dolphin as type, this is inconsistent.
 - 
 
