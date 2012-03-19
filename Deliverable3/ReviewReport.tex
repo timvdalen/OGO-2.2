@@ -61,7 +61,7 @@ In section 6, we give our judgement and grade the formal description. The final 
         \item You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
         \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
         \item It is not always clear where the input, output and dummy variables are used for in the Z-schemas. Additional explanation would be appreciated.
-	\item Some Z functions are being used before they are defined.    
+	\item Some Z functions are being used before they are defined.
    \end{itemize}
 
     \subsection{Pieces and players}
@@ -95,7 +95,7 @@ In section 6, we give our judgement and grade the formal description. The final 
         \item In Init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
         \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$ variable in init; if it is, explain this in the informal description.
         \item In Init, all foxes should be placed on the land and all dolphins in the water.
-        \item The init function allowes players to begin with $0$ pieces.
+        \item The init function allows players to begin with $0$ pieces.
     \end{itemize}
 
 	\section{Remarks about the state diagram}
