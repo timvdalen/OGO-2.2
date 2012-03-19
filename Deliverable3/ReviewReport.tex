@@ -61,7 +61,8 @@ In section 6, we give our judgement and grade the formal description. The final 
         \item You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
         \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
         \item It is not always clear where the input, output and dummy variables are used for in the Z-schemas. Additional explanation would be appreciated.
-    \end{itemize}
+	\item Some Z functions are being used before they are defined.    
+   \end{itemize}
 
     \subsection{Pieces and players}
     \begin{itemize}
