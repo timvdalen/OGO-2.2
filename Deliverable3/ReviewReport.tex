@@ -20,14 +20,19 @@
 \maketitle
 
 \begin{abstract}
-This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification. In the sections hereafter, we provide our remarks about the Z-specification, the state diagram and the MSC's; here, we distinguish between general remarks and individual remarks about specific parts of the specification. We provide our remarks as lists, to keep them organized and readable. Finally, we give our judgement of the formal description and grade the formal description.
+This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification in section 2. \\ 
+In section 3, we provide our opinion and remarks about the Z-specification; we have organized our remarks in a similar way to the structure of the formal specification. In sections 4 and 5, we evaluate the state diagram and the MSC. In each of these sections, we distinghuish between general remarks and individual remarks. The general remarks apply to several parts of the specification; the individual remarks apply to individual methods or parts of the specification. We provide our remarks as lists, in order to keep them organized and readable. \\
+In section 6, we give our judgement and grade the formal description. The final grade consists of four subgrades of the following categories: consistency, correspondence to the informal specification, completeness and explanation \& coherence. 
 \end{abstract}
 
 \newpage
 	
 	\tableofcontents
 	\newpage
-	
+    
+    \section{Introduction}
+    ToDo	
+
 	\section{General remarks}
     \begin{itemize}
         \item The order of sections is not logical: the Z specification should be after the MSC's and the Statecharts.
@@ -99,15 +104,15 @@ This document contains the review of the formal specification of group 3. We fir
         \item The state diagrams of the individual components are missing. The individual state diagrams reflect the communication within an entity (internal actions) and to the entities it "knows about"; the system state diagram is used to show how the individual entities communicate with each other.
         \item In the state diagram, it is reflected that there always is an initial flood, after the board and all its components have been initialized. There always is a flood after a round has been completed; not necessarily before the first round.
         \item A reference from a state diagram to a message sequence chart should be avoided. For every message sequence chart, there should be a state diagram which correspondents to it.
-        \item All state diagrams should have a terminating state, because the game can end.
+        \item All state diagrams should have a terminating state, because the game can end. Also, some classes like the player-classes should have an initializing state to indicate that they are being initialized.
         \item A lot transition labels are incorrect. For instance, the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" not needed, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
         \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means.
         \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. Explain what this label means; for example, that it is a notification that is send from one class to another
         \item The triggers of the transition in View are incorrect. According to the current state diagram, the update of the view and the update of the flood are executed concurrently, however it seems more logical that they execute sequentially.
         \item We believe a part of the following sentence is missing: "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
     \end{itemize}
+    
     \section{Remarks about Message Sequence Chart}
-	%\input{design}
     \begin{itemize}
         \item It is shown to small.
         \item In the MSC is shown that a round begins with a call from the controller to the board, to request the number of moves of a player. We did not state this in our informal specification. A player first makes a move request, the controller then forwards this request to the board. Since the board knows the number of moves for each player, it can internally determine whether a move request is valid, based upon these number of moves.
@@ -115,13 +120,6 @@ This document contains the review of the formal specification of group 3. We fir
         \item Nothing is stated about how the game will end, when do we have a winner?
     \end{itemize}
     
-    \section{Remarks about State Diagram}
-    \begin{itemize}
-        \item What does the P1 mean that goes from flood updated to Idle?
-        \item Classes should be initialized and terminated.
-        \item Sometimes you place () behind a function and sometimes you don't.
-        \item you don't use the MSC for p1 in the statechart.
-    \end{itemize}
 
     \section{Judgement and grading}
     \subsection{Consistency}
@@ -134,5 +132,8 @@ This document contains the review of the formal specification of group 3. We fir
     ToDo
 
     \subsection{Explanation and coherence}
+    ToDo
+    
+    \section{Conclusion}
     ToDo
 \end{document} 
