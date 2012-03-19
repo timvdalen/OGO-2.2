@@ -52,15 +52,16 @@ In section 6, our judgement and grading for the formal specification is given. T
         \item The description of your coordinate-system is very nice and understandable.
         \item Dividing the "MoveRequest" in Controller in several parts was a wise decision; this way the reader is introduced step-by-step to the whole concept.
         \item Boolean is a pre-defined set in Z. The correct notation for a set of booleans is $\mathds{B}$.
-        \item In sections 2 to  3.5, input or output variables are \emph{pre}fixed with a ? or !. In the remaining sections of the Z-specification, the input or output variables are \emph{post}fixed with a ? or !. This is inconsistent and partly incorrect; input or output variables should be \emph{post}fixed with a ? or !.
+        \item In sections 2 to  3.5, input or output variables are \emph{pre}fixed with a ? or !. In the remaining sections of the Z-specification, the input or output variables are \emph{post}fixed with a ? or !. This is inconsistent and partly incorrect; input or output variables should be \emph{post}fixed with a ? or !. 
         \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what its type is. The same holds for the $s?$ variable in DoMove.
-        \item The MoveRequest in player checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
+        \item The MoveRequest in player checks whether a move is possible, but that is not the job of the player; the board should check whether a move request is valid.
         \item The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
         \item The notion of rounds is explained informally, but not reflected formally in the Z-specification. For example, the tides occur after completion of a round.
         \item A Number of Moves schema is specified, but not used in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
         \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
         \item It is not always clear where the input, output and dummy variables are used for in the Z-schemas. Additional explanation would be appreciated.
 	   \item Some Z functions are being used before they are defined. For example, the function Neighbours is used in Board, but it is defined one page later. In the informal explanation, there is no reference to this later defined function.
+        \item Sometimes in function, the output comes first and sometimes the input. This should be consistent.
    \end{itemize}
 
     \subsection{Pieces and players}
@@ -82,7 +83,7 @@ In section 6, our judgement and grading for the formal specification is given. T
         \item In MakeMove, a conjunction is missing between the parts of the fox and the dolphin.
         \item In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
         \item In the informal explanation of getNrMoves, it is mentioned that the operation calculates the number of moves "automagically", yet it does not state what this means.
-        \item A bridge or tunnel begin and end on the same tile or to an adjacent tile.
+        \item A bridge or tunnel can begin and end on the same tile or begin on one tile and end on an adjacent tile.
         \item The terms 'days' and 'turns' are used as if they mean the same thing, whereas 'days' should indicate how many turns there are in one day.
         \item In the inRange function, p.species is used, but only p.type is defined.
         \item In the MakeMove and ShortcutPossible functions, a piece.type is given where a piece is required.
@@ -104,7 +105,7 @@ In section 6, our judgement and grading for the formal specification is given. T
         \item A reference from a state diagram to a message sequence chart should be avoided. For every message sequence chart, there should be a state diagram which correspondents to it.
         \item All state diagrams should have a terminating state, because the game can end. Also, some classes like the player-classes should have an initializing state to indicate that they are being initialized.
         \item A lot of transition labels are incorrect. For instance, the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" not needed, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
-        \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means.
+        \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means. It could also mean that this transition is useless.
         \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. An explanation what this label means is missing; for example, that it is a notification that is send from one class to another
         \item The triggers of the transition in View are incorrect. According to the current state diagram, the update of the view and the update of the flood are executed concurrently, however it seems more logical that they execute sequentially.
         \item A part of the following sentence appears to be missing: "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
