@@ -22,7 +22,7 @@
 \begin{abstract}
 This document contains the review of the formal specification of group 3. First some general remarks about the overall structure of the formal specification are provided in section 2. \\
 In section 3, our opinion and remarks about the Z-specification are provided; the remarks are organized in a similar way to the structure of the formal specification. In sections 4 and 5, the state diagram and the MSC are evaluated. In each of these sections, the remarks are divided into two categories: general remarks and individual remarks. The general remarks apply to several parts of the specification; the individual remarks apply to individual methods or parts of the specification. Our remarks are provided as lists, in order to keep them organized and readable. \\
-In section 6, our judgement and grading for the formal specification is given. The final grade consists of four partial grades of the following categories: consistency, correspondence to the informal specification, completeness and explanation \& coherence.
+In section 6, our judgement and grading for the formal specification is given. The final grade consists of four partial grades of the following categories: consistency, correspondence to the informal specification, completeness and explanation \& coherence. For each of these partial grades, we list the issues that had a major impact on the grade.
 \end{abstract}
 
 \newpage
@@ -52,7 +52,7 @@ In section 6, our judgement and grading for the formal specification is given. T
     In this section, our individual comments are organized in their respective order in the formal specification.
     \subsection{Overall remarks Z-specification}
     \begin{itemize}
-        \item The description of your coordinate-system is very nice and understandable. However, the two picture are not consistent; they both describe a different coordinate-system. The second coordinate-system is used in the Z-specification, but the first coordinate-system is never used in the document.      
+        \item The description of your coordinate-system is very nice and understandable. However, the two picture are not consistent; they both describe a different coordinate-system. The second coordinate-system is used in the Z-specification, but the first coordinate-system is never used in the document.
         \item Dividing the "MoveRequest" in Controller in several parts was a wise decision; this way the reader is introduced step-by-step to the whole concept.
         \item Boolean is a pre-defined set in Z. The correct notation for a set of booleans is $\mathds{B}$.
         \item In sections 2 to  3.5, input or output variables are \emph{pre}fixed with a ? or !. In the remaining sections of the Z-specification, the input or output variables are \emph{post}fixed with a ? or !. This is inconsistent and partly incorrect; input or output variables should be \emph{post}fixed with a ? or !.
@@ -127,17 +127,18 @@ In section 6, our judgement and grading for the formal specification is given. T
 
     \section{Judgement and grading}
     \subsection{Consistency}
-    There are a few inconsistencies in the report: sometimes you speak of species and sometimes of types. The function $pieces$ is used but not defined. Due to the fact that the state charts and MSC's are not complete, they couldn't be checked for consistency. Therefor the grade for this part is a 1.5.\\
-    
-    \subsection{Correspondence to the informal description}
-    A lot of things stated in the informal description aren't mentioned in the formal description, examples of this are the foxes that should be placed on land and the dolphins that should be placed in the water and that one player controls all the foxes while the other player controls all the dolphins. But most of the formal description matches with the informal description which brings us to a grade of 1.5.\\
+    There are a few inconsistencies in the report: for example, the attribute 'type' in Player is sometimes referred to as 'species' and sometimes as 'type'. Due to the fact that the state charts and MSC's were not complete enough, these could not be checked for consistency. Also, the two coordinate-systems in section 3.2.1 are not consistent with each other. Based upon these issues, the grade for consistency a 1.5 out of 2.5.\\
+
+    \subsection{Correspondence to the informal specification}
+     Some things stated in the informal description are not mentioned in the formal specification. For example, one player should control all the foxes, while the other player should control all the dolphins. Also, an important factor that is not reflected in the formal specification is the notion of a "safe tile". The rest of the formal specification does correspond to the informal description; the grade for correspondence is therefore a 1.5 out of 2.5. \\
 
     \subsection{Completeness}
     Since there are no abstract and introduction and the MSC and Statechart are not sufficient the grade for this part is 0.5.\\
 
-    \subsection{Explanation and coherence}    
-    Grade: 2.3
+    \subsection{Explanation and coherence}
+    The explanation matches with the functions pretty well, therefor the grade of this part is a 2.3.\\
 
-    \section{Conclusion}
-    Total grade: 5.8
-\end{document} 
+    \subsection{Conclusion}
+    The total grade is equal to 1.5 + 1.5 + 0.5 + 2.3 = 5.8.\\
+
+\end{document}
