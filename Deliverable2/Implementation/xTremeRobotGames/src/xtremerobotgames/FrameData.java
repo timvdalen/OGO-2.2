@@ -28,10 +28,12 @@ public class FrameData{
 					returnStr += ", \"occupier\":\"" + occupier.getID() + "\"";
 				}
 
-				if(type == "HomeTile"){
-					returnStr += ", \"owner\": \"" + tiles[i][j].homeRobot.getID() + "\"";
-				}else if(type == "ConveyorTile"){
-					returnStr += ", \"rotation\": \"" + tiles[i][j].rot.toString()  + "\";
+				if(type.equals("HomeTile")){
+                                        HomeTile curtile = (HomeTile) tiles[i][j];
+					returnStr += ", \"owner\": \""  +curtile.homeRobot.getID() + "\"";
+				}else if(type.equals("ConveyorTile")){
+                                        ConveyorTile curtile = (ConveyorTile) tiles[i][j];
+					returnStr += ", \"rotation\": \"" + curtile.rot.toString()  + "\"";
 				}
 
 				if(j != (cols-1)){

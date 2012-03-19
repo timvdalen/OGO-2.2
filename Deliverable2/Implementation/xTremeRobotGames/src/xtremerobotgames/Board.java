@@ -46,9 +46,33 @@ public class Board {
         return false;
     }
 
-    //TO DO
+    //DONE for the move..
     public BoardResponse moveRequest(RelativeCoord loc, Robot r, Rotation rot){
-        return null;
+        if(rot != Rotation.R0DEG){
+            if(r.r.possibleRotations.contains(rot)){
+                robotRotation.remove(r);
+                robotRotation.put(r, rot);
+                return BoardResponse.SUCCESS;
+            } else {
+                return BoardResponse.FAILED;
+            }
+        } else if(!r.r.possibleMoves.contains(loc)){
+            return BoardResponse.FAILED;
+        } else {
+            AbsoluteCoord position = calculateNewLocation(loc, r);
+            if(position == null){
+                return BoardResponse.FAILED;
+            } else if (tiles[position.getX()][position.getY()].getClass() == HomeTile.class){
+                HomeTile ht = (HomeTile) tiles[position.getX()][position.getY()];
+                    if(ht.homeRobot == r){
+                        return BoardResponse.WIN;
+                    } else {
+                    return BoardResponse.SUCCESS;
+                    }
+            } else {
+                return BoardResponse.SUCCESS;
+            }
+        }
     }
 
     //DONE
@@ -87,20 +111,25 @@ public class Board {
 
         //calculate new positions
         if (switchTiles.tile1.occupier != null){
-            saveLocation(calculateNewLocation(coord2, switchTiles.tile1.occupier), switchTiles.tile1.occupier);
+            saveLocation(calculateLocation(coord2, switchTiles.tile1.occupier), switchTiles.tile1.occupier);
             controller.notifyAutoMovement(switchTiles.tile1.occupier);                  //always notify of automovement
+        } else {
+            checkAround(coord2);    //check if conveyortiles pointing towards this tile might move, since it is (now) empty
         }
         if (switchTiles.tile2.occupier != null){
-            saveLocation(calculateNewLocation(coord1, switchTiles.tile2.occupier), switchTiles.tile2.occupier);
+            saveLocation(calculateLocation(coord1, switchTiles.tile2.occupier), switchTiles.tile2.occupier);
             controller.notifyAutoMovement(switchTiles.tile2.occupier);
+        } else {
+           checkAround(coord1);  
         }
+
 
 
         return null;
     }
 
     //get new position of robot
-    public AbsoluteCoord calculateNewLocation(AbsoluteCoord absCoord, Robot r){
+    public AbsoluteCoord calculateLocation(AbsoluteCoord absCoord, Robot r){
         if(tiles[absCoord.getX()][absCoord.getY()].getClass() == ConveyorTile.class ){
             return conveyorMove(absCoord, r);
         } else {
@@ -120,14 +149,7 @@ public class Board {
             destination = conveyorMove(destination, r);
             saveLocation(destination, r);
             controller.viewer.notifyStateChange();
-            RelativeCoord checkConveyor = new RelativeCoord(0, -1);
-            checkConveyor(addAbstoRel(absCoord, checkConveyor));
-            checkConveyor = new RelativeCoord(0,1);
-            checkConveyor(addAbstoRel(absCoord, checkConveyor));
-            checkConveyor = new RelativeCoord(-1,0);
-            checkConveyor(addAbstoRel(absCoord, checkConveyor));
-            checkConveyor = new RelativeCoord(1,0);
-            checkConveyor(addAbstoRel(absCoord, checkConveyor));
+            checkAround(absCoord);
             return destination;
         }
     }
@@ -143,6 +165,17 @@ public class Board {
                 saveLocation(destination, r);
             }
         }
+    }
+
+    public void checkAround(AbsoluteCoord absCoord){
+        RelativeCoord checkConveyor = new RelativeCoord(0, -1);
+        checkConveyor(addAbstoRel(absCoord, checkConveyor));
+        checkConveyor = new RelativeCoord(0,1);
+        checkConveyor(addAbstoRel(absCoord, checkConveyor));
+        checkConveyor = new RelativeCoord(-1,0);
+        checkConveyor(addAbstoRel(absCoord, checkConveyor));
+        checkConveyor = new RelativeCoord(1,0);
+        checkConveyor(addAbstoRel(absCoord, checkConveyor));
     }
 
     //need to take rotation of robot in account....
@@ -281,6 +314,12 @@ public class Board {
 
     //TO DO
     private AbsoluteCoord calculateNewLocation(RelativeCoord loc, Robot r){
+        AbsoluteCoord position = robots.getAbsoluteCoord(r);
+        if(addAbstoRel(position, loc) == null){
+            return null;
+        } else {
+
+        }
         return null;
     }
 
