@@ -20,16 +20,16 @@
 \maketitle
 
 \begin{abstract}
-This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification in section 2. \\ 
+This document contains the review of the formal specification of group 3. We first provide some general remarks about the overall structure of the formal specification in section 2. \\
 In section 3, we provide our opinion and remarks about the Z-specification; we have organized our remarks in a similar way to the structure of the formal specification. In sections 4 and 5, we evaluate the state diagram and the MSC. In each of these sections, we distinghuish between general remarks and individual remarks. The general remarks apply to several parts of the specification; the individual remarks apply to individual methods or parts of the specification. We provide our remarks as lists, in order to keep them organized and readable. \\
-In section 6, we give our judgement and grade the formal description. The final grade consists of four subgrades of the following categories: consistency, correspondence to the informal specification, completeness and explanation \& coherence. 
+In section 6, we give our judgement and grade the formal description. The final grade consists of four subgrades of the following categories: consistency, correspondence to the informal specification, completeness and explanation \& coherence.
 \end{abstract}
 
 \newpage
 	
 	\tableofcontents
 	\newpage
-    
+
     \section{Introduction}
     ToDo	
 
@@ -37,89 +37,88 @@ In section 6, we give our judgement and grade the formal description. The final 
     \begin{itemize}
         \item The order of sections is not logical: the Z specification should be after the MSC's and the Statecharts.
         \item The abstract is missing.
-        \item There is no content page.
-        \item The introduction is short and does not tell what is coming next, so it isn't what an introduction should be like. For example, the state diagrams and MSC's are not mentioned.
-        \item There are no any use case scenario's (and also no matching state diagrams and MSC's).
-        \item The design decisions that have been made are not documented. For example, in our informal specification, we did not specify that player 1 always makes it turn before player 2. We would expect that you would document and motivate this decision.
-        \item The class diagram is missing.
+        \item There is no table of contents.
+        \item The introduction is on the short side and is actually more of an abstract (yet if it were the state diagrams and MSC's are not mentioned).
+        \item There are no use case scenario's (and also no matching state diagrams and MSC's).
+        \item The design decisions that have been made are not documented. For example, in our informal specification, we did not specify that player 1 always makes a turn before player 2. We would expect that you would document and motivate this decision.
+        \item We would appreciate a class diagram.
         \item It is not specified how a game ends and how the individual components of the game (Controller, Board, etc.) can conclude this and react to this.
     \end{itemize}
 	
 	\section{Remarks about the Z-specification}
-    In this section, we organize our individual comments according to the order of the Z-schemas in the formal specification.
+    In this section, we organize our individual comments on the Z-schemas in the formal specification (in their respective order).
     \subsection{Overall remarks Z-specification}
     \begin{itemize}
         \item The description of your coordinate-system is very nice and understandable.
-        \item Splitting the "MoveRequest" in Controller in several pieces was a wise decision; this way, you can keep things organized and introduce the reader step-by-step to the whole concept.
-        \item Boolean is a pre-defined set in Z. The correct notation for the set of booleans is $\mathds{B}$.
-        \item In sections 2 to  3.5, input-/output-variables are prefixed with a ?/!. In the remaining sections of the Z-specification, the input-/output-variables are postfixed with a ?/!. This is inconsistent and partly incorrect; input/output-variables should be postfixed with a ?/!.
-        \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what it's type is. The same holds for the $s?$-variable in DoMove.
+        \item Dividing the "MoveRequest" in Controller in several parts was a wise decision; this way, you can keep things organized and introduce the reader step-by-step to the whole concept.
+        \item Boolean is a pre-defined set in Z. The correct notation for a set of booleans is $\mathds{B}$.
+        \item In sections 2 to  3.5, input or output variables are \em{pre}fixed with a ? or !. In the remaining sections of the Z-specification, the input or output variables are \{post}fixed with a ? or !. This is inconsistent and partly incorrect; input or output variables should be \em{post}fixed with a ? or !.
+        \item Some variables are unbounded or even undefined. For example, in the schema DoKill, a variable $s$ is used, but it is not clear where this variable comes from and what its type is. The same holds for the $s?$ variable in DoMove.
         \item The MoveRequest in player checks whether is move is possible, but that is not the job of the player; the board should check whether a move request is valid.
         \item The notion of "safe tiles" is not reflected in the Z-specification. This is an important factor when a fox wants to kill a dolphin and vice versa.
         \item The notion of rounds is explained informally, but not reflected formally in the Z-specification. For example, the tides occur after completion of a round.
         \item The invariant "Two adjacent tiles (meaning they have a common edge) may only differ in two units of elevation" is not maintained in the Z-specification.
         \item You do specify a Number of Moves schema, but do not use it in MoveRequest or DoMove. A move can only be requested (and executed) if a player has any moves left.
         \item The board has a size that depends on the number of pieces. This is not reflected in the formal specification.
-        \item It is not always clear where the input-, output- and dummy-variables are used for in the Z-schemas. Additional explanation would be appreciated.
+        \item It is not always clear where the input, output and dummy variables are used for in the Z-schemas. Additional explanation would be appreciated.
     \end{itemize}
 
     \subsection{Pieces and players}
     \begin{itemize}
-        \item One player has all pieces of type 'fox' and one player has all pieces of type 'dolphin'. You only specify that each player has pieces of the same type.
-        \item Why are all pieces of the type animal? Wouldn't it be better to simply use animals in stead of pieces?
-        \item A piece can go out of the borders of the board.
-        \item A piece can kill an animal of the same species.
-        \item Pieces isn't defined, but you use it in the DoKill function, Piece however is defined.
-        \item Why doens't the moverequest function use the neighbors function?
+        \item The document only specifies that each player has pieces of the same type; one player should have pieces of all type 'fox' and one player should have pieces of all type 'dolphin'.
+        \item All pieces have type animal; we think it would better to simply use animals in stead of pieces.
+        \item A piece can move beyond the borders of the board.
+        \item An animal can kill an animal of the same species.
+        \item 'Pieces' is not defined yet it is used in the DoKill function among others; 'Piece' however is defined.
+        \item The MoveRequest function does not use the neighbors function.
+        \item The DoMove function and MakeMove (defined at Board) look ambiguous.
     \end{itemize}
 
     \subsection{Board}
     \begin{itemize}
-        \item The invariant of the standard value of de height of water is bit confusing. First, you state that the x-value of a nEvent must be between -20 and 20. However, in the invariant of the standard value of the height of the water, you say that the x- and y-variables of nEvent are both natural numbers.
-        \item In the informal explanation of Flood, you state that you call the Flood-function twice; however, we do not see how this is reflected in the Z-schema.
-        \item In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. You state the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case, the move is, of course, not possible.
+        \item The default water height invariant is a bit confusing. First it states that the $x$ value of a nEvent must be between $-20$ and $20$, however in the invariant it says that the $x$ and $y$ variables of nEvent are both natural numbers.
+        \item In the informal explanation of Flood, it states that the Flood function is called twice; however, we do not see how this is reflected in the Z-schema.
+        \item In OccupiedBySameAnimal, the Z-schema is correct, but the informal explanation is not. It states the following: if the destination tile of a move request is occupied by an animal of the same type, then isOccupied is true and the move to this tile is possible. In this case the move is, of course, not possible.
         \item In MakeMove, a conjunction is missing between the parts of the fox and the dolphin.
         \item In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
-        \item In Init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
-        \item In the informal explanation of getNrMoves, you say that the operation calculates the number of moves "automagically".
-        \item Multiple pieces on one tile isn't specified.
-        \item A piece can be out of the borders of the board.
-        \item A bridge/tunnel can go to itself or to the neighbor.
-        \item The terms days and turns are used as if they mean the same thing, clarify how many turns there are in one day.
-        \item In the inRange function you use p.species, but you've only defined p.type.
-        \item What is the use of the MakeMove function when you already have a DoMove function?
-        \item In the MakeMove and ShortcutPossible functions you give a piece.type why a piece is required.
+        \item In the informal explanation of getNrMoves, it mentions that the operation calculates the number of moves "automagically" yet it does not state what this means.
+        \item Multiple pieces on the same tile is undefined.
+        \item A bridge or tunnel begin and end on the same tile or to an adjacent tile.
+        \item The terms days and turns are used as if they mean the same thing, it should clarify how many turns there are in one day.
+        \item In the inRange function it uses p.species, but only p.type is defined.
+        \item In the MakeMove and ShortcutPossible functions it gives a piece.type where a piece is required.
     \end{itemize}
 
     \subsection{Viewer and Controller}
     \begin{itemize}
-        \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$-variable in init; if it is, explain this in the informal description.
+        \item In Init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
+        \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$ variable in init; if it is, explain this in the informal description.
         \item In Init, all foxes should be placed on the land and all dolphins in the water.
-        \item The init function allowes players to begin with 0 pieces.
+        \item The init function allowes players to begin with $0$ pieces.
     \end{itemize}
 
 	\section{Remarks about the state diagram}
     \begin{itemize}
-        \item The order of the informal explanation is inconsistent with the order of explanation in the Z-specification. In the Z-specification, you first provide the Z-schema and thereafter the explanation; in the state diagram and MSC, you first provide the explanation and thereafter the diagrams. This is inconsistent and also confusing.
+        \item The order of the informal explanation is inconsistent with the order of explanation in the Z-specification. In the Z-specification, the Z-schema is provided first and thereafter the explanation; in the state diagram and MSC, the explanation is provided first and thereafter the diagrams. This is inconsistent and also confusing.
         \item The state diagrams of the individual components are missing. The individual state diagrams reflect the communication within an entity (internal actions) and to the entities it "knows about"; the system state diagram is used to show how the individual entities communicate with each other.
         \item In the state diagram, it is reflected that there always is an initial flood, after the board and all its components have been initialized. There always is a flood after a round has been completed; not necessarily before the first round.
         \item A reference from a state diagram to a message sequence chart should be avoided. For every message sequence chart, there should be a state diagram which correspondents to it.
         \item All state diagrams should have a terminating state, because the game can end. Also, some classes like the player-classes should have an initializing state to indicate that they are being initialized.
         \item A lot transition labels are incorrect. For instance, the label "MSC for P1 / End P1" of Player 1 is the part "/ End P1" not needed, since the transition "/ P2" can only be executed if state "Turn Completed" is active.
         \item There is a transition in View that does not have a label. This could either mean that it is executed immediately after the state "Updated" becomes active, or that it will be randomly executed. Explain what this transition means.
-        \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. Explain what this label means; for example, that it is a notification that is send from one class to another
+        \item Many triggers in transitions are not in the form of a method-call, like "NEvent" in Main. An explanation what this label means is missing; for example, that it is a notification that is send from one class to another
         \item The triggers of the transition in View are incorrect. According to the current state diagram, the update of the view and the update of the flood are executed concurrently, however it seems more logical that they execute sequentially.
-        \item We believe a part of the following sentence is missing: "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
+        \item A part of the following sentence appears to be missing: "Na een beurt van een Player wordt ook het View weer up-to-date gemaakt, zoals."
     \end{itemize}
-    
+
     \section{Remarks about Message Sequence Chart}
     \begin{itemize}
-        \item It is shown to small.
-        \item In the MSC is shown that a round begins with a call from the controller to the board, to request the number of moves of a player. We did not state this in our informal specification. A player first makes a move request, the controller then forwards this request to the board. Since the board knows the number of moves for each player, it can internally determine whether a move request is valid, based upon these number of moves.
+        \item The diagram is too small to conveniently read.
+        \item In the MSC is shown that a round begins with a call from the controller to the board, to request the number of moves of a player. This is in conflict with our informal specification. A player makes a move request first; then the controller forwards this request to the board. Since the board knows the number of moves for each player it can internally determine whether a move request is valid based upon these number of moves.
         \item The "request move"-message from controller to player should go the other way around. As explained above, the player requests a move; the controller does not ask the player whether it wants to move.
-        \item Nothing is stated about how the game will end, when do we have a winner?
+        \item Nothing is stated about how the game will end; when do we have a winner?
     \end{itemize}
-    
+
 
     \section{Judgement and grading}
     \subsection{Consistency}
@@ -133,7 +132,7 @@ In section 6, we give our judgement and grade the formal description. The final 
 
     \subsection{Explanation and coherence}
     ToDo
-    
+
     \section{Conclusion}
     ToDo
 \end{document} 
