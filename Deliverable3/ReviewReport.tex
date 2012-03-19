@@ -31,9 +31,9 @@ In section 6, our judgement and grading for the formal specification is given. T
 	\newpage
 
     \section{Introduction}
-    	This document contains the review for the formal specification described in "Formele specificatie van Groep 6 OGO 2.2" by group 3. 
-	It describes the differences between the informal specification given in "Report on OGO 2.2 Software specification Assignment 2a".
-	Any incosistencies between the specifications or within the formal specification itself will be listed, and any comments on the MSC, state chart or Z-specification will be given.
+    	This document contains the review for the formal specification described in "Formele specificatie van Groep 6 OGO 2.2" by group 3.
+	It describes the differences with the informal specification given in "Report on OGO 2.2 Software specification Assignment 2a".
+	Any inconsistencies between the specifications or within the formal specification itself will be listed, and any comments on the MSC, state chart or Z-specification will be given.
 	The formal specification will be graded on consistency, correspondence to the informal description, completeness and explanation and coherence.
 
 	\section{General remarks}
@@ -127,18 +127,18 @@ In section 6, our judgement and grading for the formal specification is given. T
 
     \section{Judgement and grading}
     \subsection{Consistency}
-    There are a few inconsistencies in the report: for example, the attribute 'type' in Player is sometimes referred to as 'species' and sometimes as 'type'. Due to the fact that the state charts and MSC's were not complete enough, these could not be checked for consistency. Also, the two coordinate-systems in section 3.2.1 are not consistent with each other. Based upon these issues, the grade for consistency a 1.5 out of 2.5.\\
+    There are a few inconsistencies in the report: for example, the attribute 'type' in Player is sometimes referred to as 'species' and sometimes as 'type'. Due to the fact that the state charts and MSC's were not complete enough, these could not be checked for consistency. Also, the two coordinate-systems in section 3.2.1 are not consistent with each other. Based upon these issues and the remarks above, the grade for consistency a 1.5 out of 2.5.\\
 
     \subsection{Correspondence to the informal specification}
-     Some things stated in the informal description are not mentioned in the formal specification. For example, one player should control all the foxes, while the other player should control all the dolphins. Also, an important factor that is not reflected in the formal specification is the notion of a "safe tile". The rest of the formal specification does correspond to the informal description; the grade for correspondence is therefore a 1.5 out of 2.5. \\
+     Some things stated in the informal description are not mentioned in the formal specification. For example, one player should control all the foxes, while the other player should control all the dolphins. Also, an important factor that is not reflected in the formal specification is the notion of a "safe tile". Sometimes, additional features are introduced that were not specified in the informal specification. For example, the formal specification states that there are "turns"; player 1 always moves his pieces before player 2. The rest of the formal specification does correspond to the informal description; the grade for correspondence is therefore a 1.3 out of 2.5. \\
 
     \subsection{Completeness}
-    Since there are no abstract and introduction and the MSC and Statechart are not sufficient the grade for this part is 0.5.\\
+    Due to the lack of state diagrams and MSC's, some scenarios are not properly explained. For example, it is not explained when and how the different components of the game can conclude that a game has ended. Since there are no abstract and introduction and the MSC and state diagram are not sufficient, the grade for this part is 0.6 out of 2.5.\\
 
     \subsection{Explanation and coherence}
-    The explanation matches with the functions pretty well, therefor the grade of this part is a 2.3.\\
+    The informal explanation is very clear and matches the formal specification. Furthermore, the document seems to be coherent and therefore the grade for this part is a 2.3 out of 2.5.\\
 
     \subsection{Conclusion}
-    The total grade is equal to 1.5 + 1.5 + 0.5 + 2.3 = 5.8.\\
-
+    In general, the provided formal specification was fine. However, some major parts are still missing and some parts of the report are inconsistent.
+    The total grade is equal to 1.5 + 1.3 + 0.6 + 2.3 = 5.7.\\
 \end{document}
