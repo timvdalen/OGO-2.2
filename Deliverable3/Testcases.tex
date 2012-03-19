@@ -22,36 +22,50 @@
 \begin{abstract}
 This document contains several non-trivial test cases based upon the formal specification of group 3. In particular, we provide test cases for those scenarios that are not yet captured correctly in the formal specification. For each test case, we first provide a short description of the purpose of the test; then, we formally describe the input and output. In the testcases for the Z-specification, we describe the input and output in terms of the variables and types of the associated Z-schema.
 \end{abstract}
-	
+
     \section{Testcases for Z-specification}
 
-	\subsection{0 Pieces}
-    Description: This test case is used to check the behavior of the system when an invalid number of pieces is entered; it tests the init-scheme of the Z-specification. \\
+\subsection{0 Pieces}
+    Description: This test case is used to check the behavior of the system when an invalid number of pieces is entered. \\
+    Scheme: Init\\
     Input: $n?$ = 0 \\
     Output: An error message indicating that each player has to begin with at least one piece.
 
-	\subsection{Fox eats dolphin in water}
-    Description: In this test case, a fox is two tiles away from the land and a dolphin is on a water tile between the fox and the land. In this scenario, the fox moves towards the land and ends up on the tile that is occupied by the dolphin. This test case is used to test ... in the Z-specification.
-    Input:  \\
-    Output: despite of being in the water, the fox will still eat the dolphin.\\
+\subsection{Fox eats dolphin in water}
+    Description: In this test case, a fox is two tiles away from the land and a dolphin is on a water tile between the fox and the land. In this scenario, the fox moves towards the land and ends up on the tile that is occupied by the dolphin. This scenario is thus a composition of RequestMove and DoKill. \\
+    Scheme 1: RequestMove \\
+    Input 1: $x?$ and $y?$ are the destination coordinates of a water tile. $p?$ is a fox\\
+    Scheme 2: DoKill\\
+    Input 2: $x?$ and $y?$ are the same coordinates as before and there is a dolphin on $(x?,y?)$.\\
+    Output: $movedXkilled! = (true,true)$.\\
 
     \subsection{Fox eats dolphin at bridge}
-    Description: This test case is used to check the scenario of a flooded bridge where a dolphin is residing. The dolphin swam to one end of the bridge while it was flooded, but then the tide lowered and the dolphin could not move anymore. A fox then uses the bridge 
-    Input: a bridge has been flooded, and while it was flooded a dolphin swam to one end of it, but the tide lowered and the dolphin can't move anymore. A fox goes up to the bridge from the other side.\\
-    Output: because the fox will go to the same tile as the dolphin is currently, the fox will eat the dolphin.\\
-
+    Description: This test case is used to check the scenario of a flooded bridge where a dolphin is residing. The dolphin swam to one end of the bridge while it was flooded, but then the tide lowered and the dolphin could not move anymore. A fox then uses the bridge.\\
+    Scheme 1: RequestMove\\
+    Input 1: $x?$ and $y?$ are the coordinates of one end of a bridge. $p?$ is a dolphin.\\
+    Output 1: $movedXkilled! = (true,false)$.\\
+    Scheme 2: Tide\\
+    Output 2: $e$ is a value low enough for the tile to go from sea to land.\\
+    Scheme 3: RequestMove\\
+    Input 3: $x?$ and $y?$ are the coordinates of the other end of the bridge. $p?$ is a fox.\\
+    Output 3: $movedXkilled! = (true,true)$.\\
+    
     \subsection{Fox wants to go into the water}
-    Description: 
-    Input: a fox is currently on the land but wants to go into the water.\\
-    Output: because the fox $\leq$ 2 tiles away from land it can still move and thus go into the water. If there is a dolphin on the water tile, the fox kills the dolphin.\\
-
-    \subsection{A player has won}
-    Input: player 1 has eliminated the last animal of player 2.\\
-    Output: player 1 has won and the game ends.\\
+    Description: a fox goes in to the water on purpose.\\
+    Scheme: ReqeustMove\\
+    Input: $x?$ and $y?$ are the coordinates of the water tile the fox goes to, $p?$ is the fox itself.\\
+    Output: If the tile was occupied by a dolphin the output becomes $movedXkilled! = (true,true)$, in all other cases the output becomes $movedXkilled! = (true,false)$.
 
     \subsection{Fox doesn't drown}
-    Input: a silly fox goes into the water and goes in to deep and can't move anymore.\\
-    output: no matter how long it takes for the tide to change back, the fox stays alive unless it gets eaten by a dolphin.\\
+    Description: a fox is deep in the water and can't move anymore, but he stays alive.\\
+    Scheme 1: RequestMove\\
+    Input 1: $x?$ and $y?$ are the coordinates of a tile in the water. $p?$ is a fox.\\
+    Output 1: $movedXkilled! = (true,false)$.\\
+    Scheme 2: Tide\\
+    Output 2: $e$ is a value high enough to ensure that the fox is more than 2 tiles away form land.\\
+    Scheme 3: RequestMove\\
+    Input 3: $x?$ and $y?$ are coordinates the fox wants to go to. $p?$ is the same fox.\\
+    Output 3: $movedXkilled! = (false,false)$.\\
 
 
     Note: because we want to keep it a fair game, all testcases for foxes are also valid for the dolphin in the other way around.\\
