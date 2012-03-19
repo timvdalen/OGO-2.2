@@ -61,6 +61,11 @@ This document contains the review of the formal specification of group 3. We fir
     \subsection{Pieces and players}
     \begin{itemize}
         \item One player has all pieces of type 'fox' and one player has all pieces of type 'dolphin'. You only specify that each player has pieces of the same type.
+        \item Why are all pieces of the type animal? Wouldn't it be better to simply use animals in stead of pieces?
+        \item A piece can go out of the borders of the board.
+        \item A piece can kill an animal of the same species.
+        \item Pieces isn't defined, but you use it in the DoKill function, Piece however is defined.
+        \item Why doens't the moverequest function use the neighbors function?
     \end{itemize}
 
     \subsection{Board}
@@ -72,12 +77,20 @@ This document contains the review of the formal specification of group 3. We fir
         \item In ShortcutPossible, both the dolphins and foxes use the bridges now as a shortcut. Dolphins should, of course, use the caves.
         \item In Init, two foxes and two dolphins should not be placed on the same tile. This is captured in MoveRequest, but it must also be captured in the initial configuration.
         \item In the informal explanation of getNrMoves, you say that the operation calculates the number of moves "automagically".
+        \item Multiple pieces on one tile isn't specified.
+        \item A piece can be out of the borders of the board.
+        \item A bridge/tunnel can go to itself or to the neighbor.
+        \item The terms days and turns are used as if they mean the same thing, clarify how many turns there are in one day.
+        \item In the inRange function you use p.species, but you've only defined p.type.
+        \item What is the use of the MakeMove function when you already have a DoMove function?
+        \item In the MakeMove and ShortcutPossible functions you give a piece.type why a piece is required.
     \end{itemize}
 
     \subsection{Viewer and Controller}
     \begin{itemize}
         \item The initial number of foxes and dolphins can be predefined by the players. It is not clear whether this is the $n?$-variable in init; if it is, explain this in the informal description.
         \item In Init, all foxes should be placed on the land and all dolphins in the water.
+        \item The init function allowes players to begin with 0 pieces.
     \end{itemize}
 
 	\section{Remarks about the state diagram}
@@ -96,8 +109,18 @@ This document contains the review of the formal specification of group 3. We fir
     \section{Remarks about Message Sequence Chart}
 	%\input{design}
     \begin{itemize}
+        \item It is shown to small.
         \item In the MSC is shown that a round begins with a call from the controller to the board, to request the number of moves of a player. We did not state this in our informal specification. A player first makes a move request, the controller then forwards this request to the board. Since the board knows the number of moves for each player, it can internally determine whether a move request is valid, based upon these number of moves.
         \item The "request move"-message from controller to player should go the other way around. As explained above, the player requests a move; the controller does not ask the player whether it wants to move.
+        \item Nothing is stated about how the game will end, when do we have a winner?
+    \end{itemize}
+    
+    \section{Remarks about State Diagram}
+    \begin{itemize}
+        \item What does the P1 mean that goes from flood updated to Idle?
+        \item Classes should be initialized and terminated.
+        \item Sometimes you place () behind a function and sometimes you don't.
+        \item you don't use the MSC for p1 in the statechart.
     \end{itemize}
 
     \section{Judgement and grading}
