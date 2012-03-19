@@ -4,7 +4,7 @@ msc
 a [label="Player 2"],
 b [label="Player 1"],
 c [label="Controller"],
-d [label="Board"];
+d [label="Board"],
 e [label="View"];
 
 a box a [label=""],
