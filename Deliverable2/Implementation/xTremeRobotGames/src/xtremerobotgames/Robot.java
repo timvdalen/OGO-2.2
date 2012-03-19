@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Robot{
 	int id;
 
-	private Rule r;
+	public Rule r;
 	private Controller c;
 
 	private ArrayList<Hint> hints;
@@ -17,7 +17,7 @@ public class Robot{
 		hints = new ArrayList<Hint>();
 	}
 
-	getID(){
+	public int getID(){
 		return this.id;
 	}
 
