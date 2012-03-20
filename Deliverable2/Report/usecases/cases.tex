@@ -37,11 +37,17 @@ Tiles exchange
 - Main Scenarios
     (a) Two valid tiles are chosen
     (b) The chosen tiles are exchanged (ordinary exchange)
+    (c) The board makes a snapshot and sends this to the controller
+    (d) The controller notifies the viewer that there are changes and sends the snapshot along with this
 - Alternatives
     (b.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) (special exchange)
     (c.1) The board notifies the controller that a robot has moved
     (d.1) The controller notifies the robot that is has been moved
+    (e.1) The board makes a snapshot and sends this to the controller
+    (f.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
     (b.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
+    (c.2) The board makes a snapshot and sends this to the controller
+    (d.2) The controller notifies the viewer that there are changes and sends the snapshot along with this
     
 The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
@@ -68,6 +74,8 @@ Return Normal tile
     (a) The robot is moved to the indicated position which is a normal tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
+    (d) The board makes a snapshot and sends this to the controller
+    (e) The controller notifies the viewer that there are changes and sends the snapshot along with this
 - Alternatives
 
 The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved.
@@ -82,9 +90,11 @@ Return Hint tile
     (a) The robot is moved to the indicated position which is a hint tile 
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-    (d) The board generates a hint for the robot
-    (e) The board notifies the controller of the hint and the robot it needs to be send to
-    (f) The controller sends the hint to the robot
+    (d) The board makes a snapshot and sends this to the controller
+    (e) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    (f) The board generates a hint for the robot
+    (g) The board notifies the controller of the hint and the robot it needs to be send to
+    (h) The controller sends the hint to the robot
 - Alternatives
 
 The "Return Conveyor tile" use case illustrates the Return Conveyor tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a conveyor tile has been approved.
@@ -101,8 +111,10 @@ Return Conveyor tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
     (d) The board calculates the new position (after movement over the conveyor tile)
-    (e) The board notifies the controller that a robot has been moved automatically
-    (f) The controller notifies the robot that it has been moved automatically
+    (e) The board makes a snapshot and sends this to the controller
+    (f) The controller notifies the viewer that there are changes and sends the snapshot along
+    (g) The board notifies the controller that a robot has been moved automatically
+    (h) The controller notifies the robot that it has been moved automatically
 - Alternatives
 
 The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved.
@@ -117,6 +129,8 @@ Return Home tile
     (a) The robot is moved to the indicated position which is the robots home tile
     (b) The board notifies the controller that the move request has been approved and the robot has won
     (c) The controller notifies the robot that his move request has been approved, that the robot has been moved to the requested position and that the robot has won
+    (d) The board makes a snapshot and sends this to the controller
+    (e) The controller notifies the viewer that there are changes and sends the snapshot along
 - Alternatives
 
 The "Reject move" use case illustrates the Reject move state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request has been rejected.
@@ -136,7 +150,7 @@ Notify robots
 - Pre-conditions: The game is initiated.
 - Trigger: A robot is moved due to movement of another robot (by conveyor tile)
 - Guarantee: The robot gets a message that is has been moved
--Main Scenarios
+- Main Scenarios
     (a) The board sends a message to the controller, notifying it that a robot has been moved
     (b) The controller notifies the robot that it has been moved
 - Alternatives
@@ -147,9 +161,19 @@ Initialize viewer
 - Pre-conditions: True
 - Trigger: World messages the viewer
 - Guarantee: Initialized viewer
--Main Scenarios
+- Main Scenarios
     (a) Viewer initializes
     (b) Viewer sends a message to the controller that he is the viewer
+- Alternatives
+
+The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
+
+Update viewer
+- Pre-conditions: The game is initiated
+- Trigger: Notify and new snapshot by the controller
+- Guarantee: Update viewer
+- Main Scenarios
+    (a) Update view by the received snapshot
 - Alternatives
 
 
