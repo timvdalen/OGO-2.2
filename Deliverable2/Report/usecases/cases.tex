@@ -6,7 +6,10 @@ Init game
 - Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
 - Main Scenarios
-    (a) New board and players are created.
+    (a) Initialize board
+    (b) The board pre-initializes the controller
+    (c) The board initializes all robots (one by one)
+    (d) The board post-initializes the controller with all the robots
 - Alternatives
 
 
@@ -15,8 +18,11 @@ End game
 - Trigger:  A robot has reached its home tile.
 - Guarantee: The game is properly terminated.
 - Main Scenarios
-    (a) Fireworks are shown and then all components of the 
-        game are terminated.
+    (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
+    (b) Notify the viewer that the game is over and which robot has won
+    (c) Viewer displays fireworks
+    (d) Remove viewer from controller
+    (e) All remaining objects (except for the board) can now terminate, the board resets
 - Alternatives
 
 
@@ -25,68 +31,107 @@ Tiles exchange
 - Trigger:  A robot has moved.
 - Guarantee: Two tiles are exchanged
 - Main Scenarios
-    (a) Two normal tiles are exchanged.
-    (b) Two tiles including a conveyor tile or broken robot tile 
-        are exchanged
-    (c) Two tiles including a tile with a robot on it are 
-        exchanged, then the robot is rotated.
+    (a) Two valid tiles are chosen
+    (b) The chosen tiles are exchanged (ordinary exchange)
 - Alternatives
-    (b-1).1 This exchange would make it impossible for a robot 
-            to reach it's home tile, 2 other tiles are 
-            selected.
+    (b.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) (special exchange)
+    (b.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
+    
 
 
-Robot Move
-- Pre-conditions: The game is initiated. And the indicated position 
+Robot Move Request
+- Pre-conditions: The game is initiated. And the indicated position
     is a empty tile.
 - Trigger: A robot requests to move his position.
 - Guarantee: The robot is moved to the indicated position.
 - Main Scenarios
-    (a) The robot is moved to the indicated position.
+    (a) The robot requests the controller if it may move
+    (b) The controller sends the request to the board
+    (c) The board checks the request
 - Alternatives
-    (a-1).1 If the indicated tile is occupied by a player 
-        or a broken robot, then the request is rejected 
-        and the robot is not moved.
 
-
-Home tile
-- Pre-conditions: The game is initiated. And the indicated position 
-    is its home tile.
-- Trigger: A robot requests to move his position to a home tile.
-- Guarantee: The robot is moved to the indicated position which 
-    is its home tile.
+Return Normal tile
+- Pre-conditions: The game is initiated. And the indicated position
+    is a normal tile, move request approved.
+- Trigger: A robot requests to move his position to a normal tile.
+- Guarantee: The robot is moved to the indicated position which
+    is a normal tile.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which 
-        is its home tile.
+    (a) The robot is moved to the indicated position which is a normal tile
+    (b) The board notifies the controller that the move request has been approved
+    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
 - Alternatives
 
-Hint tile
-- Pre-conditions: The game is initiated. The indicated position 
-    is hint tile.
+Return Hint tile
+- Pre-conditions: The game is initiated. The indicated position
+    is a hint tile, move request approved.
 - Trigger: A robot requests to move his position to a hint tile.
-- Guarantee: The robot is moved to the indicated position which 
+- Guarantee: The robot is moved to the indicated position which
     is a hint tile and a hint is given to the player.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which 
-        is a hint tile and a hint is given to the player.
+    (a) The robot is moved to the indicated position which is a hint tile 
+    (b) The board notifies the controller that the move request has been approved
+    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
+    (d) The board generates a hint for the robot
+    (e) The board notifies the controller of the hint and the robot it needs to be send to
+    (f) The controller sends the hint to the robot
 - Alternatives
-    (a-1).1 If the indicated tile is occupied by a player, 
-        then the request is rejected and the robot is 
-        not moved.
 
-
-Conveyor belt
-- Pre-conditions: The game is initiated. And the indicated position 
-    is a conveyor tile.
-- Trigger: A robot requests to move his position to a conveyor 
+Return Conveyor belt
+- Pre-conditions: The game is initiated. And the indicated position
+    is a conveyor tile, move request approved.
+- Trigger: A robot requests to move his position to a conveyor
     belt tile.
-- Guarantee: The robot is moved to the indicated position which 
+- Guarantee: The robot is moved to the indicated position which
     is a conveyor belt tile.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which 
-        is a conveyor belt tile.
+    (a) The robot is moved to the indicated position which is a conveyor
+    (b) The board notifies the controller that the move request has been approved
+    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
+    (d) The board calculates the new position (after movement over the conveyor tile)
+    (e) The board notifies the controller that a robot has been moved automatically
+    (f) The controller notifies the robot that it has been moved automatically
 - Alternatives
-    (a-1).1 If the indicated tile is occupied by a player, 
-        then the request is rejected and the robot is 
-        not moved.
+
+        
+Return Home tile
+- Pre-conditions: The game is initiated. And the indicated position
+    is its home tile, move request approved.
+- Trigger: A robot requests to move his position to a home tile.
+- Guarantee: The robot is moved to the indicated position which
+    is its home tile.
+- Main Scenarios
+    (a) The robot is moved to the indicated position which is the robots home tile
+    (b) The board notifies the controller that the move request has been approved and the robot has won
+    (c) The controller notifies the robot that his move request has been approved, that the robot has been moved to the requested position and that the robot has won
+- Alternatives
+
+Reject move
+- Pre-conditions: The game is initiated. A move request of a robot is rejected.
+- Trigger: A robot requests to move
+- Guarantee: The robot remains on the same position
+- Main Scenarios
+    (a) The board sends the reject message to the controller
+    (b) The controller sends the reject message to the robot
+- Alternatives
+
+Notify robots
+- Pre-conditions: The game is initiated.
+- Trigger: A robot is moved due to movement of another robot (by conveyor tile)
+- Guarantee: The robot gets a message that is has been moved
+-Main Scenarios
+    (a) The board sends a message to the controller, notifying it that a robot has been moved
+    (b) The controller notifies the robot that it has been moved
+- Alternatives
+
+Initialize viewer
+- Pre-conditions: True
+- Trigger: World messages the viewer
+- Guarantee: Initialized viewer
+-Main Scenarios
+    (a) Viewer initializes
+    (b) Viewer sends a message to the controller that he is the viewer
+- Alternatives
+
+
 \end{alltt}
