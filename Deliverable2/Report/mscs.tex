@@ -31,7 +31,7 @@ For this MSC, the assumption is made that there already exists a viewer and that
 
     	\subsubsection{Update viewer}
 	\begin{minipage}{\linewidth}
-		During the game execution, the viewer will keep requesting the current board snapshot from the controller. This happens concurrently to the rest of the process. It can also request the board snapshot when it gets notified by the controller that the board has changed.
+		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed. Note that this notification is not shown in the MSC below, because it is part of the 'Return ... tile' MSCs and the tiles exchange MSCs.
 
 		\input{MSC-files/viewer_update.tex}
 	\end{minipage}
