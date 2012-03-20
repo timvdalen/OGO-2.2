@@ -21,5 +21,3 @@
 - MSC: veel te klein afgebeeld
 - MSC: wanneer is het spel afgelopen?
 - Tiles: verstandig dat ze X en Y coordinaten hebben gebruikt
-
-aangepast test
