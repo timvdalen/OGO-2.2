@@ -9,15 +9,17 @@ This section contains the message sequence charts, both of high and class level.
 	\end{figure}
 
 \subsection{Message Sequence Charts}
-	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Message Sequence Chart.
+	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Message Sequence Chart, which shows the possible routes that can be taken from the corresponding MSC. For example, below the MSC 'Initialize', both 'Initialize' and 'Move Request' are shown, since 'Move Request' is the next step after 'Initialize' has been completed. If several options for next moves exist, they are given in the same way as in the HMSC below; in the corresponding separate MSC is explained when and why a certain route is taken.
+
+    A move request that results in a robot being moved to a certain tile is referred to as an 'Return ...'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
 
 	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
 
-	We are using the following MSC syntax:
+	The following MSC syntax is used in this section:
 
 	\input{MSC-files/uitleg.tex}
 
-	Note: the symbol $\vdots$ denotes the start and end of a co-region.
+	In several MSCs, we use co-regions to denote that the messages in these regions can be send in any order. For example, in the MSC 'Return Normal Tile', the order in which the board response and the notify to the Viewer are send is not important; it is more important that these messages or signals are received by the appropriate entities. As another example, consider the MSC 'Initialize'. In this MSC, it is important that several entities are initialized before others, like the board is initialized before the robots. Hence, in this MSC the order plays a central role for the flow of the programm. In our MSCs, the symbol $\vdots$ denotes the start and end of a co-region.
 
 	\subsubsection{Initialize viewer}
 	\begin{minipage}{\linewidth}
@@ -39,11 +41,18 @@ This section contains the message sequence charts, both of high and class level.
 		We introduced a separate pre- and post-initialize method, because the controller can not fully initialize without the robots and the robots, in turn, must be initialized with the controller. So, the pre-initialize is used to create the controller and the post-initialize is used to store all the robots that have been initialized by the board.
 
 		\input{MSC-files/initialize.tex}
-    	\end{minipage}
+    \end{minipage}
 
 	\subsubsection{Robot move request}
 	\begin{minipage}{\linewidth}
-		A robot can make a move request with the controller, which will forward that to the board. The board will check the validity of the move itself with the robots rule and then check the validity of the move at the current state of the board.
+		When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots (choosing the appropriate rule for them), which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. All entities are now initialized. \\
+		We introduced a separate pre- and post-initialize method, because the controller can not fully initialize without the robots and the robots, in turn, must be initialized with the controller. So, the pre-initialize is used to create the controller and the post-initialize is used to store all the robots that have been initialized by the board.
+
+		\input{MSC-files/initialize.tex}
+    \end{minipage}
+
+	\subsubsection{Robot move request}
+	A robot can make a move request with the controller, which will forward that to the board. The board will check the validity of the move itself with the robots rule and then check the validity of the move at the current state of the board.
 
 		\input{MSC-files/robotmove_request.tex}
 	\end{minipage}
