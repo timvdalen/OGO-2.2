@@ -1,6 +1,11 @@
 \subsection{Class level}
 	\subsubsection{Board}
-	First the board is initialized, then the board has to initialize the controller. After that the board goes to the NOP state from which It can answer requests from robots to move, it can also notify robots if they receive a hint, win the game or get moved by the board. After every time the board has done anything it returns to the NOP state, except when a robot has reached it's hometile, then the board has to terminate other classes via the reset() function. After the game is over the board can either terminate or go back to the initialized state to start a new game.
+	First the board is initialized, then the board has to initialize the controller. After that the board goes to the NOP state from which it can answer requests from robots and the controller. \\
+Whenever a robot requests an invalid move via the moveRequest() funtion, the board sends out a moveRequest() == FAILED message and returns to the NOP state. But when a robot requests a correct move, the new position is calculated and stored using the functions calcuateNewLocation() and saveLocation(). \\
+Normally the board now goes to the Requested_Robot_Moved state from which it will send a hint if the robot stept on a hinttile, the board will always notify the controller that the board has been updated so that the view will be updated.\\
+If the requested move would mean that other robots will get moved the board goes to the Requested_Robot_Moved_And_Robot_Auto_Moved which means that the other robot will receive a notifyAutoMovement to let him know that he has been moved, all the other functions called are the same as with the Requested_Robot_Moved.\\
+When a robot moves to it's homeTile, the boardResponse will be WIN and the game ends, then the board goes to the Game_Over state and it can terminate or start a new game. The user can also start a new game when the board is in the NOP state.\\
+Every time a robot has made a move, the controller requests a tile-exchange via the requestTilesExchange() function, this exchange is performed by the board.\\
 	
 	\includegraphics[width=\linewidth]{statecharts/board.pdf}
 
@@ -20,7 +25,7 @@
 	\includegraphics[width=\linewidth]{statecharts/robot.pdf}
 
 \subsection{System level}
-	The following graph is our system level state chart, which contains all our class level state charts and gives an overview of the complete system. Although this state chart is mostly trivial, it gives a more complete view of the entire system, thus it is shown below. 
+	The following graph is our system level state chart, which contains all our class level state charts and gives an overview of the complete system. Although this state chart is mostly trivial, it gives a more complete view of the entire system, thus it is shown below.
 
 	\includegraphics[width=\linewidth]{statecharts/system.pdf}
 
