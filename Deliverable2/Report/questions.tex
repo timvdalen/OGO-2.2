@@ -1,14 +1,14 @@
-During the development of the product, there was some communication with the stakeholder.
+During the development of the product, there was some communication with the stakeholder. To make sure the decisions made are documented correctly, this section lists the questions asked to the stakeholder and their answers.
 
 %\newcommand{\question}[2]{\noindent{\textbf #1}\\\hspace{1cm} #2}
 
-\question{If a robot that does multiple steps at once crosses a special tile, what happens?}{Hint tile: nothing. Home time: the robot wins. Conveyor belt: it gets dragged along.}
+\question{If a robot that does multiple steps at once crosses a special tile, what happens?}{If a Hint tile is crossed, nothing happens; if a Home time is crossed, the robot wins; in case of an conveyor belt, the robot gets dragged along.}
 
-\question{If a robot tries to move to a tile that is occupied, can he move again directly after that?}{There are no turns so this doesn't matter.}
+\question{If a robot tries to move to a tile that is occupied, can he move again directly after that?}{There are no turns, so this does not matter.}
 
 \question{If a robot moves to a tile that is part of a conveyor belt (not the beginning and not the end), what happens?}{The robot gets dragged along.}
 
-\question{If a robot is 'trapped' by three broken robots after it steps of a conveyor belt, can it move back?}{This can't happen by definition, all robots must be able to reach their home tiles. Conveyor belts are one way.}
+\question{If a robot is 'trapped' by three broken robots after it steps of a conveyor belt, can it move back?}{This can not happen; by definition, all robots must be able to reach their home tiles. Also, the conveyor belts are one way.}
 
 \question{How should conveyor belt transportation work? In one move to the end or a certain amount of tiles per time unit?}{In one time to the end.}
 
@@ -18,13 +18,13 @@ During the development of the product, there was some communication with the sta
 
 \question{Can a conveyor belt be a rotation and a move belt at the same time?}{Yes, it always is.}
 
-\question{Can a robot move to the hometile of abother robot? If so, can we just allow the robot who's hometile it is to move to the tile even though another robot is standing there (e.g. by pushing him away in the view) because the game will end anyway? Otherwise, the hometile won't be reachable.}{Our solution, to just allow the move, is okay.}
+\question{Can a robot move to the home tile of another robot? If so, can we just allow the robot who's home tile it is to move to the tile, even though another robot is standing there (e.g. by pushing him away in the view), because the game will end anyway? Otherwise, the home tile will not be reachable.}{Allowing the move is fine solution.}
 
-\question{If the end tile of a conveyor belt is blocked by a robot and the other robot moves, does any robot still on the belt move?}{Yes.}
+\question{If the end tile of a conveyor belt is blocked by a robot and the other robot moves, does any robot still on the belt move?}{Yes, all robots affected by this blocked robot should be moved.}
 
 \bigskip
-Both robots have the same functionality seeing as there are no turns. Robot A can do three times a move in the same time that robot B can do one three tile move. Because robot B does not jump but actually crosses the tiles, the result is the same, except for when they cross their home tile. The stakeholder decided that we should just implement it the way it's specified now.
+Both robots have a similar functionality, as there are no turns. Robot A can do three times a move in the same time that robot B can do one three tile moves. Because robot B does not jump, but actually crosses the tiles, the result is the same; this result is different if one of the robots crosses its home tile. The stakeholder decided that we should just implement it the way it is specified now.
 
-On Tuesday the 28th of February, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs the controller communicated with all other parts of the game (the players, the view and the board) and, for instance, first asked the board for two tiles that could be switched and then asked it to switch those. In the opinion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made atomic, i.e. the tile request functions are now one function that the board handles by itself.
+On Tuesday the 28th of February, we had a meeting with the stakeholders about the role of the controller. We assumed that the controller actually had to control something, but the stakeholder did not fully agree with us. In our MSCs, the controller communicated with all other parts of the game (the players, the view and the board). For instance, the controller first asked the board for two tiles that could be switched and then it asked to switch these tiles. In the opinion of the stakeholder, the controller should merely serve as a communications tunnel and not make any decisions itself. Eventually, we reached a compromise. The controller still requests everything from the other parts, but all requests have been made atomic, i.e. the tile request functions are now one function that the board handles by itself.
 
-On Tuesday the third of March, we had another meeting with the stakeholders. Their answer to our question about automatically moving robots introduced serious problems in our model. Since we weren't allowed to send messages from the Board to the Controller without making a request from the Controller first, the only way to implement this feature was to make \texttt{Board::moveRequest()} return a list of moved robots when the Controller made the request to move the first. This, however, introduced a lot of overhead. After some discussion, the stakeholder decided it was best to allow the Board to send unsolicited messages to the Controller.
+On Tuesday the third of March, we had another meeting with the stakeholders. Their answer to our question about automatically moving robots introduced serious problems in our model. We were not allowed to send messages from the Board to the Controller without making a request from the Controller first. Hence, in order to implement this feature, our idea was to extend the method that is used by the Controller to forward a Robot's move request. This method in Board, \texttt{moveRequest}, should now return a list of moved robots that were affected by the original move request. This, however, introduced a lot of overhead. After some discussion, the stakeholder decided it was best to allow the Board to send unsolicited messages to the Controller.

@@ -1,0 +1,42 @@
+msc
+{
+
+a [label="Player 2"],
+b [label="Player 1"],
+c [label="Controller"],
+d [label="Board"],
+e [label="View"];
+
+a box a [label=""],
+b box b [label=""],
+c box c [label=""],
+d box d [label=""],
+e box e [label=""];
+
+|||;
+
+c => d [label="NaturalEvent(15,5)"];
+d >> c [label=""];
+c => d [label="Flood()"];
+d >> c [label=""];
+c => b [label="move a piece"];
+b >> c [label=""];
+c => a [label="move a piece"];
+a >> c [label=""];
+c => b [label="move a piece"];
+b >> c [label=""];
+c => d [label="request state"];
+d >> c [label=""];
+c => e [label="update view"];
+e rbox e [label="display view"];
+e >> c [label=""];
+
+|||;
+
+a box a [label="", textbgcolor="black"],
+b box b [label="", textbgcolor="black"],
+c box c [label="", textbgcolor="black"],
+d box d [label="", textbgcolor="black"],
+e box e [label="", textbgcolor="black"];
+
+}

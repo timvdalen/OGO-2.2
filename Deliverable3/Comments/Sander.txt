@@ -1,10 +1,5 @@
-﻿*- Z specification: the division over the functions is good, the functions are not to long.
-- All pieces have the type animal, but later on the pieces have Dolphin as type, this is inconsistent.
-- 
-
------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-- piece: Waarom gebruik je Pieces die allemaal het type Animal zijn ipv Animals?
+﻿- Z specification: the division over the functions is good, the functions are not to long.
+- All pieces have the type animal, but later on the pieces have Dolphin as type, this is inconsistent.- piece: Waarom gebruik je Pieces die allemaal het type Animal zijn ipv Animals?
 - piece: een piece kan buiten de grenzen van het board?
 - DoKill: zijn de 2 pieces wel van verschillende spelers?
 - Board: maar 1 speler op een vakje staat nergens gespesificeerd
