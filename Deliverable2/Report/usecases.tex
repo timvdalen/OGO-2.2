@@ -1,91 +1,10 @@
+This section lists the different use cases we considered while modelling the informal specification.
 \subsection{Use cases}
 	\input{usecases/cases.tex}
 \subsection{Use case diagram}
-	\includegraphics[width=\linewidth]{usecases/diagram.pdf}	
+	The following diagram shows how the use cases relate to each other.
 
-\subsection{High Level Message Sequence Chart}
-	The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game.
-	
-	\input{hmsc.tex}
-	%\includegraphics[width=\linewidth]{classdiagram}
-
-\subsection{Message Sequence Charts}
-	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Message Sequence Chart.
-
-	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
-
-	We are using the following MSC syntax:
-
-	\input{MSC-files/uitleg.tex}
-
-	Note: the symbol $\vdots$ denotes the start and end of a co-region.
-
-	\subsubsection{Initialize viewer}
-	The viewer is initialized by the world. Analogous to the HMSC, this happens concurrently to the Initialize MSC.
-	
-	\input{MSC-files/viewer_initialize.tex}
-
-    	\subsubsection{Update viewer}
-	During the game execution, the viewer will keep requesting the current board snapshot from the controller. This happens concurrently to the rest of the process. It can also request the board snapshot when it gets notified by the controller that the board has changed.
-    	
-	\input{MSC-files/viewer_update.tex}
-
-	\subsubsection{Initialize}
-	When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots (choosing the appropriate rule for them), which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. All entities are now initialized. \\
-	We introduced a separate pre- and post-initialize method, because the controller can not fully initialize without the robots and the robots, in turn, must be initialized with the controller. So, the pre-initialize is used to create the controller and the post-initialize is used to store all the robots that have been initialized by the board.
-  	
-	\input{MSC-files/initialize.tex}
-    	
-	\subsubsection{Robot move request}
-	A robot can make a move request with the controller, which will forward that to the board. The board will check the validity of the move itself with the robots rule and then check the validity of the move at the current state of the board.
-
-	\input{MSC-files/robotmove_request.tex}
-
-	\subsubsection{Return Normal tile}
-	If the move request is okay, and the robot is moved to a normal tile, the board will return \emph{SUCCESS} to the controller, which will forward this message to the robot that was moved and then notify the viewer that the state of the board has changed.
-
-	\input{MSC-files/robotmove_to_normal.tex}
-
-	\subsubsection{Return Hint tile}
-	If the move request is okay, and the robot is moved to a hint tile, the board will notify the controller that the robot that moved should receive a hint. The controller will notify the viewer that the state of the board has changed and forward the hint to the robot.
-
-	\input{MSC-files/robotmove_to_hint.tex}
-
-	\subsubsection{Return Conveyor tile}
-	If the move request is okay, and the robot is moved to a conveyor tile, the board will notify the controller that the robot was moved successfully. The controller will notify the viewer that the state of the board is updated and forward the message from the board to the robot. The board will then send a message to the controller that the robot was moved automatically (this was due to the conveyor belt) and the controller will forward this message to the robot.
-
-	\input{MSC-files/robotmove_to_conveyor.tex}
-
-	\subsubsection{Return Home tile}
-	If the move request is okay, and the robot is moved to its home tile, the board will notify the controller that the robot that moved wins the game. The controller notifies the viewer that the state of the board has changed.
-
-	\input{MSC-files/robotmove_to_home.tex}
-
-
-	\subsubsection{Reject move}
-	If the move request is, for whatever reason, not okay, the board will notify the controller of this. The controller will forward this to the robot that tried to move.
-
-	\input{MSC-files/robotmove_reject.tex}
-
-
-	\advance\count17 by -6
-
-	\subsubsection{Ordinary exchange}
-	The controller requests the board to do a tile exchange. The board will get two valid tiles (internally, this function relies on the rule entities), swap them and returns an empty RobotPair to signal that there were no robots on the tiles.
-
-	\input{MSC-files/tiles_exchange.tex}
-
-	\subsubsection{Special exchange}
-	Like in the ordinary exchange, the controller requests the board to do a tile exchange. The board will find two valid tiles (with on at least one of them a robot or a conveyor belt) and swap them. The board will return a RobotPair with the robots that have been selected in it (so either an empty RobotPair, a RobotPair with one robot, or a RobotPair with two robots). The selected conveyor tiles and robots will be rotated. The controller will notify all players that have been moved and then notify the viewer that the state of the board has changed. Here, one robot and one conveyor belt have been selected.
-
-	\input{MSC-files/tiles_exchange_special.tex}
-	
-	\subsubsection{Notify robots}
-	The board sends a notification to the controller, which forwards this to the robot that was moved. This MSC is used when a robot is moved due to the move of another robot, for example when a robot that blocked the end of a conveyor belt moves away and the last robot on the belt should move to the end.
-
-	\input{MSC-files/notify_robots.tex}
-
-	\subsubsection{End game}
-	The controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the viewer which robot won the game, so it can show the end game animation. When the animation is done, the call will return and the controller will send a message to the board that everything it done and the board can reset and will then terminate. The winning robot will also terminate. The board can then choose to either reset to start a new game or terminate.
-
-	\input{MSC-files/end_game.tex}
+	\begin{figure}[h]
+		\includegraphics[width=\linewidth]{usecases/diagram.pdf}
+		\label{fig:usecases:diagram}
+	\end{figure}
