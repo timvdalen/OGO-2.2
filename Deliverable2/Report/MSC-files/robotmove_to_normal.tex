@@ -17,10 +17,13 @@ v box v [label=""];
 d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
+d rbox d [label="make snapshot"];
+d -> c [label="notifyViewer(snapshot)"];
+
 
 ...;
 c >> a [label="SUCCESS"];
-c -> v [label="notifyStateChange()"];
+c -> v [label="notifyStateChange(snapshot)"];
 ...;
 
 |||;
