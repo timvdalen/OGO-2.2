@@ -6,7 +6,7 @@
     Abstract classes are indicated by guillemets and enumerators by brackets.
 
 \subsection{Class description}
-    Next, a description will be given about all the classes in the class diagram. Here, the function of the class can be found, along with its attributes and its functions (and description of these). Since some of the functions have a lot of arguments, these arguments are not showed here. Notice the relations between different classes.
+    Next, a description will be given about all the classes in the class diagram. Here, the function of the class can be found, along with its attributes and its functions (and description of these). Since some of the functions have a lot of arguments, these arguments are not showed here. Note that not all relations in the class diagram are undirected; for example, the robot has no knowledge about the board, so the association between Board and Robot is directed. 
 
 	\begin{description}
         \item[Hint] An enumeration that contains all possible hints that a Robot can receive from a hint tile.
@@ -27,7 +27,7 @@
             \item getValidTiles(): This private method is used to get two tiles that can be switched, hereby not violating the invariant.
             \item reset(): This private method is used to reset the board. canReset() should give true in order for this function to be called. The board then makes the other components terminate and can initiate new components (e.g. controller, robots) in order to start a new game.
             \item saveLocation(): This private method is used to save the new location of a robot. This function is called in moveRequest().
-        \end{description}        
+        \end{description}
 		\item[Controller] This class represents the controller, which is used as mostly used as communication device between the board and other components. The controller has no special attributes. The controller has the following functions:
         \begin{description}
             \item addViewer(): This public method is used to add a viewer to the controller, so that the controller can notify this viewer when there is a change in the board (see the association in the class diagram).
@@ -39,7 +39,7 @@
             \item postInitialize(): This public method is used to (after pre-initialization) fully initialize the controller with a board and the robots.
             \item removeViewer(): This public method is used to remove a viewer from the controller. This function can be used to add a new viewer or before termination.
             \item terminate(): This function is used to first terminate all objects (except for board). Next, it tells the board it has done so, after which the controller itself terminates.
-        \end{description} 
+        \end{description}
         \item[Viewer] This class describes the functionality of the viewer, so that the game can be watched. This class has no special attributes. It contains the following functions:
         \begin{description}
             \item initialize(): This public method is used to initialize a viewer.
