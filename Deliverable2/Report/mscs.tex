@@ -13,7 +13,7 @@ This section contains the message sequence charts, both of high and class level.
 
     A move request that results in a robot being moved to a certain tile is referred to as an 'Return ... tile'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
 
-	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
+	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action is postfixed with '()' it's a function call to a private function of the entity. Otherwise, it is an action within the called function.
 
 	The following MSC syntax is used in this section:
 
