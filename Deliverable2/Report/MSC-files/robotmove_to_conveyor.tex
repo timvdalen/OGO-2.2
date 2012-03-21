@@ -4,26 +4,18 @@ msc
 
 d [label="Board"],
 c [label="Controller"],
-a [label="Robot"],
-v [label="Viewer"];
+a [label="Robot"];
 
 d box d [label=""],
 c box c [label=""],
-a box a [label=""],
-v box v [label=""];
+a box a [label=""];
 
 |||;
 
 d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
-d rbox d [label="make snapshot"];
-d -> c [label="notifyViewer(snapshot)"];
-
-...;
 c >> a [label="SUCCESS"];
-c -> v [label="notifyStateChange(snapshot)"];
-...;
 
 |||;
 
@@ -35,8 +27,7 @@ c -> a [label="notifyAutoMovement()"];
 
 a box a [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
-d box d [label="", textbgcolor="black"],
-v box v [label="", textbgcolor="black"];
+d box d [label="", textbgcolor="black"];
 
 }
 \end{msc}

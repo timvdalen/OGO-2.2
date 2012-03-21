@@ -1,0 +1,12 @@
+\digraph[scale=0.3]{HMSC_init}{rankdir=LR;
+begin [label="",shape="invtriangle"];
+p1 [label="",shape="point"];
+p2 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord",style=filled];
+mvreq [label="Robot move request",shape="Mrecord"];
+begin->p1;
+p1->init;
+init->p2;
+p2->mvreq
+}
+
