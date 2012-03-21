@@ -1,5 +1,7 @@
 \begin{alltt}
 \rm
+Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur.
+
 The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
 
 Initialize
@@ -22,10 +24,11 @@ End game
 - Guarantee: The game is properly terminated.
 - Main Scenarios
     (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
-    (b) Notify the viewer that the game is over and which robot has won
-    (c) Viewer displays fireworks
-    (d) Remove viewer from controller
-    (e) All remaining objects (except for the board) can now terminate, the board resets
+    (b) Winning robot terminates (had a WIN message before, so knows he can)
+    (c) Notify the viewer that the game is over and which robot has won
+    (d) Viewer displays fireworks
+    (e) Remove viewer from controller
+    (f) All remaining objects (except for the board) can now terminate, the board resets
 - Alternatives
 
 The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
