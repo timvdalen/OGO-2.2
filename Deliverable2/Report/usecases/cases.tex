@@ -2,10 +2,30 @@
 \rm
 Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found.
 
+The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized.
+
+Initialize viewer
+- Pre-conditions: True
+- Trigger: World messages the viewer
+- Guarantee: Initialized viewer
+- Main Scenarios
+    (a) Viewer initializes
+    (b) Viewer sends a message to the controller that he is the viewer
+- Alternatives
+
+The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
+
+Update viewer
+- Pre-conditions: The game is initiated
+- Trigger: Notify and new snapshot by the controller
+- Guarantee: Update viewer
+- Main Scenarios
+    (a) Update view by the received snapshot
+- Alternatives
+
 The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
 
 Initialize
-
 - Pre-conditions: True
 - Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
@@ -15,43 +35,6 @@ Initialize
     (c) The board initializes all robots (one by one)
     (d) The board post-initializes the controller with all the robots
 - Alternatives
-
-The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile.
-
-End game
-- Pre-conditions: The game is initiated.
-- Trigger:  A robot has reached its home tile.
-- Guarantee: The game is properly terminated.
-- Main Scenarios
-    (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
-    (b) Winning robot terminates (had a WIN message before, so knows he can)
-    (c) Notify the viewer that the game is over and which robot has won
-    (d) Viewer displays fireworks
-    (e) Remove viewer from controller
-    (f) All remaining objects (except for the board) can now terminate, the board resets
-- Alternatives
-
-The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
-
-Tiles exchange
-- Pre-conditions: The game is initiated.
-- Trigger:  A robot has moved.
-- Guarantee: Two tiles are exchanged
-- Main Scenarios
-    (a) Two valid tiles are chosen
-    (b) The chosen tiles are exchanged (ordinary exchange)
-    (c) The board makes a snapshot and sends this to the controller
-    (d) The controller notifies the viewer that there are changes and sends the snapshot along with this
-- Alternatives
-    (b.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) (special exchange)
-    (c.1) The board notifies the controller that a robot has moved
-    (d.1) The controller notifies the robot that is has been moved
-    (e.1) The board makes a snapshot and sends this to the controller
-    (f.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
-    
-    (b.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
-    (c.2) The board makes a snapshot and sends this to the controller
-    (d.2) The controller notifies the viewer that there are changes and sends the snapshot along with this
 
 The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
@@ -65,6 +48,7 @@ Robot move Request
     (b) The controller sends the request to the board
     (c) The board checks the request
 - Alternatives
+
 
 The "Return Normal tile" use case illustrates the Return Normal tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a normal tile has been approved.
 
@@ -81,6 +65,7 @@ Return Normal tile
     (d) The board makes a snapshot and sends this to the controller
     (e) The controller notifies the viewer that there are changes and sends the snapshot along with this
 - Alternatives
+
 
 The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved.
 
@@ -148,6 +133,28 @@ Reject move
     (b) The controller sends the reject message to the robot
 - Alternatives
 
+The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
+
+Tiles exchange
+- Pre-conditions: The game is initiated.
+- Trigger:  A robot has moved.
+- Guarantee: Two tiles are exchanged
+- Main Scenarios
+    (a) Two valid tiles are chosen
+    (b) The chosen tiles are exchanged (ordinary exchange)
+    (c) The board makes a snapshot and sends this to the controller
+    (d) The controller notifies the viewer that there are changes and sends the snapshot along with this
+- Alternatives
+    (c.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) (special exchange)
+    (d.1) The board notifies the controller that a robot has moved
+    (e.1) The controller notifies the robot that is has been moved
+    (f.1) The board makes a snapshot and sends this to the controller
+    (g.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
+
+    (c.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
+    (d.2) The board makes a snapshot and sends this to the controller
+    (e.2) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    
 The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile).
 
 Notify robots
@@ -159,26 +166,19 @@ Notify robots
     (b) The controller notifies the robot that it has been moved
 - Alternatives
 
-The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized.
+The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile.
 
-Initialize viewer
-- Pre-conditions: True
-- Trigger: World messages the viewer
-- Guarantee: Initialized viewer
+End game
+- Pre-conditions: The game is initiated.
+- Trigger:  A robot has reached its home tile.
+- Guarantee: The game is properly terminated.
 - Main Scenarios
-    (a) Viewer initializes
-    (b) Viewer sends a message to the controller that he is the viewer
+    (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
+    (b) Winning robot terminates (had a WIN message before, so knows he can)
+    (c) Notify the viewer that the game is over and which robot has won
+    (d) The viewer displays fireworks
+    (e) The viewer is removed from the controller
+    (f) All remaining objects (except for the board) can now terminate, the board resets
 - Alternatives
-
-The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
-
-Update viewer
-- Pre-conditions: The game is initiated
-- Trigger: Notify and new snapshot by the controller
-- Guarantee: Update viewer
-- Main Scenarios
-    (a) Update view by the received snapshot
-- Alternatives
-
 
 \end{alltt}
