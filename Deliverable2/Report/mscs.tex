@@ -29,7 +29,7 @@ For this MSC, the assumption is made that there already exists a viewer and that
 
     	\subsubsection{Update viewer}
 	\begin{minipage}{\linewidth}
-		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed. Note that this notification is not shown in the MSC below, because it is part of the 'Return ... tile' MSCs and the tiles exchange MSCs. In each of these MSCs, the board will always make a snapshot whenever the board has changed and send that snapshot to the viewer, via the controller.
+		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed.
 
 		\input{MSC-files/viewer_update.tex}
 	\end{minipage}
@@ -52,28 +52,28 @@ Note that the move requests describe a move request in terms of local coordinate
 
 	\subsubsection{Return Normal tile}
 	\begin{minipage}{\linewidth}
-		If the move request is valid, and the robot is moved to a normal tile, the board will return \emph{SUCCESS} to the controller, which will forward this message to the robot that was moved. The board also makes a snapshot and notifies the controller that the board has changed, which forwards this snapshot to the viewer. Internally, the board calculates the new location of the robot and saves the location if the move request is valid.
+		If the move request is valid, and the robot is moved to a normal tile, the board will return \emph{SUCCESS} to the controller, which will forward this message to the robot that was moved. Internally, the board calculates the new location of the robot and saves the location if the move request is valid.
 
 		\input{MSC-files/robotmove_to_normal.tex}
 	\end{minipage}
 
 	\subsubsection{Return Hint tile}
 	\begin{minipage}{\linewidth}
-		If the move request is valid, and the robot is moved to a hint tile, the board will first respond with \emph{SUCCESS}, to indicate that the move request has been granted. Hereafter, the board generates a hint then notifies the controller that the robot that moved should receive a hint. The controller will notify the viewer that the state of the board has changed and forward the hint to the robot. Note that the notifyHint from the board to the controller also contains a robot, since the controller must be able to identify the robot that should receive the hint. Of course, the viewer has to be notified again that the board has changed.
+		If the move request is valid, and the robot is moved to a hint tile, the board will first respond with \emph{SUCCESS}, to indicate that the move request has been granted. Hereafter, the board generates a hint then notifies the controller that the robot that moved should receive a hint; the controller will forward the hint to the robot. Note that the notifyHint from the board to the controller also contains a robot, since the controller must be able to identify the robot that should receive the hint.
 
 		\input{MSC-files/robotmove_to_hint.tex}
 	\end{minipage}
 
 	\subsubsection{Return Conveyor tile}
 	\begin{minipage}{\linewidth}
-		If the move request is valid, and the robot is moved to a conveyor tile, the board again returns \emph{SUCCESS} to the controller, which forwards this message to the robot that was moved. The board will then notify the controller that the robot was moved successfully. The board will make its snapshot, send it to the controller and the controller will notify the viewer; the controller will also forward the \emph{SUCCESS} from the board to the robot. The board will then send a message to the controller that the robot was moved automatically (this was due to the conveyor belt) and the controller will forward this message to the robot, using notifyAutoMovement. As in the 'Return Hint tile' MSC, the notifyAutoMovement from the board to the controller contains the robot that should be notified.
+		If the move request is valid, and the robot is moved to a conveyor tile, the board again returns \emph{SUCCESS} to the controller, which forwards this message to the robot that was moved. The board will then notify the controller that the robot was moved successfully and the controller will forward this to the robot. The board will then send a message to the controller that the robot was moved automatically (this was due to the conveyor belt) and the controller will forward this message to the robot, using notifyAutoMovement. As in the 'Return Hint tile' MSC, the notifyAutoMovement from the board to the controller contains the robot that should be notified.
 
 		\input{MSC-files/robotmove_to_conveyor.tex}
 	\end{minipage}
 
 	\subsubsection{Return Home tile}
 	\begin{minipage}{\linewidth}
-	   If the move request is valid, and the robot is moved to its home tile, the board will notify the controller that the robot that moved wins the game, using the response \emph{WIN}. The controller notifies the viewer that the state of the board has changed, using the board snapshot it received from the board.
+	   If the move request is valid, and the robot is moved to its home tile, the board will notify the controller that the robot that moved wins the game, using the response \emph{WIN}.
 
 		\input{MSC-files/robotmove_to_home.tex}
 	\end{minipage}
@@ -89,14 +89,14 @@ Note that the move requests describe a move request in terms of local coordinate
 
 	\subsubsection{Ordinary exchange}
 	\begin{minipage}{\linewidth}
-		The controller requests the board to do a tile exchange. The board will get two valid tiles, swap them and returns an empty RobotPair to signal that there were no robots on the tiles. Note that the 'getValidTiles'-function must maintain the "always reachable home tile"-invariant: each robot must always be able to reach its home tile. The board will calculate this internally and in this case, select two valid tiles without robots. Again, the viewer has to be notified that the board has changed because of the tiles exchange.
+		The controller requests the board to do a tile exchange. The board will get two valid tiles, swap them and returns an empty RobotPair to signal that there were no robots on the tiles. Note that the 'getValidTiles'-function must maintain the "always reachable home tile"-invariant: each robot must always be able to reach its home tile. The board will calculate this internally and in this case, select two valid tiles without robots.
 
 		\input{MSC-files/tiles_exchange.tex}
 	\end{minipage}
 
 	\subsubsection{Special exchange}
 	\begin{minipage}{\linewidth}
-		As in the ordinary exchange, the controller requests the board to do a tile exchange. The board will find two valid tiles (in this case, with on at least one of them a robot or a conveyor belt) and swap them. The board will return a RobotPair with the robots that have been selected. Note that this RobotPair will be either an empty RobotPair, a RobotPair with one robot or a RobotPair with two robots. The selected conveyor tiles and robots will be rotated. The controller will notify all players that have been moved and then notify the viewer that the state of the board has changed. Hence, in case of an empty RobotPair, no robots will be notified; if RobotPair contains two robots, both robots will be notified. The viewer is also notified that the board has changed. \\
+		As in the ordinary exchange, the controller requests the board to do a tile exchange. The board will find two valid tiles (in this case, with on at least one of them a robot or a conveyor belt) and swap them. The board will return a RobotPair with the robots that have been selected. Note that this RobotPair will be either an empty RobotPair, a RobotPair with one robot or a RobotPair with two robots. The selected conveyor tiles and robots will be rotated. The controller will notify all players that have been moved. Hence, in case of an empty RobotPair, no robots will be notified; if RobotPair contains two robots, both robots will be notified. The viewer is also notified that the board has changed. \\
 In the MSC below, one robot and one conveyor belt have been selected. Note that robot2 will not be notified, since it was not part of the tiles exchange. As in the MSC 'Ordinary exchange', the board must (internally) make sure that the "always reachable home tile"-invariant is maintained.
 
 		\input{MSC-files/tiles_exchange_special.tex}
