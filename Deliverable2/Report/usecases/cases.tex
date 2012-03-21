@@ -22,7 +22,8 @@ Update viewer
 - Trigger: Notify and new snapshot by the controller
 - Guarantee: Update viewer
 - Main Scenarios
-    (a) Update view by the received snapshot
+    (a) Receive a new snapshot from the controller
+    (b) Update view by the received snapshot
 - Alternatives
 
 The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
@@ -32,7 +33,7 @@ Initialize
 - Trigger: The user presses the start game button.
 - Guarantee: A new game is initiated.
 - Main Scenarios
-    (a) Initialize board
+    (a) Initialize the board
     (b) The board pre-initializes the controller
     (c) The board initializes all robots (one by one)
     (d) The board post-initializes the controller with all the robots
@@ -62,13 +63,8 @@ Return Normal tile
 - Main Scenarios
     (a) The robot is moved to the indicated position which is a normal tile
     (b) The board notifies the controller that the move request has been approved
-    (c) The board makes a snapshot and sends this to the controller
-    (d) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-    (e) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
 - Alternatives
-    (d.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
-    (e.1) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-
 
 The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved.
 
@@ -82,11 +78,9 @@ Return Hint tile
     (a) The robot is moved to the indicated position which is a hint tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-    (d) The board makes a snapshot and sends this to the controller
-    (e) The controller notifies the viewer that there are changes and sends the snapshot along with this
-    (f) The board generates a hint for the robot
-    (g) The board notifies the controller of the hint and the robot it needs to be send to
-    (h) The controller sends the hint to the robot
+    (d) The board generates a hint for the robot
+    (e) The board notifies the controller of the hint and the robot it needs to be send to
+    (f) The controller sends the hint to the robot
 - Alternatives
 
 The "Return Conveyor tile" use case illustrates the Return Conveyor tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a conveyor tile has been approved.
@@ -103,10 +97,8 @@ Return Conveyor tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
     (d) The board calculates the new position (after movement over the conveyor tile)
-    (e) The board makes a snapshot and sends this to the controller
-    (f) The controller notifies the viewer that there are changes and sends the snapshot along
-    (g) The board notifies the controller that a robot has been moved automatically
-    (h) The controller notifies the robot that it has been moved automatically
+    (e) The board notifies the controller that a robot has been moved automatically
+    (f) The controller notifies the robot that it has been moved automatically
 - Alternatives
 
 The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved.
@@ -121,8 +113,6 @@ Return Home tile
     (a) The robot is moved to the indicated position which is the robots home tile
     (b) The board notifies the controller that the move request has been approved and the robot has won
     (c) The controller notifies the robot that his move request has been approved, that the robot has been moved to the requested position and that the robot has won
-    (d) The board makes a snapshot and sends this to the controller
-    (e) The controller notifies the viewer that there are changes and sends the snapshot along
 - Alternatives
 
 The "Reject move" use case illustrates the Reject move state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request has been rejected.
@@ -147,19 +137,14 @@ Tiles exchange
     (b) Two valid tiles are chosen
     (c) The chosen tiles are exchanged (ordinary exchange)
     (d) The board returns an empty robot pair to the controller
-    (e) The board makes a snapshot and sends this to the controller
-    (f) The controller notifies the viewer that there are changes and sends the snapshot along with this
 - Alternatives
-    (e.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) and swaps along with the tile (special exchange)
-    (f.1) The board returns a robot pair containing the switched robot
-    (g.1) The board notifies the controller that a robot has moved
-    (h.1) The controller notifies the robot that is has been moved
-    (i.1) The board makes a snapshot and sends this to the controller
-    (j.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    (d.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) and swaps along with the tile (special exchange)
+    (e.1) The board returns a robot pair containing the switched robot
+    (f.1) The board notifies the controller that a robot has moved
+    (g.1) The controller notifies the robot that is has been moved
 
-    (e.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
-    (f.2) The board makes a snapshot and sends this to the controller
-    (g.2) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
+
 
 The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile).
 
