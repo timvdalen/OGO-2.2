@@ -1,6 +1,8 @@
 \begin{alltt}
 \rm
-The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized. 
+Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found.
+
+The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
 
 Initialize
 
@@ -22,10 +24,11 @@ End game
 - Guarantee: The game is properly terminated.
 - Main Scenarios
     (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
-    (b) Notify the viewer that the game is over and which robot has won
-    (c) Viewer displays fireworks
-    (d) Remove viewer from controller
-    (e) All remaining objects (except for the board) can now terminate, the board resets
+    (b) Winning robot terminates (had a WIN message before, so knows he can)
+    (c) Notify the viewer that the game is over and which robot has won
+    (d) Viewer displays fireworks
+    (e) Remove viewer from controller
+    (f) All remaining objects (except for the board) can now terminate, the board resets
 - Alternatives
 
 The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
@@ -45,10 +48,11 @@ Tiles exchange
     (d.1) The controller notifies the robot that is has been moved
     (e.1) The board makes a snapshot and sends this to the controller
     (f.1) The controller notifies the viewer that there are changes and sends the snapshot along with this
+    
     (b.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
     (c.2) The board makes a snapshot and sends this to the controller
     (d.2) The controller notifies the viewer that there are changes and sends the snapshot along with this
-    
+
 The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
 Robot move Request
@@ -87,7 +91,7 @@ Return Hint tile
 - Guarantee: The robot is moved to the indicated position which
     is a hint tile and a hint is given to the player.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is a hint tile 
+    (a) The robot is moved to the indicated position which is a hint tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
     (d) The board makes a snapshot and sends this to the controller
@@ -118,7 +122,7 @@ Return Conveyor tile
 - Alternatives
 
 The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved.
-        
+
 Return Home tile
 - Pre-conditions: The game is initiated. And the indicated position
     is its home tile, move request approved.
