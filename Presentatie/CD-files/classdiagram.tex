@@ -1,0 +1,59 @@
+\let\l=\relax
+\let\<=\relax
+\let\>=\relax
+\digraph[scale=.3]{classdiagram}{
+margin=0
+fontsize=8
+fontname=Helvetica
+compound=true
+splines=ortho
+node [fontsize=8, fontname=Helvetica, shape=record]
+edge [fontsize=8, fontname=Helvetica, arrowhead=open, labeldistance=2]
+Board [label="{Board||}"]
+Hint [label="{[Hint]||}"]
+BoardResponse [label="{[BoardResponse]||}"]
+Viewer [label="{Viewer||}"]
+BoardSnapshot [label="{BoardSnapshot||}"]
+Controller [label="{Controller||}"]
+AbsoluteCoord [label="{AbsoluteCoord||}"]
+Tile [label="{Tile||}"]
+/**/
+subgraph cluster_Tiles {
+NormalTile [label="{NormalTile||}"]
+HomeTile [label="{HomeTile||}"]
+HintTile [label="{HintTile||}"]
+ConveyorTile [label="{ConveyorTile||}"]
+BrokenRobotTile [label="{BrokenRobotTile||}"]
+}
+/**/
+Robot [label="{Robot||}"]
+RelativeCoord [label="{RelativeCoord||}"]
+Rule [label="{\<\<Rule\>\>||}"]
+Rotation [label="{[Rotation]||}"]
+/**/
+Board->Controller [taillabel=1, headlabel="0..*"]
+Board->Tile [arrowtail=diamond,dir=both, taillabel=1,headlabel="*"]
+Board->Robot [taillabel=1, headlabel="0..*"]
+/**/
+Controller->Viewer [taillabel=1, headlabel=1, arrowhead=none]
+Controller->Robot [taillabel=1, headlabel="*", arrowhead=none]
+/**/
+Tile->Robot [taillabel=1, headlabel="              0..1"]
+/**/
+HomeTile->Robot [taillabel=1, headlabel="              1"]
+/**/
+Robot->Rule [taillabel="*", headlabel=1]
+/**/
+BoardSnapshot->Tile [taillabel=1, headlabel="*"]
+/**/
+NormalTile->Tile [ltail=cluster_Tiles,arrowhead=empty]
+/**/
+Board->Hint [style=dashed]
+Board->BoardResponse [style=dashed]
+Board->AbsoluteCoord [style=dashed]
+Viewer->BoardSnapshot [style=dashed]
+Controller->AbsoluteCoord [style=dashed]
+Robot->RelativeCoord [style=dashed]
+Rule->Rotation [style=dashed]
+ConveyorTile->Rotation [style=dashed]
+} 

@@ -1,0 +1,103 @@
+\documentclass{beamer}
+
+\usepackage{msctexen,graphviz,graphicx,xmpmulti}
+
+\title{xTremeRobotGames\\\small OGO 2.2 project}
+\author{Tim van Dalen, Tony Nan, Ferry Timmers,\\ 
+                Lasse Blaauwbroek, Femke Jansen,\\
+                Jeroen Peters and Sander Breukink\\}
+
+\institute[TU/e]{}
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+	\frame{\titlepage}
+	
+	\begin{frame}
+	    \frametitle{Table of Contents}
+    		\tableofcontents
+  	\end{frame}
+
+	\section{Use cases}
+	\begin{frame}
+		\frametitle{Use cases}
+		\framesubtitle{Some use cases for the game}
+		Contents here
+	\end{frame}
+
+	\section{Message Sequence Charts}
+	\begin{frame}
+		\frametitle{Message Sequence Charts}
+		\framesubtitle{Formally modelling use cases}
+		Een paar mscs op deze en volgende slides
+	\end{frame}
+	
+	\subsection{High level}
+	\begin{frame}
+		\frametitle{High level Message Sequence Chart}
+		\framesubtitle{The main game flow}
+		\input{MSC-files/hmsc.tex}
+	\end{frame}
+	\subsection{Use case level}
+	\begin{frame}
+		\frametitle{Use case level Message Sequence Charts}
+		\framesubtitle{Game initialize}
+		\scalebox{0.6}{
+			\input{MSC-files/initialize_msc.tex}
+		}
+		\input{MSC-files/initialize_hmsc.tex}
+	\end{frame}
+
+	\begin{frame}
+		\frametitle{Use case level Message Sequence Charts}
+		\framesubtitle{Move request}
+		\scalebox{0.9}{
+			\input{MSC-files/robotmove_request_msc.tex}
+		}
+		\input{MSC-files/robotmove_request_hmsc.tex}
+	\end{frame}
+	\begin{frame}
+		\frametitle{Use case level Message Sequence Charts}
+		\framesubtitle{Normal move}
+		\scalebox{0.8}{
+			\input{MSC-files/robotmove_to_normal_msc.tex}
+		}
+		\input{MSC-files/robotmove_to_normal_hmsc.tex}
+	\end{frame}
+
+	\section{Class diagram}
+	\begin{frame}
+		\frametitle{Class diagram}
+		\framesubtitle{Fitting the pieces together}
+		\input{CD-files/classdiagram.tex}
+	\end{frame}
+
+	\section{Test cases}
+	\begin{frame}
+		\frametitle{Test cases}
+		\framesubtitle{Showing the specification works}
+
+		Nu switchen naar andere virtual desktop, test case draaien.
+
+	\end{frame}
+
+	\section{Implementation}
+	\begin{frame}
+		\frametitle{Implementation}
+		\framesubtitle{Making it work}
+		Arena whatever, fireworks uitleg.
+	\end{frame}
+	\subsection{Game report}
+	\begin{frame}
+		\frametitle{Game report}
+		\framesubtitle{Report of semifinal for the World Cup}
+		\multiinclude[format=png,graphics={width=0.6\linewidth}]{IMP-files/frames}
+	\end{frame}
+\end{document}
