@@ -1,17 +1,16 @@
 This section contains the message sequence charts, both of high and class level.
 \subsection{High Level Message Sequence Chart}
-	The graph in figure~\ref{fig:msc:high} represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game.
 	
-	\begin{figure}[h]
-		\input{hmsc.tex}
-		\label{fig:msc:high}
-		\caption{The high level message sequence chart}
-	\end{figure}
-
+	\begin{minipage}{\linewidth}
+		The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game.
+		
+		\input{hmsc}	
+	\end{minipage}
+	\newpage
 \subsection{Message Sequence Charts}
 	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Message Sequence Chart, which shows the possible routes that can be taken from the corresponding MSC. For example, below the MSC 'Initialize', both 'Initialize' and 'Move Request' are shown, since 'Move Request' is the next step after 'Initialize' has been completed. If several options for next moves exist, they are given in the same way as in the HMSC below; in the corresponding separate MSC is explained when and why a certain route is taken.
 
-    A move request that results in a robot being moved to a certain tile is referred to as an 'Return ... tile'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
+    	A move request that results in a robot being moved to a certain tile is referred to as an 'Return ... tile'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
 
 	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
 
@@ -24,7 +23,7 @@ This section contains the message sequence charts, both of high and class level.
 	\subsubsection{Initialize viewer}
 	\begin{minipage}{\linewidth}
 		The viewer is initialized by the world. Analogous to the HMSC, this happens concurrently to the Initialize MSC. \\
-For this MSC, the assumption is made that there already exists a viewer and that it knows about the other components in the game, when the call from the outside world is received. After the call has been received, the viewer will initialize itself and will try to attach itself to the controller. Since initializing the viewer happens concurrently to initializing the other components of the game, the controller may not have been initialized yet; the viewer will continuously try to attach itself, until it receives a respond from the controller.
+		For this MSC, the assumption is made that there already exists a viewer and that it knows about the other components in the game, when the call from the outside world is received. After the call has been received, the viewer will initialize itself and will try to attach itself to the controller. Since initializing the viewer happens concurrently to initializing the other components of the game, the controller may not have been initialized yet; the viewer will continuously try to attach itself, until it receives a respond from the controller.
 	
 		\input{MSC-files/viewer_initialize.tex}
 	\end{minipage}
@@ -47,7 +46,7 @@ For this MSC, the assumption is made that there already exists a viewer and that
 	\subsubsection{Robot move request}
 	\begin{minipage}{\linewidth}
 		A robot can make a move request with the controller, which will forward that to the board. The board will check the validity of the move itself with the robots rule and then check the validity of the move at the current state of the board. The internal actions 'get possible moves' and 'get possible rotations' are thus used by the board to check whether the move request is conform with the specified moves and rotations in the rule of the robot. Based upon the outcome of the move request, one of the five MSCs given in the HMSC below is executed. \\
-Note that the move requests describe a move request in terms of local coordinates, since a robot does not know its exact location on the board. Also, the move request contains the robot that requested the move, along with the requested rotation.
+		Note that the move requests describe a move request in terms of local coordinates, since a robot does not know its exact location on the board. Also, the move request contains the robot that requested the move, along with the requested rotation.
 
 		\input{MSC-files/robotmove_request.tex}
     \end{minipage}
