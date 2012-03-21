@@ -11,6 +11,9 @@ c box c [label=""];
 
 |||;
 
+b rbox b [label="make snapshot"];
+b -> c [label="notifyViewer(snapshot)"];
+c -> d [label="notifyStateChange(snapshot)"];
 d rbox d [label="updateView()"];
 
 |||;

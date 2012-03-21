@@ -20,12 +20,7 @@ b rbox b [label="getValidTiles()"];
 b rbox b [label="exchange two valid tiles"];
 b rbox b [label="rotate robot1 and rotate tiles"];
 b>>c [label="RobotPair with one Robot"];
-b box b [label="make snapshot"];
-b->c [label="notifyViewer(snapshot)"];
-...;
 c->p1 [label="notifyAutoMovement()"];
-c -> v [label="notifyStateChange(snapshot)"];
-...;
 
 |||;
 
