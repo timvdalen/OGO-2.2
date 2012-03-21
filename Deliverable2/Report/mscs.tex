@@ -11,7 +11,7 @@ This section contains the message sequence charts, both of high and class level.
 \subsection{Message Sequence Charts}
 	This section contains the message sequence charts for our use cases. Below every MSC is the location of the MSC in the High Level Message Sequence Chart, which shows the possible routes that can be taken from the corresponding MSC. For example, below the MSC 'Initialize', both 'Initialize' and 'Move Request' are shown, since 'Move Request' is the next step after 'Initialize' has been completed. If several options for next moves exist, they are given in the same way as in the HMSC below; in the corresponding separate MSC is explained when and why a certain route is taken.
 
-    A move request that results in a robot being moved to a certain tile is referred to as an 'Return ...'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
+    A move request that results in a robot being moved to a certain tile is referred to as an 'Return ... tile'-MSC. This convention is used, because the board provides several responses, messages and signals based upon the outcome of the move request. For example, in 'Return Home tile', the board uses a \emph{WIN} response to indicate that a certain robot has reached its home tile. Also, in 'Return Hint tile', the board acknowledges the move request with a \emph{SUCCESS} and will thereafter send a separate message that contains the requested hint.
 
 	The world entity is not a real part of our MSCs, but rather a link to the outside world. When an internal action ends in '()' it's a function call to a private function of the entity. Otherwise, it's an action within the called function.
 
@@ -31,7 +31,7 @@ For this MSC, the assumption is made that there already exists a viewer and that
 
     	\subsubsection{Update viewer}
 	\begin{minipage}{\linewidth}
-		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed. Note that this notification is not shown in the MSC below, because it is part of the 'Return ... tile' MSCs and the tiles exchange MSCs.
+		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed. Note that this notification is not shown in the MSC below, because it is part of the 'Return ... tile' MSCs and the tiles exchange MSCs. In each of these MSCs, the board will always make a snapshot whenever the board has changed and send that snapshot to the viewer, via the controller.
 
 		\input{MSC-files/viewer_update.tex}
 	\end{minipage}
