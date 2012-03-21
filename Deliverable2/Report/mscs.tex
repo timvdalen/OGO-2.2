@@ -113,7 +113,7 @@ In the MSC below, one robot and one conveyor belt have been selected. Note that 
 
 	\subsubsection{End game}
 	\begin{minipage}{\linewidth}
-		If a robot has reached its home tile, the controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the viewer which robot won the game, so it can show the end game animation. When the animation is done, the viewer detaches itself from the controller, using removeViewer. The controller will then send a message to the board that everything it done and the board can reset and will then terminate. The winning robot will also terminate. The board can then choose to either reset to start a new game or terminate; since this is a non-deterministic choice from the board, this is not modeled in the MSC below.
+		If a robot has reached its home tile, the controller will send a terminate message to all losing robots, which will then terminate safely. The controller will then notify the viewer which robot won the game, so it can show the end game animation. When the animation is done, the viewer detaches itself from the controller, using removeViewer. The controller will then send a message to the board that everything it done and the board can reset and will then terminate. Note that the winning robot can terminate on its own, since its termination does not affect the other components of the game; the viewer can show an appropriate animation that reflects which robots has won. The board can then choose to either reset to start a new game or terminate; since this is a non-deterministic choice from the board, this is not modeled in the MSC below.
 
 		\input{MSC-files/end_game.tex}
 	\end{minipage}
