@@ -4,11 +4,15 @@ msc
 
 d [label="Board"],
 c [label="Controller"],
+r [label="Robot"],
 v [label="Viewer"];
+
 
 d box d [label=""],
 c box c [label=""],
+r box r [label=""],
 v box v [label=""];
+
 
 |||;
 
@@ -17,7 +21,12 @@ d rbox d [label="saveLocation(absCoords, robot)"];
 d rbox d [label="make snapshot"];
 d -> c [label="notifyViewer(snapshot)"];
 d >> c [label="WIN"];
+
+...;
+c >> r [label="WIN"];
 c -> v [label="notifyStateChange(snapshot)"];
+...;
+
 
 |||;
 
