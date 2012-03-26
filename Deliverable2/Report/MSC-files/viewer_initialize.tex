@@ -26,10 +26,11 @@ w box w [label="", textbgcolor="black"];
 }
 \end{msc}
 \digraph[scale=0.5]{HMSC_init_view}{rankdir=LR;
-begin2 [label="",shape="invtriangle"];
+p2 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
 initview [label="Initialize viewer",shape="Mrecord",style=filled];
-updateview [label="Update viewer",shape="Mrecord"];
-begin2->initview;
-initview->updateview;
-updateview->updateview;
+mvreq [label="Robot move request",shape="Mrecord"];
+init->initview;
+initview->p2;
+p2->mvreq
 }
