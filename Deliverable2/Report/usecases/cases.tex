@@ -137,8 +137,7 @@ Tiles exchange
     (c) The chosen tiles are exchange
 - Alternatives
     (d.1) If a chosen tile contains a robot, the robot will rotate and swaps along with the tile
-    (e.1) The board notifies the controller that a robot has moved
-    (f.1) The controller notifies the robot that is has been moved \\
+    (e.1) The board notifies the controller that a robot has been swapped \\
 
     (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed \\
 
@@ -146,11 +145,12 @@ The "Notify robots" use case illustrates the Notify robots state in the High Lev
 
 Notify robots
 - Pre-conditions: The game is initiated.
-- Trigger: A robot is moved due to movement of another robot (by conveyor tile)
+- Trigger: A robot is moved due to movement of another robot (by conveyor tile) or a tile exchange
 - Guarantee: The robot gets a message that is has been moved
 - Main Scenarios
-    (a) The board sends a message to the controller, notifying it that a robot has been moved
-    (b) The controller notifies the robot that it has been moved
+    (a) Recursively check for other robots that are moved
+    (b) The board sends a message to the controller, notifying it that a robot has been moved
+    (c) The controller notifies the robot that it has been moved
 - Alternatives \\
 
 The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile. Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).\\
