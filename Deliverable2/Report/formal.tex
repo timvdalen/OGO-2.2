@@ -3,8 +3,8 @@ In this section, the formal specification that is going to be used to implement 
 The specification is written in Object-Z, an extension of the Z language.
 
 \subsection{Basic Axiomatic definitions}
-Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
-In our class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Below, shown below is the Z specification of these enumerators.
+Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, it is defined as a separate set. \\
+In our class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Shown below is the Z specification of these enumerators.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -19,7 +19,7 @@ Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST
 \end{axdef}
 
 \subsection{Classes}
-We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
+There are two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
 \begin{class}{Null}
 \upharpoonright (selfRef) \\
@@ -232,7 +232,7 @@ controller' = Null.selfRef
 \end{schema} \\
 \znewpage
 \begin{classcom}
-We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
+By copying all the tiles and adding a mapping (same as for the original board), the following snapshot has been created. Next, with this snapshot the view can display the board.
 \end{classcom} \\
 \begin{schema}{requestSnapShot}
 boardSnapshot : BoardSnapShot \\
@@ -442,7 +442,7 @@ tiles(absoluteCoord?).target = robot? \\
 output! = SUCCESS
 \end{schema} \\
 \begin{classcom}
-saveLocation corresponds to the private method in Board. It has two input-variables: absCoords, which is an absolute coordinate and robot, which is the robot that has been moved.  If we want to save the new location of the robot, the Tile that becomes the new location must be empty. The help-method put is used to place the robot on the empty Tile. After the location has been saved, the viewer is notified of the robot's location change, so it can redraw the Board.
+saveLocation corresponds to the private method in Board. It has two input-variables: absCoords, which is an absolute coordinate and robot, which is the robot that has been moved.  In order to save the new location of the robot, the Tile that becomes the new location must be empty. The help-method put is used to place the robot on the empty Tile. After the location has been saved, the viewer is notified of the robot's location change, so it can redraw the Board.
 \end{classcom} \\
 \begin{schema}{saveLocation}
 absCoords? : AbsoluteCoord \\
