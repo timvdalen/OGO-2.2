@@ -1,8 +1,10 @@
-In this section, the Z-specification is given. The specification is written in Object-Z, an extension of the Z language.
+In this section, the formal specification that is going to be used to implement this project is given.
+
+The specification is written in Object-Z, an extension of the Z language.
 
 \subsection{Basic Axiomatic definitions}
-Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, these are defined as a separate set. \\
-In the class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Below, the Z specification of these enumerators is given.
+Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
+In our class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Below, shown below is the Z specification of these enumerators.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -16,61 +18,75 @@ BoardResponse == \{FAILED, SUCCESS, WIN\}
 Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST, NORTH\_WEST\}
 \end{axdef}
 
-\begin{zed}
-[Null]
-\end{zed}
-
 \subsection{Classes}
-In the class diagram, there are two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
+We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
-\begin{class}{Coord}
-\upharpoonright (x, y) \\
-\begin{state}
-x : \num \\
-y : \num
-\end{state} \\
-\begin{schema}{add}
-\Delta (x, y) \\
-coord? : Coord
+\begin{class}{Null}
+\upharpoonright (selfRef) \\
+\begin{classcom}
+This is a class representing nothing.
+\end{classcom} \\
+\begin{schema}{selfRef}
+output! : Null
 \where
-x' = coord?.x + x \\
-y' = coord?.y + y
+output! = self
 \end{schema}
 \end{class}
 
 \begin{class}{AbsoluteCoord}
-Coord \\
+\upharpoonright (x, y, BoardWith, BoardHeight) \\
 \begin{axdef}
-BoardWith, BoardHeight : \nat
+BoardWith : \nat
+\end{axdef} \\
+\begin{axdef}
+BoardHeight : \nat
 \end{axdef} \\
 \begin{state}
+x : \nat \cup \{0\} \\
+y : \nat \cup \{0\}
 \where
-0 \leq x < BoardWidth \\
-0 \leq y < BoardHeight
+x < BoardWidth \\
+y < BoardHeight
 \end{state}
 \end{class}
 
 \begin{class}{RelativeCoord}
-Coord \\
+\upharpoonright (x, y) \\
+\begin{state}
+x : \num \\
+y : \num
+\end{state}
 \end{class}
+
+\begin{classcom}
+Calculate the absolute coordinate from an absolute coordinate and a relative coordinate, taking the height / width of the bord into account.
+\end{classcom} \\
+\begin{axdef}
+addAbtoRel == (AbsoluteCoord \cross RelativeCoord) \rightarrow (AbsoluteCoord \union Null)
+\where
+\forall (a,b) : AbsoluteCoord \cross RelativeCoord | \\ \t1
+\IF (0 <= a.x + b.x < BoardWidth \\ \t2
+0 <= a.x + b.x < BoardHeigth) \\ \t1
+\THEN
+addAbtoRel(a,b).x = a.x + b.x \\ \t2
+addAbtoRel(a,b).y = a.y + b.y \\ \t1
+\ELSE addAbtoRel(a,b) = Null.selfRef
+\end{axdef}
 
 Tile class has five specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A Tile has a type, which is either of the above specializations, and a field 'occupier', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile.
 \begin{class}{Tile}
-\upharpoonright (occupier) \\
+\upharpoonright (type, occupier) \\
 \begin{state}
-occupier : Robot \cup Null \\
-isSnapshotTile : \bool \\
+type : \{NormalTile, HomeTile, ConveyorTile, \\ \t1 BrokenRobotTile, HintTile\} \\
+occupier : Robot \cup Null
 \end{state} \\
-\begin{schema}{Init}
-occupier = Null
-\end{schema} \\
 \begin{classcom}
 clearTile is a help-method that clears the occupies variable of a Tile.
 \end{classcom} \\
 \begin{schema}{clear}
 \Delta (occupier) \\
 \where
-occupier' = Null
+occupier' = Null.selfRef
 \end{schema} \\
 \begin{classcom}
 put is a help-method that takes a robot as input-variable and sets the occupies-variable of a Tile to this robot.
@@ -80,9 +96,6 @@ put is a help-method that takes a robot as input-variable and sets the occupies-
 input? : Robot
 \where
 occupier' = input?
-\end{schema} \\
-\begin{schema}{rotate}
-\Delta()
 \end{schema}
 \end{class}
 
@@ -117,251 +130,383 @@ A ConveyerTile has a certain rotation, which influences the direction in which a
 \end{classcom} \\
 \begin{state}
 rotation : Rotation
-\end{state} \\
-\begin{classcom}
-Left empty on purpose.
-\end{classcom} \\
-\begin{schema}{rotate}
-\Delta (rotation)
-\end{schema}
+\end{state}
 \end{class}
 
 The Board class maintains several invariants and has a variety of methods, since it is one of the major components of the game.
 
 \begin{class}{Board}
-\upharpoonright (canReset, initialize) \\
+\upharpoonright (tiles, robots) \\
 \begin{state}
-tiles : \power (AbsoluteCoord \fun \: \downarrow \! Tile) \\
-robots : \power (Robot \fun Rotation) \\
-\also \also \also
-controller : Controller \\
-occupied : \power AbsoluteCoord \\
-adjacent : \power (AbsoluteCoord \rel AbsoluteCoord) \\
-conveyorUnitDest : \power (AbsoluteCoord \pinj AbsoluteCoord) \\
-conveyorDest : \power (AbsoluteCoord \pinj AbsoluteCoord)
+tiles : \power (AbsoluteCoord \fun Tile) \\
+robots : \power (Robot \fun Rotation)
 \where
-\forall t : \ran tiles | \neg t.isSnaphotTile
-\also \also \also \also
-\forall c : occupied | tiles(c) \in BrokenRobotTile \vee
-tiles(c).occupier \not = Null \\
-\also \also \also \also
-\forall (c, d) : conveyorUnitDest | d \not \in occupied \; \wedge tiles(c) \in ConveyorTile \; \; \wedge \\ \t1
-        tiles(c).rotation = 0 \Rightarrow (c.x = d.x + 1 \wedge c.y = d.y) \; \; \wedge \\ \t1
-        tiles(c).rotation = 90 \Rightarrow (c.x = d.x \wedge c.y = d.y - 1) \; \; \wedge \\ \t1
-        tiles(c).rotation = 180 \Rightarrow (c.x = d.x - 1 \wedge c.y = d.y) \; \; \wedge \\ \t1
-        tiles(c).rotation = 270 \Rightarrow (c.x = d.x \wedge c.y = d.y + 1) \; \; \\
-\also \also \also \also
-\forall (c,d) : conveyorDest | (c,d) \in conveyorUnitDest \star \; \; \wedge \\ \t1 (tiles(d) \not \in ConveyorTile \vee conveyorUnitDest(d) = d)
-\also \also \also \also
-\forall (c, d) : adjacent | ~ |\!c.x - d.x\!| + |\!c.y - d.y\!| = 1 \wedge d \not \in occupied
-\also \also \also \also
-\forall r : robots | \exists c, d : \dom tiles @  \\ \t1 tiles(c) \in HomeTile \wedge tiles(c).target = r \; \; \wedge \\ \t1
-d.occupier = r \wedge (c, d) \in (adjacent \cup conveyorDest)\star
+\forall r : robots | \exists c : \dom tiles @  \\ \t1 tiles(c).type = HomeTile \wedge tiles(c).target = r \wedge \\ \t1
+\exists d : \dom tiles @ d.occupier = r \wedge Reachable(c, d)
 \end{state} \\
+\begin{schema}{Occupied}
+coord? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = (tiles(coord).type = BrokenRobotTile \; \; \vee \\ \t1
+tiles(coord).occupier \not = Null
+\end{schema} \\
+\begin{schema}{ConveyorUnitDest}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = \neg Occupied(coordB) \\ \t1
+        tiles(input?).type = ConveyorTile \\ \t1
+        tiles(input?).rotation = 0 \Rightarrow \\ \t2 input?.x = output!.x + 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 90 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y - 1 \\ \t1
+        tiles(input?).rotation = 180 \Rightarrow \\ \t2 input?.x = output!.x - 1 \wedge input?.y = output!.y \\ \t1
+        tiles(input?).rotation = 270 \Rightarrow \\ \t2 input?.x = output!.x \wedge input?.y = output!.y + 1) \\ \t1
+\end{schema} \\
+\znewpage
+\begin{schema}{ConveyorDest}
+input? : AbsoluteCoord \\
+output! : AbsoluteCoord
+\where
+\IF ConveyorUnitDest(input?, output!) \\
+\THEN output! = input? \\
+\ELSE output! = \exists c : AbsoluteCoord | \\ \t2 ConveyorUnitDest(input?, c) \\ \t2 ConveyorDest(c, output!)
+\end{schema} \\
+\begin{schema}{Adjacent}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = |\!coordA.x - coordB.x\!| + \\ \t1 |\!coordA.y - coordB.y\!| = 1 \\ \t1
+\neg Occupied(coordB)
+\end{schema} \\
+\begin{schema}{Reachable}
+coordA? : AbsoluteCoord \\
+coordB? : AbsoluteCoord \\
+output! : \bool
+\where
+output! = ConveyorDest(coordA?) = coordB? \: \vee \\ \t1 (\exists c : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = output!) \: \vee \\ \t1
+(\exists c,d : AbsoluteCoord | \\ \t2 Adjacent(ConveyorDest(coordA?), c) \: \wedge \\ \t2 ConveyorDest(c) = d \: \wedge \\ \t2 Reachable(d, output!))
+\end{schema} \\
+\znewpage
 \begin{classcom}
 Initialize is called from the outside world, when a new game has to be started. Note that the tiles and robots in this method are read from an input file. After the tiles and robots have been initiated, the Board pre-initializes the Controller and initializes all the robots. Finally, the Board post-initializes the Controller with the initialized Robots and the Board.
 \end{classcom} \\
-\begin{schema}{Init}
-reset
-\end{schema} \\
-\begin{schema}{internalInit}
+\begin{schema}{Initialize}
 \Delta (tiles, robots, controller)
 \where
-tiles' \not = Null \\
-robots' \not = Null \\
-controller' \not = Null
+tiles' = createTiles \\
+robots' = createRobots \\
+controller'.preInitialize \\
+\forall r : \dom Robots | r.initialize(controller)
 \end{schema} \\
-initialize \sdef internalInit \; \comp \\ \t1
-[c : Controller | c = controller] @ \bigwedge_{r : dom Robots} robots.initialize \; \comp \\ \t1
-[r : \power Robots | r = \dom Robots] @ controller.initialize \\
-\znewpage
+\begin{classcom}
+The method below creates a set of robots from a file. This is not further specified.
+\end{classcom} \\
+\begin{schema}{createRobots}
+output! : \power (Robot \fun Rotation)
+\end{schema} \\
+\begin{classcom}
+The method below creates a set of tiles from a file. This is not further specified.
+\end{classcom} \\
+\begin{schema}{createTiles}
+output! : \power (AbsoluteCoord \fun Tile)
+\end{schema} \\
 \begin{classcom}
 CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot.
 \end{classcom} \\
-\begin{classcom}
-Uitleg waarom init leeg is.
-\end{classcom} \\
-canReset \sdef [\exists t : \ran tiles | t \in HomeTileTiles @ \\
-\t1 t.target = t.occupier] \wedge reset \\
+\begin{schema}{canReset}
+\where
+(\exists t : Tile | t.type = HomeTile \\ \t1
+t.occupier = t.target) \Rightarrow board.reset
+\end{schema} \\
 \begin{classcom}
 When the Board resets itself, the tiles, the controller and the robots are deleted.
 \end{classcom} \\
 \begin{schema}{reset}
-\Delta (tiles, robots. controller)
+\Delta (tiles, robots)
 \where
-tiles' = Null \\
-robots' = Null \\
-controller' = Null
-\end{schema} \\
-\begin{classcom}
-A snapshot is made by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
-\end{classcom} \\
-\begin{schema}{requestSnapShot}
-snapshot? : BoardSnapshot
-\where
-\forall (c1,t1) : tiles | \exists (c2,t2) : snapshot? | c1 = c2 \: \wedge \\ \t2
-t1.occupier = t2.occupier \: \wedge \\ \t2
-t1 \in NormalTile \Rightarrow t2 \in NormalTile \: \wedge \\ \t2
-t1 \in HintTile \Rightarrow t2 \in HintTile \: \wedge \\ \t2
-t1 \in BrokenRobotTile \Rightarrow t2 \in BrokenRobotTile \: \wedge \\ \t2
-t1 \in HomeTile \Rightarrow (t2 \in HomeTile \wedge t1.target = t2.target) \: \wedge \\ \t2
-t1 \in ConveyorTile \Rightarrow \\ \t3 (t2 \in ConveyorTile \wedge t2.rotation = t2.rotation)
+tiles' = Null.selfRef \\
+robots' = Null.selfRef \\
+controller' = Null.selfRef
 \end{schema} \\
 \znewpage
 \begin{classcom}
+We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
+\end{classcom} \\
+\begin{schema}{requestSnapShot}
+boardSnapshot : BoardSnapShot \\
+output! : BoardSnapshot
+\where
+\forall (c,t) : tiles |  \\ \t1
+\exists (d,u) : boardSnapshot | c = d \: \wedge \\ \t2 t \not = u \wedge t.type = u.type \: \wedge \\ \t2 t.occupier = u.occupier \: \wedge \\ \t2 t.type = HomeTile \Rightarrow t.target = u.target \: \wedge \\ \t2 t.type = ConveyorTile \Rightarrow t.rotation = u.rotation \\
+output! = boardSnapshot
+\end{schema} \\
+\begin{classcom}
 GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. It checks where the HomeTile of the robot is and according to that gives the appropiate hint.
 \end{classcom} \\
-\begin{axdef}
-hintMapping : \power ((\{-1, 0, 1\} \cross \{-1, 0, 1\}) \pfun \power Hint)
-\where
-hintMapping(-1, -1) = \{NORTH\_WEST, NORTH, WEST\} \\
-hintMapping(-1, 0) = \{WEST\} \\
-hintMapping(-1, 1) = \{SOUTH\_WEST, SOUTH, WEST\} \\
-hintMapping(0, -1) = \{NORTH\} \\
-hintMapping(0, 1) = \{SOUTH\} \\
-hintMapping(1, -1) = \{NORTH\_EAST, NORTH, EAST\} \\
-hintMapping(1, 0) = \{EAST\} \\
-hintMapping(1, 1) = \{SOUTH\_EAST, SOUTH, EAST\} \\
-\end{axdef} \\
-\begin{axdef}
-rotate90Deg : \power (Hint \fun Hint)
-\where
-rotate90Deg(NORTH) = WEST \\
-rotate90Deg(WEST) = SOUTH \\
-rotate90Deg(SOUTH) = EAST \\
-rotate90Deg(EAST) = NORTH \\
-rotate90Deg(NORTH\_EAST) = NORTH\_WEST \\
-rotate90Deg(NORTH\_WEST) = SOUTH\_WEST \\
-rotate90Deg(SOUTH\_WEST) = SOUTH\_EAST \\
-rotate90Deg(SOUTH\_EAST) = NORTH\_EAST
-\end{axdef} \\
-sendPossibleHint \sdef [robot? : Robot | \\ \t2 \neg \exists c : \ran tiles | c \in HintTile \wedge c.occupier = robot?] \; \; [] \\ \t1
-(getHint \comp controller.notifyHint) \\
 \begin{schema}{getHint}
 robot? : Robot \\
-output!: Hint \\
-\delta x : \{-1, 0, 1\} \\
-\delta y : \{-1, 0, 1\} \\
-numRotations : \nat
+output!: Hint
 \where
-numRotations = \frac{robots(robot?)}{90} \\
-\also \also \also \also \also
-\exists c1,c2 : \ran tiles, h : Hint | \\ \t1 c1 \in HomeTile \wedge
- tiles(c1).target = robot? \; \; \wedge \\ \t1 tiles(c2).occupier = robot? \wedge
- \delta x = \frac{c1.x - c2.x}{|c1.x - c2.x|} \wedge \delta y = \frac{c1.y - c2.y}{|c1.y - c2.y|} \; \; \wedge \\ \t1
- h \in robot.hintMapping(\delta x, \delta y) \; \; \wedge \\ \t1
- output! = rotate90Deg^{numRatations}(h)
+\exists t, t1: \ran tiles | t.occupier = robot? @\\ \t1
+t1.type = HomeTile @ t1.target = robot? \\ \t1
+\exists coord, coord1: AbsoluteCoord | tiles(coord) = t \\ \t2
+\IF coord.x = coord1.x \\ \t2
+\THEN \\ \t3
+\IF coord.y < coord1.y \\ \t3
+\THEN output! = SOUTH \\ \t3
+\ELSE output! = NORTH \\ \t2
+\ELSE \\ \t3
+\IF coord.x > coord1.x \\ \t3
+\THEN output! = getHintLeft(coord , coord1) \\ \t3
+\ELSE output! = getHintRight(coord, coord1)
+\end{schema} \\
+\znewpage
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the left of the robot.
+\end{classcom} \\
+\begin{schema}{getHintLeft}
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = WEST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, WEST, SOUTH\_WEST\} | \\ \t3 output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, WEST, WEST\_NORTH\} | \\ \t3 output! = hint
+\end{schema}\\
+\begin{classcom}
+This method is a sub method of getHint, used to deal with HomeTile to the right of the robot.
+\end{classcom} \\
+\begin{schema}{getHintRight}
+absCoord? : AbsoluteCoord \\
+absCoord1? : AbsoluteCoord \\
+output! : Hint
+\where
+\IF absCoord?.y = absCoord1?.y \\
+\THEN output! = EAST \\
+\ELSE \\ \t1
+\IF absCoord?.y < absCoord1.y \\ \t1
+\THEN \exists hint: \{SOUTH, EAST, EAST\_SOUTH\} | \\ \t3 output! = hint \\ \t1
+\ELSE \exists hint: \{NORTH, EAST, NORTH\_EAST\} | \\ \t3 output! = hint
 \end{schema} \\
 \znewpage
 \begin{classcom}
 getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile. Off course, the invariant also holds for this function.
 \end{classcom} \\
 \begin{schema}{getValidTiles}
-tilePair! : Tile \cross Tile
+output! : (Tile \cross Tile)
 \where
-\exists b : Board, (c1, t1), (c2, t2) : tiles | \\ \t1
-b.robots = robots \;\; \wedge \\ \t1
- b.tiles = (tiles \setminus \{(c1, t1), (c2, t2)\}) \cup \{(c1, t2), (c2, t1)\} \\ \t1
-t1 \not = t2 \; \;  \wedge \\ \t1
-t1 \not \in HomeTile \wedge t1 \not \in HintTile \; \; \wedge \\ \t1
-t2 \not \in HomeTile \wedge t2 \not \in HintTile \; \; \wedge \\ \t1
-tilePair! = (t1, t2)
+\exists t,t1: Tile | t \not = t1  @ \\ \t1
+t.type \not = HomeTile \\ \t1
+t.type \not = HintTile \\ \t1
+t1.type \not = HomeTile \\ \t1
+t1.type \not = HintTile \implies \\ \t1
+output! = (t \cross t1)
 \end{schema} \\
 \begin{classcom}
 Method to exchange the positions of two tiles on the board. These tiles should be valid. If a robot is on one of the tiles, it moves along.
 \end{classcom} \\
-\begin{schema}{exchangeTiles}
-\Delta(tiles, robots) \\
-tilePair? : Tile \cross Tile \\
-exchangedPair! : Tile \cross Tile \\
-output? : \bool
+\begin{schema}{requestTilesExchange}
+\Delta (tiles)
+output! : ({Robot \union Null} \cross {Robot \union Null}) \\
+(tile, tile1) : Tile \cross Tile
 \where
-output? = true\\
-tilePair? = exchangedPair! \\
-\also \also \also
-\exists c1, c2 : \dom tiles | tiles(c1) = tilePair?.0 \wedge tiles(c2) = tilePair?.1 \; \; \wedge \\ \t1
-tiles' = tiles \setminus \{(c1, tilePair?.0),(c2, tilePair?.1)\} \cup \\ \t2 \{(c1, tilePair?.1),(c2, tilePair?.0)\}
-\\ \t1 \forall r : \dom robots | \\ \t2 (r \not = tiles(c1).occupier \wedge r \not = tiles(c2).occupier) \Rightarrow \\ \t3 robots'(r) = robots(r)
+(tile, tile1)  = getValidTile \\
+\exists abCoord, abCoord1 : AbsoluteCoord | tiles(abCoord) = tile \\ \t1
+tiles(abCoord1) = tile1 \implies \\ \t2
+tiles(abCoord)' = tile1 \\ \t2
+tiles(abCoord1)' = tile \\ \t2
+\exists n : notifyView \\ \t2
+\exists r : Robot | tile.occupier = r \implies \\ \t3
+\exists rotation : Rotation | robots(r)' = rotation \\ \t3
+\exists n : notifyStateChange | n.input? = r \\ \t2
+\exists r1 : Robot | tile1.occupier = r \implies \\ \t3
+\exists rotation1 : Rotation | robots(r1)' = rotation1 \\ \t3
+\exists n1: notifyStateChange | n1.input? = r1 \\ \t2
+\IF tile.occupier = Null.selfRef \\ \t3
+tile1.occupier \not = Null.selfRef\\ \t2
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t1 m.absoluteCoord? = abCoord1 \\ \t3
+\IF tile1.occupier = Null.selfRef \\ \t3
+tile.occupier \not = Null.selfRef \\ \t2
+\THEN \exists m : moveConveyorSwitch | \\ \t3 \t1 m.absoluteCoord? = abCoord1
 \end{schema} \\
-moveBlockedRobot \sdef [c, d : \dom tiles, r : \dom robots | \\ \t1 tiles(c) \in ConveyorTile \wedge tiles(c).occupier = r \; \; \wedge \\ \t1 conveyorDest(c) \not = c \wedge conveyorDest(c) = d] @ \\ \t2 c.clear \wedge d.put[input?/r] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/r] \\
-moveBlockedRobotsRecursive \sdef (moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = Null \wedge conveyorDest(c) = c] \\
 \znewpage
-requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
-\t1 [t1, t2 : Tile | t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp board.notifyView \\
+\begin{classcom}
+Method to deal with the fact that a robot is part of a tile exchange.
+\end{classcom} \\
+\begin{schema}{specialExchange}
+\Delta (robots)
+tile? : Tile
+\where
+\exists r : Robot | tile.occupier = r \implies \\ \t1
+controller.notifyAutoMovement(r) \\ \t1
+\exists rotation : Rotation | robots(r)' = rotation
+\end{schema} \\
+\begin{classcom}
+Make sure that a robot on a conveyor belt is moved to the proper tile.
+\end{classcom} \\
+\begin{schema}{moveConveyorSwitch}
+absoluteCoord? : AbsoluteCoord \\
+\where
+moveConveyorSwitchSub(absoluteCoord?, 0,1) \\
+moveConveyorSwitchSub(absoluteCoord?, 1,0) \\
+moveConveyorSwitchSub(absoluteCoord?, 0,-1) \\
+moveConveyorSwitchSub(absoluteCoord?, -1,0) \\
+\end{schema}\\
+\begin{classcom}
+Subfunction of moveConveyorSwitch, does the actual calculation of the placement of the robot.
+\end{classcom} \\
+\begin{schema}{moveConveyorSwitchSub}
+absoluteCoord? : AbsoluteCoord \\
+x? : int \\
+y? : int \\
+relCoord : RelativeCoord
+\where
+relCoord.x = x? \\
+relCoord.y = y? \\
+\IF tiles(addAbtoRel(absoluteCoord?, relCoord)).type = ConveyorTile \\ \t1
+tiles(absoluteCoord?).occupier = Null \\ \t1
+\exists r : Robot | \\ \t2 tiles(addAbtoRel(absoluteCoord?, relCoord)).occupier = r \\
+\THEN moveConveyorSwitch(addAbtoRel(absoluteCoord?, relCoord)\\ \t1
+saveLocation(addAbtoRel(absoluteCoord?, relCoord), r)
+\end{schema} \\
+\znewpage
 \begin{classcom}
 This functions deals with the moveRequest of the controller
 \end{classcom} \\
-moveRequest \sdef moveWalk \; \; \comp \\ \t1 ([output? = SUCCESS \vee output? = WIN] \wedge moveRotate \; \; [] \\ \t1 [output! : \bool | output? = FAILED \wedge output! = FAILED]) \\
+\begin{schema}{moveRequest}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+absoluteCoord : AbsoluteCoord \\
+output! : BoardResponse
+\where
+\IF rotation? \not = 0 \\
+\THEN response! = moveRotate(localCoords?, robot?, rotation?) \\
+\ELSE response! = moveWalk(localCoords?, robot?)
+\end{schema} \\
 \begin{classcom}
 Used to deal with rotations a robot wants to make.
 \end{classcom} \\
 \begin{schema}{moveRotate}
-\Delta(robots) \\
 localCoords? : RelativeCoord \\
 robot? : Robot \\
 rotation? : Rotation \\
 output! : BoardResponse
 \where
-\IF localCoords.x = 0 \wedge localCoords.y = 0 \; \; \wedge \\ \t1
+\IF localCoords.x = 0 \\ \t1
+localCoords.y = 0 \\ \t1
  \exists r : robot?.rule.possibleRotations | r = rotation?\\
-\THEN output! = SUCCESS \; \; \wedge \\ \t1
-robots'(robot?) = (robots(robot?) + rotation?) \mod 360 \\
-\ELSE output! = FAILED \wedge robots' = robots
+\THEN output! = SUCCESS \\ \t1
+robots(robot?) = (robots(robot?) + rotation?) \mod 360 \\
+\ELSE output! = FAILED
 \end{schema} \\
 \begin{classcom}
 Used to deal with other movements a robot wants to make.
 \end{classcom} \\
-\znewpage
-\begin{schema}{moveWalkPre}
+\begin{schema}{moveWalk}
 localCoords? : RelativeCoord \\
 robot? : Robot \\
-output! : BoardResponse \\
-putTile! : Tile \cup Null \\
-beginTile! : Tile \\
-autoMovement! : \bool
-\also \also \also
-pathBlockedOn : \power (\seq AbsoluteCoord \fun \nat) \\
-firstConveyor : \power (\seq AbsoluteCoord \fun \nat) \\
-relativeToAbsolute : \power (\seq RelativeCoord \pfun \seq AbsoluteCoord) \\
-validMove : \power (Tile \fun \bool) \\
-path : \power \seq AbsoluteCoord \cup Null \\
+output! : BoardResponse
 \where
-beginTile!.occupier = robot?
-\also \also \also \also
-\forall s : \power \seq pathBlockedOn | \\ \t1
- \IF \exists (n, c) : s | occupied(c) \\ \t1
- \THEN \exists (n1, c1) : s | n1 = pathBlockedOn(s) \wedge occupied(c) \; \; \wedge \\ \t6
- (\neg \exists (n2, c2) : s | occupied(c) \wedge n2 < n1) \\ \t1
- \ELSE pathBlockedOn(s) = -1
-\also \also \also \also
-\forall s : \power \seq AbsoluteCoord | \\ \t1
- \IF \exists (n,c) : s | c \in ConveyorTile \wedge \neg occupied(c) \\ \t1
- \THEN \exists (n1,c1) : s | n1 = firstConveyor(s) \; \; \wedge \\ \t6 c1 \in ConveyorTile \wedge \neg occupied(c1) \; \; \wedge \\ \t6
- (\neg \exists (n2,c2) : s | c2 \in ConveyorTile \; \; \wedge \\ \t9 \t1 \neg occupied(c2) \wedge c2 < c1) \\ \t1
- \ELSE firstConveyor(s) = -1
-\also \also \also \also
-\forall (s1, s2) : relativeToAbsolute | \forall n : \dom s1 | \\ \t1 s2(n).x = s1(n).x + beginTile!.x \; \; \wedge \\ \t1 s2(n).y = s1(n).y + beginTile!.y
-\also \also \also \also
-\IF (localCoords?, robots(robot?)) \in robot?.rule.possibleMoves \; \; \wedge \\ \t1 robot?.rule.possibleMoves(localCoords?, robots(robot?) \in \\ \t9 \t4 relativeToAbsolute \\
-\THEN path = relativeToAbsolute( \\ \t4 robot?.rule.possibleMoves(localCoords?, robots(robot?)) \\
-\ELSE path = Null
-\also \also \also \also
+\IF robot?.rule.possibleMoves(localCoords?, robots(robot?)) = \\ \t1
+possiblePath(robot?) \wedge rotation? = 0 \\
+\THEN absoluteCoord = calculateNewLocation(localCoords?, robot?)\\ \t1
+\IF absoluteCoord = Null \\ \t1
+\THEN output! = FAILED \\ \t1
+\ELSE output! = checkTile(absoluteCoord?, robot?)\\ \t2
+\ELSE output! = FAILED
 \end{schema} \\
 \znewpage
-\begin{schema}{moveWalkPre}
-\forall t : Tile | validMove(t) = \exists b : Board | \\ \t2
-    b.robots = robots \wedge b.tiles = tiles \; \; \wedge \\ \t1 b.tiles(beginTile!).occupier = Null \wedge b.tiles(t).occupier = robot? \; \; \wedge \\ \t1 \forall t : (\ran tiles) \setminus \{beginTile!, t\} | \\ \t2 t.occupier = tiles(b.tiles^{-1}(t)).occupier \; \; \wedge \\ \t2 t \in HomeTile \Rightarrow t.target = tiles(b.tiles^{-1}(t)).target
-\also \also \also \also
-\IF path = Null \vee (pathBlockedOn(path) \not = -1 \; \;\wedge \\ \t1 (firstConveyor(path) = -1 \; \; \vee \\ \t2 firstConveyor(path) > pathBlockedOn(path)) \\
-\THEN output! = FAILED \; \; \wedge putTile! = Null \wedge autoMovement! = \false \\
-\ELSE \IF firstConveyor(path) \not = -1 \; \; \wedge \\ \t1 validMove(conveyorDest(firstConveyor(path))) \\
-\THEN output! = SUCCESS \wedge autoMovement! = \true \;\; \wedge \\ \t1 putTile! = conveyorDest(firstConveyor(path) \\
-\ELSE \IF validMove(path(\#path - 1)) \\
-\THEN output! = SUCCESS \wedge autoMovement! = \false \; \; \wedge \\ \t1  putTile! = path(\#path - 1) \\
-\ELSE output! = FAILED \wedge autoMovement! = \false \wedge putTile! = Null
+\begin{classcom}
+Subfunction of moveWalk, used to check on which tile the robot will end and gives the proper response.
+\end{classcom} \\
+\begin{schema}{checkTile}
+absoluteCoord? : AbsoluteCoord \\
+robot? : Robot \\
+output! : BoardResponse
+\where
+saveLocation(absoluteCoord?, robot?) \\
+\IF tiles(absoluteCoord?).type = HomeTile \\ \t1
+tiles(absoluteCoord?).target = robot? \\
+\THEN output! = WIN \\ \
+\ELSE  \\ \t1
+\IF tiles(absoluteCoord?).type = ConveyorTile \\ \t1
+\THEN controller.notifyAutomovement(robot?) \\ \t1
+\IF tiles(absoluteCoord?).type = HintTile \\ \t1
+\THEN controller.notifyHint(Board.getHint(robot?), robot?) \\ \t1
+output! = SUCCESS
 \end{schema} \\
-moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([output? = FAILED] \; \; [] \\ \t2 [output? = SUCCESS \vee output? = WIN] \wedge begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge board.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 [autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?])) \; \; \comp \\ \t1
-moveBlockedRobotsRecursive
+\begin{classcom}
+saveLocation corresponds to the private method in Board. It has two input-variables: absCoords, which is an absolute coordinate and robot, which is the robot that has been moved.  If we want to save the new location of the robot, the Tile that becomes the new location must be empty. The help-method put is used to place the robot on the empty Tile. After the location has been saved, the viewer is notified of the robot's location change, so it can redraw the Board.
+\end{classcom} \\
+\begin{schema}{saveLocation}
+absCoords? : AbsoluteCoord \\
+robot? : Robot
+\where
+\exists t : Tile | t.occupier = robot? \wedge t.clear\\
+tiles(absCoords?).put(robot) \\
+viewer.notifyView
+\end{schema}
+\znewpage
+\begin{classcom}
+Function to calculate the location of a robot according to it's path.
+\end{classcom}\\
+\begin{schema}{calculateNewLocation}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+absoluteCoord : AbsoluteCoord \\
+output! : (AbsoluteCoord \union Null)
+\where
+\IF checkPath(localCoords?, robot?) \\
+\THEN absoluteCoord = firstConveyor(c, path) \\ \t1
+\exists s : ConveyorDest | s.input? = absoluteCoord @ \\ \t2
+output! = s.output! \\
+\ELSE output! = Null.selfRef
+\end{schema} \\
+\begin{classcom}
+Function to check if the path is free (if not, a ConveyorTile should be in front of the obstacle in order to let the path be valid). Calculate new coordinates as well
+\end{classcom} \\
+\begin{schema}{checkPath}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+path : seq RelativeCoord \\
+absoluteCoord : AbsoluteCoord \\
+bool : \bool \\
+output! : \bool
+\where
+bool = false \\
+path = robot?.rule.possibleMoves(localCoords? \cross robots(robot?)) \\
+\exists (c, t) : tiles | t.occupier = robot? \implies \\ \t1
+\forall (int, coord) : path | \\ \t2
+((addAbtoRel(c, coord) = Null \vee \\ \t2
+(tiles(addAbtoRel(c, coord).type = BrokenRobotTile) \vee \\ \t2
+\exists r: Robot | tiles(addAbtoRel(c, coord).occupier = r )\implies \\ \t3
+\exists (int1, coord1) : path | int1 < int \\ \t3
+tiles(addAbtoRel(c, coord1).type = ConveyorTile \\ \t3
+absoluteCoord = addAbtoRel(c, coord1)) \implies \\ \t4
+bool = \true \\ \t4
+output! = bool
+\end{schema} \\
+\znewpage
+\begin{classcom}
+Calculate the first occuring ConveyorTile for a given path.
+\end{classcom} \\
+\begin{schema}{firstConveyor}
+firstConveyor == (AbsoluteCoord \cross seq RelativeCoord) \fun \\ \t1 AbsoluteCoord
+\where
+\exists absoluteCoord : AbsoluteCoord |  \\ \t1
+\exists (int, coord): seq RelativeCoord |  \\ \t2
+(tiles(addAbtoRel(absoluteCoord, coord).type = conveyorTile \\ \t2
+conveyorInPath(absoluteCoord, (int, coord)) = \\ \t3 addAbtoRel(absoluteCoord, coord)) \implies \\ \t3
+\forall (int1, coord1): seq RelativeCoord | \\ \t3
+\IF tiles(addAbtoRel(absoluteCoord, coord1).type = conveyorTile \\ \t3
+\THEN int <= int1
+\end{schema}
 \end{class}
 
 A BoardSnapshot is simply a copy of the current state of the board; therefore, the BoardSnapshot maintains a mapping of absolute coordinates to the tiles.
@@ -369,8 +514,6 @@ A BoardSnapshot is simply a copy of the current state of the board; therefore, t
 \upharpoonright (tiles) \\
 \begin{state}
 tiles : \power (AbsoluteCoord \fun Tile) \\
-\where
-\forall t \ran tiles | t.isSnapshotTile
 \end{state}
 \end{class}
 
@@ -380,8 +523,6 @@ A Rule consists of a list of possible moves and a list of possible rotations. Th
 \begin{state}
 possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
-\where
-\forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
 \end{state} \\
 \end{class}
 
@@ -390,62 +531,64 @@ A Robot has knowledge of the Controller and maintains a rule-attribute, describi
 \upharpoonright (rules) \\
 \begin{state}
 rules : Rules \\
-controller : Controller \\
-hints : \power Hints
+controller : Controller
+hint : Hints
 \end{state}\\
-\begin{schema}{Init}
-rules = Null \\
-controller = Null \\
-hints = Null
-\end{schema} \\
 \begin{classcom}
 The initialize of the Robot uses the parameters controller and rules. The controller-parameter is the initialized Controller; the rules-parameter is the set of rules that determine the possible moves and rotations. In the initialize, all the provided input-values are saved and the list of hints is initially empty, since the Robot has not yet received any hints.
 \end{classcom} \\
 \begin{schema}{initialize}
-\Delta (controller, rules) \\
+\Delta (controller, rules, hint) \\
 controller? : Controller \\
 rules? : Rules
 \where
 controller' = controller? \\
-rules' = rules?
-\end{schema} \\
+rules' = rules? \\
+hint' = Null.selfRef
+\end{schema}\\
 \begin{classcom}
 NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its Home Tile is.
 \end{classcom} \\
 \begin{schema}{notifyAutoMovement}
 \Delta (hint)
 \where
-hint' = \emptyset
+hint' = Null.selfRef
 \end{schema}\\
 \begin{classcom}
 NotifyHint is used by the Controller to pass the hint of the Board to the Robot. Since each Robot may store a list with all the hints it has received, the new hint is simply added to the list of hints.
 \end{classcom} \\
 \begin{schema}{notifyHint}
 \Delta (hint) \\
-newHint? : Hint
+hint? : Hint
 \where
-hint' = hint \cup \{newHint?\}
-\end{schema} \\
-play \sdef [coords : RelativeCoord, r : Rotation | \\ \t2 (coords, r) \in rules.possibleMoves] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; \comp \\ \t1 play
+hint' = \{hint?\} \union hint
+\end{schema}
 \end{class}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller. The variable 'boardChanged' is used as a flag to indicate that the board has changed and the Viewer has not yet updated the view.
 \begin{class}{Viewer}
 \begin{state}
 controller : Controller \\
-boardChanged : \bool \\
-currentSnapshot : BoardSnapshot \\
+boardChanged : \bool
 \end{state}\\
 \begin{classcom}
 In initialize, the Viewer attaches itself to the Controller, using the addViewer-method; the viewer parameter in addViewer is this Viewer. ???
 \end{classcom} \\
-\begin{schema}{Init}
-boardChanged = \false
+\begin{schema}{initialize}
+\Delta (controller)
+\where
+\exists a : addViewer | a.viewer? = self \implies \\ \t1
+a.output! = controller' \\ \t1
+boardChanged' = \false
 \end{schema}\\
 \begin{classcom}
 When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode.
 \end{classcom} \\
-notifyGameOver \sdef \mathbb{M}.showFireworks \\
+\begin{schema}{notifyGameOver}
+robot? : Robot
+\where
+Fireworks
+\end{schema}\\
 \begin{classcom}
 With notifyStateChange, the Viewer is notified by the Controller that the Board has changed. The Viewer sets boardChanged to true, to indicate that it has not yet updated the view.
 \end{classcom} \\
@@ -458,42 +601,93 @@ boardChanged' = \true
 \begin{classcom}
 The updateView-method uses the value of boardChanged to update the view. If this variable is true, then the Viewer requests a new snapshot from the Board, via the Controller, and updates the view. After the update, boardChanged is set to false. If boardChanged is false, then the previous snapshot is still up-to-date and nothing is changed. Note that the variable controller in Viewer never changes here, because it is simply used to request a board snapshot.
 \end{classcom} \\
-updateView \sdef ([boardChanged = \false] \;\; [] \\ \t1
-([boardChanged = \true] \wedge controller.requestBoardStatus \;\; \comp \\ \t2 [\Delta(currentSnapshot), board? : BoardSnapshot | \\ \t3 currentSnapshot' = board?])) \; \; \comp \\ \t1 \mathbb{M}.updateScreen
+\begin{schema}{updateView}
+\Delta (controller, snapShot)
+\where
+\IF boardChanged = \true \\
+\THEN \exists r: requestBoardStatus | output! = snapShot' \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller \\
+\ELSE snapShot' = snapShot \\ \t1
+boardChanged' = \false \\ \t1
+controller' = controller
+\end{schema}
 \end{class}
 
 The controller has knowledge about the Board and the Viewer; it also maintains a list of the robots.
 \begin{class}{Controller}
 \begin{state}
 board : Board \\
-robots : \power Robot \\
+robots : \power Robot
 viewer : Viewer
 \end{state}\\
 \begin{classcom}
 addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
 \end{classcom} \\
+\begin{schema}{addViewer}
+\Delta (viewer) \\
+viewer? : Viewer \\
+output! : Controller
+\where
+\IF viewer = Null \\
+\THEN viewer' = viewer? \\ \t1
+output! = self \\
+\ELSE output! = Null.selfRef
+\end{schema}\\
 \begin{classcom}
 notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile.
 \end{classcom} \\
-notifyAutoMovement \sdef robot?.notifyAutomovement \\
+\begin{schema}{notifyAutoMovement}
+robot? : Robot
+\where
+robot?.notifyAutomovement
+\end{schema}\\
 \znewpage
 \begin{classcom}
 moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate.
 \end{classcom} \\
-moveRequest \sdef board.moveRequest \comp ([output? \not = WIN] [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
+\begin{schema}{moveRequest}
+localCoords? : RelativeCoord \\
+robot? : Robot \\
+rotation? : Rotation \\
+ouput! : BoardResponse
+\where
+\exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
+m.robot? = robot? \\ \t1
+m.rotation? = rotation? \\ \t1
+m.output! = output! \\ \t1
+\IF output! = WIN \\ \t1
+\THEN \forall r : Robot | r.terminate \\ \t2
+\exists n : viewer.notifyGameOver | n.robot? = robot? \\ \t2
+board.canReset \\ \t2
+terminate
+\end{schema}\\
 \begin{classcom}
 Notify the controller of an appropriate hint.
 \end{classcom} \\
-notifyHint \sdef robot?.notifyHint \\
+\begin{schema}{notifyHint}
+hint? : Hint \\
+robot? : Robot
+\where
+\exists n : robot.notifyHint | n.hint? = hint?
+\end{schema}\\
 \begin{classcom}
 Notify the viewer that the board has changed.
 \end{classcom} \\
-notifyView \sdef view.notifyStateChange
+\begin{schema}{notifyView}
+\where
+\exists n : notifyStateChange
+\end{schema}
 \znewpage
 \begin{classcom}
 Initialize the controller so that it can be referred to.
 \end{classcom} \\
-\begin{schema}{Init}
+\begin{schema}{preInitialize}
+\Delta (board, robots, vieuwer)
+\where
+board' = Null.selfRef \\
+robots' = Null.selfRef \\
+viewer' = Null.selfRef
 \end{schema}\\
 \begin{classcom}
 The real initialization of the controller, giving it a board and robots.
@@ -510,9 +704,18 @@ robots' = robots?
 Remove a viewer (so that eventually, a new one can be added).
 \end{classcom} \\
 \begin{schema}{removeViewer}
+\Delta (viewer, robots, board)
+\where
+viewer' = Null.selfRef \\
+robots' = robots \\
+board' = board
 \end{schema}\\
 \begin{classcom}
 Function to get a snapshot of the board.
 \end{classcom} \\
-requestBoardStatus \sdef board.requestSnapshot
+\begin{schema}{requestBoardStatus}
+output! : BoardSnapShot
+\where
+\exists r : requestSnapShot | r.output! = output!
+\end{schema}
 \end{class}
