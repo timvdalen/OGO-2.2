@@ -1,0 +1,23 @@
+\digraph[scale=0.3]{HMSC_req}{
+rankdir=LR;
+p2 [label="",shape="point"];
+p3 [label="",shape="point"];
+p4 [label="",shape="point"];
+init [label="Initialize",shape="Mrecord"];
+mvreq [label="Robot move request",shape="Mrecord",style=filled];
+mvrej [label="Reject move",shape="Mrecord"];
+retnt [label="Return Normal tile",shape="Mrecord"];
+retht [label="Return Hint tile",shape="Mrecord"];
+retct [label="Return Conveyor tile",shape="Mrecord"];
+retmt [label="Return Home tile",shape="Mrecord"];
+init->p2;
+p2->mvreq;
+mvreq->p3;
+p3->mvrej;
+mvrej->p2;
+p3->p4;
+p4->retnt;
+p4->retht;
+p4->retct;
+p4->retmt;
+}

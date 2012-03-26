@@ -4,27 +4,29 @@ msc
 
 b [label="Board"],
 c [label="Controller"],
-p [label="Robot"],
+p [label="Robot Lost"],
+pw [label="Robot Win"],
 v [label="View"];
 
 b box b [label=""],
 c box c [label=""],
 p box p [label=""],
+pw box pw [label=""],
 v box v [label=""];
 
 |||;
 
 c -> p [label="terminate"];
 p rbox p [label="terminate()"];
-p note p [label="From here on, robot is the robot that has won the game"];
+c note p [label="All robots who lost the game receive a terminate from the controller."];
 c -> v [label="notifyGameOver(robot)"];
 v rbox v [label="fireworks"];
 v -> c [label="removeViewer()"];
 c -> b [label="canReset"];
 v rbox v [label="terminate"],
 b rbox b [label="reset()"],
-c rbox c [label="terminate"],
-p rbox p [label="terminate"];
+c rbox c [label="terminate()"],
+pw rbox pw [label="terminate()"];
 
 
 |||;
@@ -32,6 +34,7 @@ p rbox p [label="terminate"];
 b box b [label="",textbgcolor="black"],
 c box c [label="",textbgcolor="black"],
 p box p [label="",textbgcolor="black"],
+pw box pw [label="",textbgcolor="black"],
 v box v [label="",textbgcolor="black"];
 
 }

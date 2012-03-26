@@ -11,11 +11,9 @@ c box c [label=""];
 
 |||;
 
-d => c [label="requestBoardSnapshot()"];
-c => b [label="requestBoardSnapshot()"];
 b rbox b [label="make snapshot"];
-b >> c [label="BoardSnapshot"];
-c >> d [label="BoardSnapshot"];
+b -> c [label="notifyViewer(snapshot)"];
+c -> d [label="notifyStateChange(snapshot)"];
 d rbox d [label="updateView()"];
 
 |||;

@@ -5,22 +5,17 @@ msc
 d [label="Board"],
 c [label="Controller"],
 a [label="Robot"],
-v [label="Viewer"];
 
 d box d [label=""],
 c box c [label=""],
-a box a [label=""],
-v box v [label=""];
+a box a [label=""];
 
 |||;
 
 d rbox d [label="calculateNewLocation(localCoords, robot)"];
 d rbox d [label="saveLocation(absCoords, robot)"];
 d >> c [label="SUCCESS"];
-...;
 c >> a [label="SUCCESS"];
-c -> v [label="notifyStateChange()"];
-...;
 d rbox d [label="getHint(robot)"];
 d -> c [label="notifyHint(hint, robot)"];
 c -> a [label="notifyHint(hint)"];
@@ -29,9 +24,7 @@ c -> a [label="notifyHint(hint)"];
 
 a box a [label="", textbgcolor="black"],
 c box c [label="", textbgcolor="black"],
-d box d [label="", textbgcolor="black"],
-v box v [label="", textbgcolor="black"];
-
+d box d [label="", textbgcolor="black"];
 }
 \end{msc}
 \digraph[scale=0.5]{HMSC_mvht}{

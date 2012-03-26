@@ -1,0 +1,31 @@
+\begin{msc}
+msc
+{
+
+d [label="Board"],
+c [label="Controller"],
+a [label="Robot"],
+r [label="Rule"];
+
+d box d [label=""],
+c box c [label=""],
+a box a [label=""],
+r box r [label=""];
+
+|||;
+
+a => c [label="moveRequest(localCoords, robot, rotation)"];
+c => d [label="moveRequest(localCoords, robot, rotation)"];
+d rbox d [label="get possible moves"], r note r [label="references the robot's ruleset"];
+d rbox d [label="get possible rotations"];
+d rbox d [label="check if robot can be placed"];
+
+|||;
+
+a box a [label="", textbgcolor="black"],
+c box c [label="", textbgcolor="black"],
+d box d [label="", textbgcolor="black"],
+r box r [label="", textbgcolor="black"];
+
+}
+\end{msc}
