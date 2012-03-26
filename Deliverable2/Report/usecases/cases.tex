@@ -1,9 +1,9 @@
 \begin{alltt}
 \rm
 Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found. \\
-A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
+A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint. \\
 
-The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
+The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized. \\
 
 Initialize
 - Pre-conditions: True
@@ -14,9 +14,9 @@ Initialize
     (b) The board pre-initializes the controller
     (c) The board initializes all robots (one by one)
     (d) The board post-initializes the controller with all the robots
-- Alternatives
+- Alternatives \\
 
-The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized.
+The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized. \\
 
 Initialize viewer
 - Pre-conditions: True
@@ -26,9 +26,9 @@ Initialize viewer
     (a) The viewer initializes
     (b) The viewer keeps sending a message to the controller that he is the viewer as long as this is not acknowledged
     (c) The viewer gets a response from the controller
-- Alternatives
+- Alternatives \\
 
-The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
+The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile. \\
 
 Robot move Request
 - Pre-conditions: The game is initiated.
@@ -38,10 +38,9 @@ Robot move Request
     (a) The robot requests the controller if it may move
     (b) The controller sends the request to the board
     (c) The board checks the request
-- Alternatives
+- Alternatives \\
 
-
-The "Return Normal tile" use case illustrates the Return Normal tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a normal tile has been approved.
+The "Return Normal tile" use case illustrates the Return Normal tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a normal tile has been approved. \\
 
 Return Normal tile
 - Pre-conditions: The game is initiated. And the indicated position
@@ -53,9 +52,9 @@ Return Normal tile
     (a) The robot is moved to the indicated position which is a normal tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-- Alternatives
+- Alternatives \\
 
-The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved.
+The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved. \\
 
 Return Hint tile
 - Pre-conditions: The game is initiated. The indicated position
@@ -70,9 +69,9 @@ Return Hint tile
     (d) The board generates a hint for the robot
     (e) The board notifies the controller of the hint and the robot it needs to be send to
     (f) The controller sends the hint to the robot
-- Alternatives
+- Alternatives \\
 
-The "Return Conveyor tile" use case illustrates the Return Conveyor tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a conveyor tile has been approved.
+The "Return Conveyor tile" use case illustrates the Return Conveyor tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a conveyor tile has been approved. \\
 
 Return Conveyor tile
 - Pre-conditions: The game is initiated. And the indicated position
@@ -88,9 +87,9 @@ Return Conveyor tile
     (d) The board calculates the new position (after movement over the conveyor tile)
     (e) The board notifies the controller that a robot has been moved automatically
     (f) The controller notifies the robot that it has been moved automatically
-- Alternatives
+- Alternatives \\
 
-The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved.
+The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved. \\
 
 Return Home tile
 - Pre-conditions: The game is initiated. And the indicated position
@@ -102,9 +101,9 @@ Return Home tile
     (a) The robot is moved to the indicated position which is the robots home tile
     (b) The board notifies the controller that the move request has been approved and the robot has won
     (c) The controller notifies the robot that his move request has been approved, that the robot has been moved to the requested position and that the robot has won
-- Alternatives
+- Alternatives \\
 
-The "Reject move" use case illustrates the Reject move state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request has been rejected.
+The "Reject move" use case illustrates the Reject move state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request has been rejected. \\
 
 Reject move
 - Pre-conditions: The game is initiated. A move request of a robot is rejected.
@@ -113,9 +112,9 @@ Reject move
 - Main Scenarios
     (a) The board sends the reject message to the controller
     (b) The controller sends the reject message to the robot
-- Alternatives
+- Alternatives \\
 
-The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
+The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed. \\
 
 Update viewer
 - Pre-conditions: The game is initiated
@@ -124,9 +123,9 @@ Update viewer
 - Main Scenarios
     (a) Receive a new snapshot from the controller
     (b) Update view by the received snapshot
-- Alternatives
+- Alternatives \\
 
-The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
+The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both). \\
 
 Tiles exchange
 - Pre-conditions: The game is initiated.
@@ -141,12 +140,12 @@ Tiles exchange
     (d.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) and swaps along with the tile (special exchange)
     (e.1) The board returns a robot pair containing the switched robot
     (f.1) The board notifies the controller that a robot has moved
-    (g.1) The controller notifies the robot that is has been moved
+    (g.1) The controller notifies the robot that is has been moved \\
 
-    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange)
+    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange) \\
 
 
-The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile).
+The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile). \\
 
 Notify robots
 - Pre-conditions: The game is initiated.
@@ -155,9 +154,9 @@ Notify robots
 - Main Scenarios
     (a) The board sends a message to the controller, notifying it that a robot has been moved
     (b) The controller notifies the robot that it has been moved
-- Alternatives
+- Alternatives \\
 
-The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile.
+The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile. \\
 
 End game
 - Pre-conditions: The game is initiated.
