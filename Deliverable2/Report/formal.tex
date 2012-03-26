@@ -1,10 +1,8 @@
-In this section, the formal specification that we are going to use to implement this project is given.
-
-The specification is written in Object-Z, an extension of the Z language.
+In this section, the Z-specification is given. The specification is written in Object-Z, an extension of the Z language.
 
 \subsection{Basic Axiomatic definitions}
-Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
-In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
+Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, these are defined as a separate set. \\
+In the class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Below, the Z specification of these enumerators is given.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -23,7 +21,7 @@ Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST
 \end{zed}
 
 \subsection{Classes}
-We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
+In the class diagram, there are two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
 \begin{class}{Coord}
 \upharpoonright (x, y) \\
@@ -196,7 +194,7 @@ robots' = Null \\
 controller' = Null
 \end{schema} \\
 \begin{classcom}
-We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
+A snapshot is made by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
 \end{classcom} \\
 \begin{schema}{requestSnapShot}
 snapshot? : BoardSnapshot
