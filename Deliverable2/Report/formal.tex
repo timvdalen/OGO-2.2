@@ -1,10 +1,10 @@
-In this section, the formal specification that we are going to use to implement this project is given.
+In this section, the formal specification that is going to be used to implement this project is given.
 
 The specification is written in Object-Z, an extension of the Z language.
 
 \subsection{Basic Axiomatic definitions}
 Several attributes that are used in later definitions in our Z schemas are defined in this section. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
-In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
+In our class diagram, several enumerators are used: Hint, BoardResponse and Rotation. Below, shown below is the Z specification of these enumerators.
 
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -635,7 +635,7 @@ output! = self \\
 \ELSE output! = Null.selfRef
 \end{schema}\\
 \begin{classcom}
-notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile. 
+notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile.
 \end{classcom} \\
 \begin{schema}{notifyAutoMovement}
 robot? : Robot

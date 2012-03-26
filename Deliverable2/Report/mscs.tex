@@ -2,7 +2,7 @@ This section contains the message sequence charts, both of high and class level.
 \subsection{High Level Message Sequence Chart}
 	
 	\begin{minipage}{\linewidth}
-		The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs. The graph consists of two parts that run concurrently, the viewer part and the main game part. The viewer part will make sure the viewer updates regularly. The main game part follows the flow of a normal game.
+		The following graph represents our high level message sequence chart and shows how a normal program flow is modeled by MSCs.
 		
 		\input{hmsc}	
 	\end{minipage}
@@ -18,13 +18,6 @@ This section contains the message sequence charts, both of high and class level.
 
 	In several MSCs, co-regions are used to denote that the messages in these regions can be send in any order. For example, in the MSC 'Return Normal Tile', the order in which the board response and the notify to the viewer are send is not important; it is more important that these messages or signals are received by the appropriate entities. As another example, consider the MSC 'Initialize'. In this MSC, it is important that several entities are initialized before others, like the board is initialized before the robots. Hence, in this MSC the order plays a central role for the flow of the programm. In our MSCs, the symbol $\vdots$ denotes the start and end of a co-region.
 
-    	\subsubsection{Update viewer}
-	\begin{minipage}{\linewidth}
-		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed.
-
-		\input{MSC-files/viewer_update.tex}
-	\end{minipage}
-
 	\subsubsection{Initialize}
 	\begin{minipage}{\linewidth}
 		When the game starts, the board is initialized. When this is done, the board sends a preInitialize to the controller. When the controller is done with that, the board will initialize all robots (choosing the appropriate rule for them), which will reply with an 'OK' when done. When all robots have been initialized, the board sends a postInitialize to the controller. All entities are now initialized. \\
@@ -32,7 +25,7 @@ This section contains the message sequence charts, both of high and class level.
 
 		\input{MSC-files/initialize.tex}
     \end{minipage}
-    
+
     \subsubsection{Initialize viewer}
 	\begin{minipage}{\linewidth}
 		The viewer is initialized by the world. Note that the world provides a parameter 'controller' to the viewer, so the viewer knows how to address the controller. Analogous to the HMSC, this happens after the components of the game (board, controller, etcetera) have been initialized. After the call has been received, the viewer will initialize itself and will attach itself to the controller, via addViewer. Once the viewer has been succesfully attached, the controller returns itself to notify the viewer of this success.
@@ -84,6 +77,13 @@ This section contains the message sequence charts, both of high and class level.
 	\end{minipage}
 
 	\advance\count17 by -6
+
+    \subsubsection{Update viewer}
+	\begin{minipage}{\linewidth}
+        Whenever the board has changed, either because of a move request or a tiles exchange, the board prepares a snapshot for the viewer.	The board notifies the controller that it has a new snapshot for the viewer, using notifyViewer. The controller will then notify the viewer and send the board snapshot, using notifyStateChange; the viewer will internally update its view.
+
+		\input{MSC-files/viewer_update.tex}
+	\end{minipage}
 
 	\subsubsection{Ordinary exchange}
 	\begin{minipage}{\linewidth}
