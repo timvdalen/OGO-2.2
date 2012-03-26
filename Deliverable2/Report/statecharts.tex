@@ -44,13 +44,11 @@ If the response equals WIN, the robot has reached it's hometile and has won the 
 \\
 If the response equals SUCCES the request move is allowed and the robot is moved, if the robot has stepped on a hintTile it will receive a hint via the notifyHint() function and go to the OnHintTile state, if the robot has reached a regularTile or a conveyorTile it goes to the OnRegularOrConveyorTile and receive a notifyAutoMovement() function if it has been moved by a conveyorTile.\\
 \\
-If the resoponse equals FAILED the robot will stay at it's current tile and nothing special will happen.\\
-	
+If the resoponse equals FAILED the robot will stay at it's current tile and nothing special will happen.\\	
 	\includegraphics[width=\linewidth]{statecharts/robot.pdf}
 
 \subsection{System level}
 	The following graph is our system level state chart, which contains all our class level state charts and gives an overview of the complete system. Although this state chart is mostly trivial, it gives a more complete view of the entire system, thus it is shown below.\\
-
 	\includegraphics[width=\linewidth]{statecharts/system.pdf}
 
 \subsection{Relation to other sections}
