@@ -250,6 +250,8 @@ rotate90Deg(NORTH\_WEST) = SOUTH\_WEST \\
 rotate90Deg(SOUTH\_WEST) = SOUTH\_EAST \\
 rotate90Deg(SOUTH\_EAST) = NORTH\_EAST
 \end{axdef} \\
+sendPossibleHint \sdef [robot? : Robot | \\ \t2 \neg \exists c : \ran tiles | c \in HintTile \wedge c.occupier = robot?] \; \; [] \\ \t1
+(getHint \comp controller.notifyHint) \\
 \begin{schema}{getHint}
 robot? : Robot \\
 output!: Hint \\
@@ -300,7 +302,7 @@ moveBlockedRobot \sdef [c, d : \dom tiles, r : \dom robots | \\ \t1 tiles(c) \in
 moveBlockedRobotsRecursive \sdef (moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = Null \wedge conveyorDest(c) = c] \\
 \znewpage
 requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
-\t1 [t1, t2 : Tile | t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \\
+\t1 [t1, t2 : Tile | t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp board.notifyView \\
 \begin{classcom}
 This functions deals with the moveRequest of the controller
 \end{classcom} \\
@@ -373,7 +375,8 @@ beginTile!.occupier = robot?
 \THEN output! = SUCCESS \wedge autoMovement! = \false \; \; \wedge \\ \t1  putTile! = path(\#path - 1) \\
 \ELSE output! = FAILED \wedge autoMovement! = \false \wedge putTile! = Null
 \end{schema} \\
-moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([output? = FAILED] \; \; [] \\ \t2 [output? = SUCCESS \vee output? = WIN] \wedge begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?]) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 [autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?]))
+moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([output? = FAILED] \; \; [] \\ \t2 [output? = SUCCESS \vee output? = WIN] \wedge begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge board.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 [autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?])) \; \; \comp \\ \t1
+moveBlockedRobotsRecursive
 \end{class}
 
 A BoardSnapshot is simply a copy of the current state of the board; therefore, the BoardSnapshot maintains a mapping of absolute coordinates to the tiles.
@@ -393,7 +396,7 @@ A Rule consists of a list of possible moves and a list of possible rotations. Th
 possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
 possibleRotations : \power Rotation
 \where
-\forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(\#possibleMoves(c, r) - 1) = c
+\forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
 \end{state} \\
 \end{class}
 
@@ -419,7 +422,7 @@ controller? : Controller \\
 rules? : Rules
 \where
 controller' = controller? \\
-rules' = rules? \\
+rules' = rules?
 \end{schema} \\
 \begin{classcom}
 NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its Home Tile is.
@@ -427,43 +430,37 @@ NotifyAutoMovement is used by the Controller to notify that the Robot was moved,
 \begin{schema}{notifyAutoMovement}
 \Delta (hint)
 \where
-hint' = Null.selfRef
+hint' = \emptyset
 \end{schema}\\
 \begin{classcom}
 NotifyHint is used by the Controller to pass the hint of the Board to the Robot. Since each Robot may store a list with all the hints it has received, the new hint is simply added to the list of hints.
 \end{classcom} \\
 \begin{schema}{notifyHint}
 \Delta (hint) \\
-hint? : Hint
+newHint? : Hint
 \where
-hint' = \{hint?\} \union hint
-\end{schema}
+hint' = hint \cup \{newHint?\}
+\end{schema} \\
+play \sdef [coords : RelativeCoord, r : Rotation | \\ \t2 (coords, r) \in rules.possibleMoves] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; \comp \\ \t1 play
 \end{class}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller. The variable 'boardChanged' is used as a flag to indicate that the board has changed and the Viewer has not yet updated the view.
 \begin{class}{Viewer}
 \begin{state}
 controller : Controller \\
-boardChanged : \bool
+boardChanged : \bool \\
+currentSnapshot : BoardSnapshot \\
 \end{state}\\
 \begin{classcom}
 In initialize, the Viewer attaches itself to the Controller, using the addViewer-method; the viewer parameter in addViewer is this Viewer. ???
 \end{classcom} \\
-\begin{schema}{initialize}
-\Delta (controller)
-\where
-\exists a : addViewer | a.viewer? = self \implies \\ \t1
-a.output! = controller' \\ \t1
-boardChanged' = \false
+\begin{schema}{Init}
+boardChanged = \false
 \end{schema}\\
 \begin{classcom}
 When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode.
 \end{classcom} \\
-\begin{schema}{notifyGameOver}
-robot? : Robot
-\where
-Fireworks
-\end{schema}\\
+notifyGameOver \sdef \mathbb{M}.showFireworks \\
 \begin{classcom}
 With notifyStateChange, the Viewer is notified by the Controller that the Board has changed. The Viewer sets boardChanged to true, to indicate that it has not yet updated the view.
 \end{classcom} \\
@@ -476,93 +473,42 @@ boardChanged' = \true
 \begin{classcom}
 The updateView-method uses the value of boardChanged to update the view. If this variable is true, then the Viewer requests a new snapshot from the Board, via the Controller, and updates the view. After the update, boardChanged is set to false. If boardChanged is false, then the previous snapshot is still up-to-date and nothing is changed. Note that the variable controller in Viewer never changes here, because it is simply used to request a board snapshot.
 \end{classcom} \\
-\begin{schema}{updateView}
-\Delta (controller, snapShot)
-\where
-\IF boardChanged = \true \\
-\THEN \exists r: requestBoardStatus | output! = snapShot' \\ \t1
-boardChanged' = \false \\ \t1
-controller' = controller \\
-\ELSE snapShot' = snapShot \\ \t1
-boardChanged' = \false \\ \t1
-controller' = controller
-\end{schema}
+updateView \sdef ([boardChanged = \false] \;\; [] \\ \t1
+([boardChanged = \true] \wedge controller.requestBoardStatus \;\; \comp \\ \t2 [\Delta(currentSnapshot), board? : BoardSnapshot | \\ \t3 currentSnapshot' = board?])) \; \; \comp \\ \t1 \mathbb{M}.updateScreen
 \end{class}
 
 The controller has knowledge about the Board and the Viewer; it also maintains a list of the robots.
 \begin{class}{Controller}
 \begin{state}
 board : Board \\
-robots : \power Robot
+robots : \power Robot \\
 viewer : Viewer
 \end{state}\\
 \begin{classcom}
 addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
 \end{classcom} \\
-\begin{schema}{addViewer}
-\Delta (viewer) \\
-viewer? : Viewer \\
-output! : Controller
-\where
-\IF viewer = Null \\
-\THEN viewer' = viewer? \\ \t1
-output! = self \\
-\ELSE output! = Null.selfRef
-\end{schema}\\
 \begin{classcom}
 notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile.
 \end{classcom} \\
-\begin{schema}{notifyAutoMovement}
-robot? : Robot
-\where
-robot?.notifyAutomovement
-\end{schema}\\
+notifyAutoMovement \sdef robot?.notifyAutomovement \\
 \znewpage
 \begin{classcom}
 moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate.
 \end{classcom} \\
-\begin{schema}{moveRequest}
-localCoords? : RelativeCoord \\
-robot? : Robot \\
-rotation? : Rotation \\
-ouput! : BoardResponse
-\where
-\exists m : Board.moveRequest | m.localCoords? = localCoords \\ \t1
-m.robot? = robot? \\ \t1
-m.rotation? = rotation? \\ \t1
-m.output! = output! \\ \t1
-\IF output! = WIN \\ \t1
-\THEN \forall r : Robot | r.terminate \\ \t2
-\exists n : viewer.notifyGameOver | n.robot? = robot? \\ \t2
-board.canReset \\ \t2
-terminate
-\end{schema}\\
+moveRequest \sdef board.moveRequest \comp ([output? \not = WIN] [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
 \begin{classcom}
 Notify the controller of an appropriate hint.
 \end{classcom} \\
-\begin{schema}{notifyHint}
-hint? : Hint \\
-robot? : Robot
-\where
-\exists n : robot.notifyHint | n.hint? = hint?
-\end{schema}\\
+notifyHint \sdef robot?.notifyHint \\
 \begin{classcom}
 Notify the viewer that the board has changed.
 \end{classcom} \\
-\begin{schema}{notifyView}
-\where
-\exists n : notifyStateChange
-\end{schema}
+notifyView \sdef view.notifyStateChange
 \znewpage
 \begin{classcom}
 Initialize the controller so that it can be referred to.
 \end{classcom} \\
-\begin{schema}{preInitialize}
-\Delta (board, robots, vieuwer)
-\where
-board' = Null.selfRef \\
-robots' = Null.selfRef \\
-viewer' = Null.selfRef
+\begin{schema}{Init}
 \end{schema}\\
 \begin{classcom}
 The real initialization of the controller, giving it a board and robots.
@@ -579,20 +525,11 @@ robots' = robots?
 Remove a viewer (so that eventually, a new one can be added).
 \end{classcom} \\
 \begin{schema}{removeViewer}
-\Delta (viewer, robots, board)
-\where
-viewer' = Null.selfRef \\
-robots' = robots \\
-board' = board
 \end{schema}\\
 \begin{classcom}
 Function to get a snapshot of the board.
 \end{classcom} \\
-\begin{schema}{requestBoardStatus}
-output! : BoardSnapShot
-\where
-\exists r : requestSnapShot | r.output! = output!
-\end{schema}
+requestBoardStatus \sdef board.requestSnapshot
 \end{class}
 
 \end{document} 
