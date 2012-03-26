@@ -3,17 +3,6 @@
 Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found. \\
 A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
 
-The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
-
-Update viewer
-- Pre-conditions: The game is initiated
-- Trigger: Notify and new snapshot by the controller
-- Guarantee: Update viewer
-- Main Scenarios
-    (a) Receive a new snapshot from the controller
-    (b) Update view by the received snapshot
-- Alternatives
-
 The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
 
 Initialize
@@ -124,6 +113,17 @@ Reject move
 - Main Scenarios
     (a) The board sends the reject message to the controller
     (b) The controller sends the reject message to the robot
+- Alternatives
+
+The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
+
+Update viewer
+- Pre-conditions: The game is initiated
+- Trigger: Notify and new snapshot by the controller
+- Guarantee: Update viewer
+- Main Scenarios
+    (a) Receive a new snapshot from the controller
+    (b) Update view by the received snapshot
 - Alternatives
 
 The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both).
