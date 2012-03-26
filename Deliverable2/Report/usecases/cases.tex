@@ -3,18 +3,6 @@
 Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found. \\
 A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
 
-The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized.
-
-Initialize viewer
-- Pre-conditions: True
-- Trigger: The user presses the start game button
-- Guarantee: Initialized viewer
-- Main Scenarios
-    (a) The viewer initializes
-    (b) The viewer keeps sending a message to the controller that he is the viewer as long as this is not acknowledged
-    (c) The viewer gets a response from the controller
-- Alternatives
-
 The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed.
 
 Update viewer
@@ -39,10 +27,22 @@ Initialize
     (d) The board post-initializes the controller with all the robots
 - Alternatives
 
+The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized.
+
+Initialize viewer
+- Pre-conditions: True
+- Trigger: The user presses the start game button
+- Guarantee: Initialized viewer
+- Main Scenarios
+    (a) The viewer initializes
+    (b) The viewer keeps sending a message to the controller that he is the viewer as long as this is not acknowledged
+    (c) The viewer gets a response from the controller
+- Alternatives
+
 The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
 Robot move Request
-- Pre-conditions: The game is initiated. 
+- Pre-conditions: The game is initiated.
 - Trigger: A robot requests to move his position.
 - Guarantee: The robot request is checked.
 - Main Scenarios
