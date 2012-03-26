@@ -24,8 +24,7 @@ Initialize viewer
 - Guarantee: Initialized viewer
 - Main Scenarios
     (a) The viewer initializes
-    (b) The viewer keeps sending a message to the controller that he is the viewer as long as this is not acknowledged
-    (c) The viewer gets a response from the controller
+    (b) The viewer sends a message to the controller
 - Alternatives \\
 
 The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile. \\
@@ -67,7 +66,7 @@ Return Hint tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
     (d) The board generates a hint for the robot
-    (e) The board notifies the controller of the hint and the robot it needs to be send to
+    (e) The board notifies the controller of the hint
     (f) The controller sends the hint to the robot
 - Alternatives \\
 
@@ -81,12 +80,11 @@ Return Conveyor tile
 - Guarantee: The robot is moved to the indicated position which
     is a conveyor belt tile.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is a conveyor
+    (a) The robot is moved to the indicated position which is a conveyor tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-    (d) The board calculates the new position (after movement over the conveyor tile)
-    (e) The board notifies the controller that a robot has been moved automatically
-    (f) The controller notifies the robot that it has been moved automatically
+    (d) The board notifies the controller that a robot has been moved automatically
+    (e) The controller notifies the robot that it has been moved automatically
 - Alternatives \\
 
 The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved. \\
@@ -121,29 +119,28 @@ Update viewer
 - Trigger: Notify and new snapshot by the controller
 - Guarantee: Update viewer
 - Main Scenarios
-    (a) Receive a new snapshot from the controller
-    (b) Update view by the received snapshot
+    (a) The board makes a snapshot
+    (b) The board sends the snapshot to the controller
+    (c) The controller sends the snapshot to the viewer
+    (b) The viewer updates the view with the received snapshot
 - Alternatives \\
 
-The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both). \\
+The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). This case corresponds with the "Ordinary exchange" MSC that can be found in the High Level Message Sequence Chart. In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both). This reflects with the "Special exchange" MSC that can be found in the High Level Message Sequence Chart. Note that both the alternatives can occur simultaneously. That is, a robot on a conveyor tile could be selected. Also, two tiles with robots can be selected.\\
 
 Tiles exchange
 - Pre-conditions: The game is initiated.
 - Trigger:  A robot has moved.
 - Guarantee: Two tiles are exchanged
 - Main Scenarios
-    (a) The controller calls requestTilesExchange
+    (a) The controller requests a tile exchange from the board
     (b) Two valid tiles are chosen
-    (c) The chosen tiles are exchanged (if the tiles are empty, this is the ordinary exchange that can be found in the high level message sequence chart)
-    (d) The board returns an empty robot pair to the controller
+    (c) The chosen tiles are exchange
 - Alternatives
-    (d.1) If a chosen tile contains a robot, the robot will rotate (this can be the same) and swaps along with the tile (special exchange)
-    (e.1) The board returns a robot pair containing the switched robot
-    (f.1) The board notifies the controller that a robot has moved
-    (g.1) The controller notifies the robot that is has been moved \\
+    (d.1) If a chosen tile contains a robot, the robot will rotate and swaps along with the tile
+    (e.1) The board notifies the controller that a robot has moved
+    (f.1) The controller notifies the robot that is has been moved \\
 
-    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile might change (can also be the same) (special exchange) \\
-
+    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed \\
 
 The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile). \\
 
@@ -156,19 +153,18 @@ Notify robots
     (b) The controller notifies the robot that it has been moved
 - Alternatives \\
 
-The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile. \\
+The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile. Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).\\
 
 End game
 - Pre-conditions: The game is initiated.
 - Trigger:  A robot has reached its home tile.
 - Guarantee: The game is properly terminated.
 - Main Scenarios
-    (a) The controller sends a terminate message to the every robot (except for the one that has won), hereby notifying them that they have lost and making them terminate
-    (b) Winning robot terminates (had a WIN message before, so knows he can)
-    (c) Notify the viewer that the game is over and which robot has won
-    (d) The viewer displays fireworks
-    (e) The viewer is removed from the controller
-    (f) All remaining objects (except for the board) can now terminate, the board resets
+    (a) The controller sends a terminate message to the every robot that has lost
+    (b) Notify the viewer that the game is over and which robot has won
+    (c) The viewer displays fireworks
+    (d) The viewer is removed from the controller
+    (e) All remaining objects (except for the board) can now terminate, the board resets
 - Alternatives
 
 \end{alltt}
