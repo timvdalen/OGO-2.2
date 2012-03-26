@@ -8,7 +8,7 @@ fontname=Helvetica
 compound=true
 splines=ortho
 node [fontsize=8, fontname=Helvetica, shape=record]
-edge [fontsize=8, fontname=Helvetica, arrowhead=open, labeldistance=2]
+edge [fontsize=8, fontname=Helvetica, arrowhead=open, labeldistance=1.5]
 Board [label="{Board|- width : int\l- height : int\l|+ canReset() : bool\l+ initialize()\l+ moveRequest(loc : RelativeCoord, r : Robot, rot : Rotation) : BoardResponse\l+ requestTilesExchange() : bool\l- calculateNewLocation(loc : RelativeCoord, r : Robot) :
 AbsoluteCoord\l- getHint(r : Robot) : Hint\l- getValidTiles() : TilePair\l- reset()\l- saveLocation(loc : AbsoluteCoord, r : Robot)\l}"]
 Hint [label="{[Hint]| NORTH\l NORTH_EAST\l EAST\l SOUTH_EAST\l SOUTH\l SOUTH_WEST\l WEST\l NORTH_WEST\l}"]
@@ -39,6 +39,8 @@ Board->Robot [taillabel=1, headlabel="2..*"]
 Controller->Viewer [taillabel=1, headlabel=1, arrowhead=none]
 Controller->Robot [taillabel=1, headlabel="*", arrowhead=none]
 /**/
+Viewer->BoardSnapshot [taillabel=1, headlabel="0..1"]
+/**/
 Tile->Robot [taillabel=1, headlabel="              0..1 - occupier"]
 /**/
 HomeTile->Robot [taillabel=1, headlabel="              1 - homeRobot"]
@@ -52,7 +54,6 @@ NormalTile->Tile [ltail=cluster_Tiles,arrowhead=empty]
 Board->Hint [style=dashed]
 Board->BoardResponse [style=dashed]
 Board->AbsoluteCoord [style=dashed]
-Viewer->BoardSnapshot [style=dashed]
 Controller->AbsoluteCoord [style=dashed]
 Robot->RelativeCoord [style=dashed]
 Rule->Rotation [style=dashed]
