@@ -18,14 +18,6 @@ This section contains the message sequence charts, both of high and class level.
 
 	In several MSCs, co-regions are used to denote that the messages in these regions can be send in any order. For example, in the MSC 'Return Normal Tile', the order in which the board response and the notify to the viewer are send is not important; it is more important that these messages or signals are received by the appropriate entities. As another example, consider the MSC 'Initialize'. In this MSC, it is important that several entities are initialized before others, like the board is initialized before the robots. Hence, in this MSC the order plays a central role for the flow of the programm. In our MSCs, the symbol $\vdots$ denotes the start and end of a co-region.
 
-	\subsubsection{Initialize viewer}
-	\begin{minipage}{\linewidth}
-		The viewer is initialized by the world. Analogous to the HMSC, this happens concurrently to the Initialize MSC. \\
-For this MSC, the assumption is made that there already exists a viewer and that it knows about the other components in the game, when the call from the outside world is received. After the call has been received, the viewer will initialize itself and will try to attach itself to the controller. Since initializing the viewer happens concurrently to initializing the other components of the game, the controller may not have been initialized yet; the viewer will continuously try to attach itself, until it receives a response from the controller.
-	
-		\input{MSC-files/viewer_initialize.tex}
-	\end{minipage}
-
     	\subsubsection{Update viewer}
 	\begin{minipage}{\linewidth}
 		During the game execution, the viewer updates its view whenever it gets notified by the controller that the board has changed.
@@ -40,6 +32,13 @@ For this MSC, the assumption is made that there already exists a viewer and that
 
 		\input{MSC-files/initialize.tex}
     \end{minipage}
+    
+    \subsubsection{Initialize viewer}
+	\begin{minipage}{\linewidth}
+		The viewer is initialized by the world. Note that the world provides a parameter 'controller' to the viewer, so the viewer knows how to address the controller. Analogous to the HMSC, this happens after the components of the game (board, controller, etcetera) have been initialized. After the call has been received, the viewer will initialize itself and will attach itself to the controller, via addViewer. Once the viewer has been succesfully attached, the controller returns itself to notify the viewer of this success.
+	
+		\input{MSC-files/viewer_initialize.tex}
+	\end{minipage}
 
 	\subsubsection{Robot move request}
 	\begin{minipage}{\linewidth}
