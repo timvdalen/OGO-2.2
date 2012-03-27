@@ -26,7 +26,7 @@ public class FrameData{
 
 				if(occupier != null){
                                         //System.out.println("Occup[ier");
-					returnStr += ", \"occupier\":\" { \"id\":\"" + occupier.getID() + "\", \"rotation\":\"" + board.getRotation(occupier) +  "\"}\"";
+					returnStr += ", \"occupier\": { \"id\":\"" + occupier.getID() + "\", \"rotation\":\"" + board.getRotation(occupier) +  "}\"";
 				}else{
                                     //System.out.println("NO occu");
                                 }
