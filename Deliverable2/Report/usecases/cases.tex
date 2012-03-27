@@ -1,9 +1,11 @@
 \begin{alltt}
 \rm
 The use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case is given. After that, the main scenario (usual case) of the use case will be presented, along with possible alternatives, when necessary. \\
-A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
+A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. 
+This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
 
-The next use case illustrates the initialize MSC in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized.
+The next use case illustrates the initialize MSC in the High Level Message Sequence Chart. In this use case, 
+all of the different components (except for the viewer) will get initialized.
 
 Initialize
 - Pre-conditions: True
@@ -29,7 +31,8 @@ Initialize viewer
 - Alternatives
     none
 
-The "Robot move request" use case illustrates the Robot move request MSC in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
+The "Robot move request" use case illustrates the Robot move request MSC in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the 
+move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
 Robot move Request
 - Pre-conditions: The game is initiated.
@@ -125,7 +128,8 @@ Reject move
 - Alternatives
     none
 
-The "Update viewer" use case illustrates the Update viewer MSC in the High Level Message Sequence Chart. This use case illustrates how the viewer is updated, after something on the board has changed.
+The "Update viewer" use case illustrates the Update viewer MSC in the High Level Message Sequence Chart. This use case illustrates how the viewer is updated, after something on 
+the board has changed.
 
 Update viewer
 - Pre-conditions: The game is initiated.
@@ -158,7 +162,8 @@ Tiles exchange
 
     (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed
 
-The "Notify robots" use case illustrates the Notify robots MSC in the High Level Message Sequence Chart. This use case deals with robots that have been moved by the board, due to movement of another robot. For example, another robot first blocks the end of a conveyer tile, then moves away and causes another robot to be pushed of the conveyor belt. If the robot is moved to its home tile, the controller will also notify the robot of this.\\
+The "Notify robots" use case illustrates the Notify robots MSC in the High Level Message Sequence Chart. This use case deals with robots that have been moved by the board, due to movement of another robot. For example, another robot first blocks the end of a conveyer tile, then moves 
+away and causes another robot to be pushed of the conveyor belt. If the robot is moved to its home tile, the controller will also notify the robot of this.\\
 
 Notify robots
 - Pre-conditions: The game is initiated.
@@ -183,7 +188,7 @@ End game
     (b) Notify the viewer that the game is over and which robot has won
     (c) The viewer displays fireworks
     (d) The viewer is removed from the controller
-    (e) All remaining objects (except for the board) can now terminate, the board receives a message that it can reset.
+      (e) All remaining objects (except for the board) can now terminate, the board receives a message that it can reset.
 - Alternatives
     none
 
