@@ -32,7 +32,7 @@ public class XTremeRobotGames {
         b.addBrokenRobotTile(new AbsoluteCoord(8,4));
         b.addBrokenRobotTile(new AbsoluteCoord(9,4));
         b.addHintTile(new AbsoluteCoord(0,9));
-        b.addHintTile(new AbsoluteCoord(0,1));
+        b.addHintTile(new AbsoluteCoord(1,0));
         b.addHintTile(new AbsoluteCoord(4,2));
         b.addHintTile(new AbsoluteCoord(5,6));
         b.addConveyorTile(new AbsoluteCoord(3,8), Rotation.R180DEG);
