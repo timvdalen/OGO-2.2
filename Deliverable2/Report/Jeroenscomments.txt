@@ -1,0 +1,3 @@
+Check msc coregion comments
+Geen HMSC onder notify robots
+Nog steeds inspring problemen en zin afbreek problemen in de use cases (TIM?!?!?)
