@@ -48,7 +48,7 @@ public class Board {
 
     //DONE for the move..
     public BoardResponse moveRequest(RelativeCoord loc, Robot r, Rotation rot){
-        if(rot != Rotation.R0DEG){
+        if(rot != Rotation.R0DEG){                  //rulecheck
             if(r.r.possibleRotations.contains(rot)){
                 robotRotation.remove(r);
                 robotRotation.put(r, rot);
@@ -56,7 +56,7 @@ public class Board {
             } else {
                 return BoardResponse.FAILED;
             }
-        } else if(!r.r.possibleMoves.contains(loc)){
+        } else if(!r.r.possibleMoves.contains(loc)){    //rulecheck
             return BoardResponse.FAILED;
         } else {
             AbsoluteCoord position = calculateNewLocation(loc, r);
@@ -67,9 +67,18 @@ public class Board {
                     if(ht.homeRobot == r){
                         return BoardResponse.WIN;
                     } else {
+                    saveLocation(position, r);
                     return BoardResponse.SUCCESS;
                     }
             } else {
+                if(tiles[position.getX()][position.getY()].getClass() == ConveyorTile.class){
+                    AbsoluteCoord nposition = conveyorMove(position, r);
+                    if(nposition != position){
+                        position = nposition;
+                        r.notifyAutoMovement();
+                    }
+                }
+                saveLocation(position, r);
                 return BoardResponse.SUCCESS;
             }
         }
@@ -315,12 +324,55 @@ public class Board {
     //TO DO
     private AbsoluteCoord calculateNewLocation(RelativeCoord loc, Robot r){
         AbsoluteCoord position = robots.getAbsoluteCoord(r);
-        if(addAbstoRel(position, loc) == null){
+        AbsoluteCoord destination = addAbstoRel(position, loc);
+        int x = destination.getX() - position.getX();
+        int y = destination.getY() - position.getY();
+        if( destination == null){
             return null;
         } else {
-
+           if(x > 0 || y > 0){ //otherwise smaller than 0 for sure
+               if(x == 0){
+                   for(int i = 0; i <= y; i++){
+                       if(tiles[position.getX()][(position.getY()+i)].getClass() == BrokenRobotTile.class){
+                           return null;
+                       } else if(tiles[position.getX()][(position.getY()+i)].getClass() == ConveyorTile.class){
+                           RelativeCoord help = new RelativeCoord(0,i);
+                           return addAbstoRel(position, help);
+                       }
+                   }
+               } else {
+                   for(int i = 0; i <= x; i++){
+                       if(tiles[(position.getX()+i)][position.getY()].getClass() == BrokenRobotTile.class){
+                           return null;
+                       } else if(tiles[position.getX()+i][position.getY()].getClass() == ConveyorTile.class){
+                           RelativeCoord help = new RelativeCoord(i,0);
+                           return addAbstoRel(position, help);
+                       }
+                   }
+               }
+           } else {
+               if(x == 0){
+                   for(int i = 0; i >= y; i--){
+                       if(tiles[position.getX()][(position.getY()+i)].getClass() == BrokenRobotTile.class){
+                           return null;
+                       } else if(tiles[position.getX()][(position.getY()+i)].getClass() == ConveyorTile.class){
+                           RelativeCoord help = new RelativeCoord(0,i);
+                           return addAbstoRel(position, help);
+                       }
+                   }
+               } else {
+                   for(int i = 0; i >= x; i--){
+                       if(tiles[(position.getX()+i)][position.getY()].getClass() == BrokenRobotTile.class){
+                           return null;
+                       } else if(tiles[position.getX()+i][position.getY()].getClass() == ConveyorTile.class){
+                           RelativeCoord help = new RelativeCoord(i,0);
+                           return addAbstoRel(position, help);
+                       }
+                   }
+               }
+           }
         }
-        return null;
+        return null; // just to be sure
     }
 
     //TO DO
@@ -330,6 +382,9 @@ public class Board {
 
     //TO DO
     private void reset(){
+        if(canReset()){
+           //reset.
+        }
 
     }
 
