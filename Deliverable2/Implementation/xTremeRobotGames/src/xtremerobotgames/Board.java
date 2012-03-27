@@ -38,6 +38,7 @@ public class Board {
     }
 
     public void addRobot(Robot r, AbsoluteCoord abs, AbsoluteCoord hometile, Rotation rot){
+        tiles[abs.getX()][abs.getY()].occupier = r;
         robots.addRobot(r, abs);
         tiles[hometile.getX()][hometile.getY()] = new HomeTile(r);
         home.put(r, tiles[hometile.getX()][hometile.getY()]);
