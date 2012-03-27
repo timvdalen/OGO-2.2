@@ -1,0 +1,3 @@
+- Gebruik witregels is inconsistent
+- Gebruik inspringen ook
+- Bij use-cases kloppen de enters en het inspringen niet
