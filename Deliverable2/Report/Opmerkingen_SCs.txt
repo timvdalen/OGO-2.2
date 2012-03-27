@@ -1,0 +1,19 @@
+Systeem.svg
+- Waarom staan er puntjes als triggered actie bij [Controller initialized & all robots initialized]? Ze staan ook bij Controller.notifyViewer.
+- Regular = NormalTile? Houdt alsjeblieft dezelfde naamconventie aan, anders veroorzaakt dat alleen maar verwarring.
+- notifyView = notifyViewer (in Controller)
+- Dubbele backslash bij requestTilesExchange?
+- Moet in Controller moveRequest SUCCESS en WIN ook niet worden beschreven? Bijvoorbeeld in Controller staat de actie [Board.NOP], misschien kun je daar Board.MoveRequest == FAILED van maken? En de conditie [Robot.OnHomeTile] kan dan vervangen worden door [Board.MoveRequest == WIN], want de controller "weet" dat een robot zijn homeTile heeft bereikt, omdat hij een WIN hoort van Board.
+- notiryGameOver in Viewer moet natuurlijk notifyGameOver zijn.
+
+- Ik mis de volgende methodes uit het classe diagram:
+  ~ canReset: wordt niet aangeroepen door Controller; nu wordt er reset() aangeroepen bij [Robot.OnHomeTile], maar dat moet natuurlijk canReset() zijn.
+  ~ getHint(): deze moet in Board bij [Robot On Hint Tile] als getriggerde actie erbij, voordat Controller.notifyHint() wordt aangeroepen.
+  ~ addViewer: als onderdeel van de initialisatie van de viewer dient de viewer addViewer() aan te melden bij de Controller; dit is dus een extra getriggerde actie na 'initialize()' in Viewer.
+  ~ postInitialize: controller reageert wel op een postInitialize, maar ik zie deze niet terug in Board. In Board moet natuurlijk een aanroep van Controller.postInitialize() plaatsvinden. 
+
+Verder nog een aantal opmerkingen waar ikzelf over twijfelde, dus deze moeten we misschien ook met de rest overleggen, voordat je ze al dan niet verwerkt:
+- Kan in Robot nou oneindig lang notifyAutoMovement gedaan worden? Staat geen verdere conditie bij, dus het lijkt alsof dit nu een beetje random kan gebeuren.
+- Bij [canReset == false] in Board wordt nog steeds reset() aangeroepen. Hadden we dat inderdaad zo afgesproken, of moest er eigenlijk een andere functie aangeroepen worden (die mogelijk niet in het classe diagram staat)? Leg het anders even uit in de tekst boven de MSC, dat maakt een hoop duidelijk.
+
+Als laatste opmerking: kloppen de SCs van de individuele klassen nou? Ze lijken erg af te wijken van de systeem.svg (zoals die van Board.svg).
