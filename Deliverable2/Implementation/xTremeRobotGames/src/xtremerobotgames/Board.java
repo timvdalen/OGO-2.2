@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public class Board {
 
-    private int width;
-    private int height;
+    private static int width = 10;
+    private static int height = 10;
     private Tile[][] tiles;
     private Controller controller;
     private RobotCoord robots;
@@ -24,13 +24,36 @@ public class Board {
     private HashMap<Robot, Rotation> robotRotation;
 
     //TO DO constructor
-    Board(int w, int h, RobotCoord robot, HashMap<Robot, Tile> hometiles){
+    Board(HashMap<Robot, Tile> hometiles){
         tiles = new Tile[width][height];
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                tiles[i][j] = new NormalTile();
+            }
+        }
         controller = new Controller();
-        robots = robot;
         home = hometiles;
     }
 
+    public void addRobot(Robot r, AbsoluteCoord abs, AbsoluteCoord hometile, Rotation rot){
+        robots.addRobot(r, abs);
+        tiles[hometile.getX()][hometile.getY()] = new HomeTile(r);
+        home.put(r, tiles[hometile.getX()][hometile.getY()]);
+        robotRotation.put(r, rot);
+    }
+
+    public void addConveyorTile(AbsoluteCoord abs, Rotation rot){
+        tiles[abs.getX()][abs.getY()] = new ConveyorTile(rot);
+    }
+
+    public void addBrokenRobotTile(AbsoluteCoord abs){
+        tiles[abs.getX()][abs.getY()] = new BrokenRobotTile();
+    }
+
+    public void addHintTile(AbsoluteCoord abs){
+        tiles[abs.getX()][abs.getY()] = new HintTile();
+    }
+    
     //might be a better way to solve this
     public boolean canReset(){
         for(int i = 0; i < width; i++){
@@ -407,4 +430,7 @@ public class Board {
         }
     }
 
+    public Rotation getRotation(Robot r){
+        return this.robotRotation.get(r);
+    }
 }
