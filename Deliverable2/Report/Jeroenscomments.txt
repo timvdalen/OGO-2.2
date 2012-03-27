@@ -1,3 +1,4 @@
 Check msc coregion comments
 Geen HMSC onder notify robots
 Nog steeds inspring problemen en zin afbreek problemen in de use cases (TIM?!?!?)
+6.3 needs to be above the statecharts, not at the end (seems to me at least)
