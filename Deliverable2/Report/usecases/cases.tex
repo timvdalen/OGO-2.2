@@ -73,7 +73,7 @@ Return Hint tile
     (a) The robot is moved to the indicated position, which is a hint tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved
-    and that the robot has been moved to the requested position
+        and that the robot has been moved to the requested position
     (d) The board generates a hint for the robot
     (e) The board notifies the controller of the hint
     (f) The controller sends the hint to the robot
@@ -93,7 +93,7 @@ Return Conveyor tile
     (a) The robot is moved to the indicated position, which is a conveyor tile
     (b) The board notifies the controller that the move request has been approved
     (c) The controller notifies the robot that his move request has been approved
-    and that the robot has been moved to the requested position
+        and that the robot has been moved to the requested position
     (d) The board notifies the controller that a robot has been moved automatically
     (e) The controller notifies the robot that it has been moved automatically
 - Alternatives
@@ -110,9 +110,9 @@ Return Home tile
 - Main Scenarios
     (a) The robot is moved to the indicated position, which is the robots home tile
     (b) The board notifies the controller that the move request has been approved and
-    the robot has won
+        the robot has won
     (c) The controller notifies the robot that his move request has been approved, that
-    the robot has been moved to the requested position and that the robot has won
+        the robot has been moved to the requested position and that the robot has won
 - Alternatives
     none
 
@@ -163,7 +163,8 @@ Tiles exchange
     (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed
 
 The "Notify robots" use case illustrates the Notify robots MSC in the High Level Message Sequence Chart. This use case deals with robots that have been moved by the board, due to movement of another robot. For example, another robot first blocks the end of a conveyer tile, then moves 
-away and causes another robot to be pushed of the conveyor belt. If the robot is moved to its home tile, the controller will also notify the robot of this.\\
+away and causes another robot to be pushed of the conveyor belt. If the robot is moved to its 
+home tile, the controller will also notify the robot of this.
 
 Notify robots
 - Pre-conditions: The game is initiated.
@@ -173,11 +174,11 @@ Notify robots
     (a) Recursively check for other robots that are moved
     (b) The board sends a message to the controller, notifying it that a robot has been moved
     (c) The controller notifies the robot that it has been moved
-- Alternatives \\
+- Alternatives 
     none
 
 The "End game" use case illustrates the End game MSC in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile.
-Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).\\
+Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).
 
 End game
 - Pre-conditions: The game is initiated.
@@ -188,7 +189,7 @@ End game
     (b) Notify the viewer that the game is over and which robot has won
     (c) The viewer displays fireworks
     (d) The viewer is removed from the controller
-      (e) All remaining objects (except for the board) can now terminate, the board receives a message that it can reset.
+    (e) All remaining objects (except for the board) can now terminate, the board receives a message that it can reset.
 - Alternatives
     none
 
