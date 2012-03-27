@@ -103,6 +103,7 @@ In the MSC below, one robot and one conveyor belt have been selected. Note that 
 	\subsubsection{Notify robots}
 	\begin{minipage}{\linewidth}
 		The board first checks recursively for robots that are affected by the original move request. Then, the board sends a notification to the controller, which forwards this to the robot that was moved. This MSC is used when a robot is moved due to the move of another robot, for example when a robot that blocked the end of a conveyor belt moves away and the last robot on the belt should move to the end.
+		Note that is it possible for a robot to end up on its home tile like this. Because of this, a BoardResponse is sent back, to indicate a winning (or of course normal) automove.
 
 		\input{MSC-files/notify_robots.tex}
 	\end{minipage}

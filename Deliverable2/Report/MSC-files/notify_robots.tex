@@ -13,8 +13,8 @@ r box r [label=""];
 
 |||;
 b rbox b [label="recursively check moved robots"];
-b -> c [label="notifyAutoMovement(robot)"];
-c -> r [label="notifyAutoMovement()"];
+b -> c [label="notifyAutoMovement(robot, boardresponse)"];
+c -> r [label="notifyAutoMovement(boardresponse)"];
 
 |||;
 

@@ -13,10 +13,12 @@ public class Viewer {
 
     private Controller controller;
     private BoardSnapshot boardsnapshot;
+    private Board board;
 
     private int frameid;
 
-    Viewer(Controller c){
+    Viewer(Controller c, Board b){
+        board = b;
         this.boardsnapshot = null;
         this.controller = c.addViewer(this);
 	this.frameid = 0;
@@ -32,7 +34,7 @@ public class Viewer {
 
     private void updateView(){
         boardsnapshot = controller.requestBoardSnapshot();
-        FrameData data = new FrameData(this.frameid, boardsnapshot);
+        FrameData data = new FrameData(this.frameid, board);
 	System.out.println(data.encode());
 	this.frameid++;
     }
