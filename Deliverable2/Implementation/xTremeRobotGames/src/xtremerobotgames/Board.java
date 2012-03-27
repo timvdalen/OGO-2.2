@@ -428,7 +428,7 @@ public class Board {
         tiles[coord.getX()][coord.getY()].occupier = null;
         tiles[abs.getX()][abs.getY()].occupier = r;
         robots.changePosition(r, abs);
-        System.out.println("Savend");
+        //System.out.println("Savend");
     }
 
     //function to add relative to absolute Coordinate, returns null if absCoord is not on the board
