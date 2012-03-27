@@ -18,21 +18,23 @@ public class Board {
     private static int width = 10;
     private static int height = 10;
     private Tile[][] tiles;
-    private Controller controller;
+    public Controller controller;
     private RobotCoord robots;
     private HashMap<Robot, Tile> home;
     private HashMap<Robot, Rotation> robotRotation;
 
     //TO DO constructor
-    Board(HashMap<Robot, Tile> hometiles){
+    public Board(){
         tiles = new Tile[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 tiles[i][j] = new NormalTile();
             }
         }
+        robots = new RobotCoord();
+        home = new HashMap<Robot, Tile>();
+        robotRotation = new HashMap<Robot, Rotation>();
         controller = new Controller();
-        home = hometiles;
     }
 
     public void addRobot(Robot r, AbsoluteCoord abs, AbsoluteCoord hometile, Rotation rot){
@@ -71,6 +73,8 @@ public class Board {
 
     //DONE for the move..
     public BoardResponse moveRequest(RelativeCoord loc, Robot r, Rotation rot){
+       /**
+
         if(rot != Rotation.R0DEG){                  //rulecheck
             if(r.r.possibleRotations.contains(rot)){
                 robotRotation.remove(r);
@@ -82,7 +86,10 @@ public class Board {
         } else if(!r.r.possibleMoves.contains(loc)){    //rulecheck
             return BoardResponse.FAILED;
         } else {
-            AbsoluteCoord position = calculateNewLocation(loc, r);
+        *
+        */
+
+            AbsoluteCoord position = addAbstoRel(robots.getAbsoluteCoord(r), loc);
             if(position == null){
                 return BoardResponse.FAILED;
             } else if (tiles[position.getX()][position.getY()].getClass() == HomeTile.class){
@@ -94,17 +101,20 @@ public class Board {
                     return BoardResponse.SUCCESS;
                     }
             } else {
-                if(tiles[position.getX()][position.getY()].getClass() == ConveyorTile.class){
+                /*
+                 if(tiles[position.getX()][position.getY()].getClass() == ConveyorTile.class){
                     AbsoluteCoord nposition = conveyorMove(position, r);
                     if(nposition != position){
                         position = nposition;
                         r.notifyAutoMovement();
                     }
                 }
+                 * 
+                 */
                 saveLocation(position, r);
                 return BoardResponse.SUCCESS;
             }
-        }
+        
     }
 
     //DONE
@@ -418,6 +428,7 @@ public class Board {
         tiles[coord.getX()][coord.getY()].occupier = null;
         tiles[abs.getX()][abs.getY()].occupier = r;
         robots.changePosition(r, abs);
+        System.out.println("Savend");
     }
 
     //function to add relative to absolute Coordinate, returns null if absCoord is not on the board

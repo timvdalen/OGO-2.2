@@ -5,19 +5,49 @@ import xtremerobotgames.*;
 public class XTremeRobotGames {
 
     public static void main(String[] args) {
-        System.out.println("Hoi.");
-	if(Hint.WEST == Hint.WEST){
-		System.out.println("Hint: Alles prima.");
-	}
-	if(Rotation.R0DEG == Rotation.R270DEG){
-		System.out.println("Ratation: Failed");
-	}else{
-		System.out.println("Rotation: Works");
-	}
-	BoardResponse rep;
-	rep = BoardResponse.FAILED;
-	if(rep == BoardResponse.FAILED){
-		System.out.println("BoardResponse werkt ook");
-	}
+        Board b = new Board();
+        Viewer v = new Viewer(b.controller, b);
+        Rule r = new RuleA();
+        Robot r1 = new Robot(0, b.controller, r);
+        Robot r2 = new Robot(1, b.controller, r);
+        Robot r3 = new Robot(2, b.controller, r);
+        AbsoluteCoord abs1 = new AbsoluteCoord(1,2);
+        AbsoluteCoord abs2 = new AbsoluteCoord(1,8);
+        AbsoluteCoord abs3 = new AbsoluteCoord(9,2);
+        AbsoluteCoord h1 = new AbsoluteCoord(3,6);
+        AbsoluteCoord h2 = new AbsoluteCoord(6,2);
+        AbsoluteCoord h3 = new AbsoluteCoord(7,6);
+        b.addRobot(r1, abs1, h1, Rotation.R0DEG);
+        b.addRobot(r2, abs2, h2, Rotation.R0DEG);
+        b.addRobot(r3, abs3, h3, Rotation.R0DEG);
+        b.addBrokenRobotTile(new AbsoluteCoord(1,5));
+        b.addBrokenRobotTile(new AbsoluteCoord(0,5));
+        b.addBrokenRobotTile(new AbsoluteCoord(0,6));
+        b.addBrokenRobotTile(new AbsoluteCoord(0,7));
+        b.addBrokenRobotTile(new AbsoluteCoord(5,9));
+        b.addBrokenRobotTile(new AbsoluteCoord(6,5));
+        b.addBrokenRobotTile(new AbsoluteCoord(6,6));
+        b.addBrokenRobotTile(new AbsoluteCoord(6,7));
+        b.addBrokenRobotTile(new AbsoluteCoord(6,8));
+        b.addBrokenRobotTile(new AbsoluteCoord(8,4));
+        b.addBrokenRobotTile(new AbsoluteCoord(9,4));
+        b.addHintTile(new AbsoluteCoord(0,9));
+        b.addHintTile(new AbsoluteCoord(0,1));
+        b.addHintTile(new AbsoluteCoord(4,2));
+        b.addHintTile(new AbsoluteCoord(5,6));
+        b.addConveyorTile(new AbsoluteCoord(3,8), Rotation.R180DEG);
+        b.addConveyorTile(new AbsoluteCoord(4,8), Rotation.R180DEG);
+        b.addConveyorTile(new AbsoluteCoord(5,8), Rotation.R180DEG);
+        b.addConveyorTile(new AbsoluteCoord(3,4), Rotation.R0DEG);
+        b.addConveyorTile(new AbsoluteCoord(4,4), Rotation.R0DEG);
+        b.addConveyorTile(new AbsoluteCoord(5,4), Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+
     }
 }
