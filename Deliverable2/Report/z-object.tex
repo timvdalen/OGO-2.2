@@ -130,7 +130,7 @@ occupier' = Null
 \end{schema} \\
 \znewpage
 \begin{zpar}
-The put schema has is defined for the same reason as the clear schema. It places the given robot on the tile.
+The put schema is defined for the same reason as the clear schema. It places the given robot on the tile.
 \end{zpar}\\
 \begin{schema}{put}
 \Delta (occupier) \\
@@ -151,7 +151,7 @@ A NormalTile is a subclass of Tile  a tile with no special meaning.
 Tile
 \end{class}
 
-The HintTile class is also subclass of tile. It is only renamed to indicate the board should produce a hint when a robot occupies it.
+The HintTile class is also subclass of tile. It is just renamed to indicate the board should produce a hint when a robot occupies it.
 \begin{class}{HintTile}
 Tile
 \end{class}
@@ -189,12 +189,12 @@ This is the overridden schema of the base class. It changes the orientation of t
 \end{schema}
 \end{class}
 
-The Board class maintains is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
+The Board class is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
 \begin{class}{Board}
 \upharpoonright (initialize, requestTilesExchange, canReset, moveRequest) \\
 \begin{nobottomstate}
 \begin{zpar}
-The tiles variable if a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
+The tiles variable is a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
 \end{zpar} \\
 tiles : \power (AbsoluteCoord \fun \: \downarrow \! Tile) \\
 \also \also \also
@@ -318,7 +318,7 @@ controller' = null
 \end{schema} \\
 \znewpage
 \begin{zpar}
-This schema creates a snapshot of the current situation of the board.
+This schema creates a snapshot of the current state of the board.
 It does so by requiring all tiles in the snapshot to have exactly the
 same state as the current state of the tiles of the board. The only
 exception is that the snapshot variable of the tiles must be true.
