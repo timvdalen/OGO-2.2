@@ -10,7 +10,7 @@ public class Robot{
 
 	private ArrayList<Hint> hints;
 
-	Robot(int _id, Controller _c, Rule _r, AbsoluteCoord abscoord){
+	Robot(int _id, Controller _c, Rule _r){
 		this.id = _id;
 		this.c = _c;
 		this.r = _r;

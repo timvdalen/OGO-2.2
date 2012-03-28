@@ -1,9 +1,11 @@
 \begin{alltt}
 \rm
-Next, the use cases for the game will be presented. These use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case can be found. After that, the main scenario (usual case) of the use case will be presented and after that possible alternatives can be found. \\
-A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint. \\
+The use cases are made to illustrate how the game works and what possible scenarios can be occur. In the use cases, a trigger for the use case and a pre-condition for the use case is given. After that, the main scenario (usual case) of the use case will be presented, along with possible alternatives, when necessary. \\
+A move request that results in a robot being on a certain tile is referred to as an 'Return ... tile' use case. 
+This convention is used, because the board provides several responses and messages based upon the outcome of the move request. For example, in 'Return Home tile', the board sends a predefined win-response to indicate that a certain robot has reached its home tile. As another example, in 'Return Hint tile' the board first acknowledges the move request and then sends a separate message that contains the requested hint.
 
-The next use case illustrates the initialize state in the High Level Message Sequence Chart. In this use case, all of the different components (except for the viewer) will get initialized. \\
+The next use case illustrates the initialize MSC in the High Level Message Sequence Chart. In this use case, 
+all of the different components (except for the viewer) will get initialized.
 
 Initialize
 - Pre-conditions: True
@@ -14,9 +16,10 @@ Initialize
     (b) The board pre-initializes the controller
     (c) The board initializes all robots (one by one)
     (d) The board post-initializes the controller with all the robots
-- Alternatives \\
+- Alternatives
+    none
 
-The "Initialize viewer" use case illustrates the Initialize viewer state in the High Level Message Sequence Chart. This use case is used to illustrate how the viewer will be initialized. \\
+The "Initialize viewer" use case illustrates the Initialize viewer MSC in the High Level Message Sequence Chart. It is used to illustrate how the viewer will be initialized, since the viewer behaves differently from the other components of the game.
 
 Initialize viewer
 - Pre-conditions: True
@@ -25,9 +28,11 @@ Initialize viewer
 - Main Scenarios
     (a) The viewer initializes
     (b) The viewer sends a message to the controller
-- Alternatives \\
+- Alternatives
+    none
 
-The "Robot move request" use case illustrates the Robot move request state in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile. \\
+The "Robot move request" use case illustrates the Robot move request MSC in the High Level Message Sequence Chart. In this use case, the robot request the controller if it can make a move. The controller forwards this request to the board, which then decides. Note that the board here checks if the 
+move is allowed. This also deals with the fact that, if a robot wants to move to its home tile and this is occupied, the robot still may move (and moves) to this tile.
 
 Robot move Request
 - Pre-conditions: The game is initiated.
@@ -37,124 +42,143 @@ Robot move Request
     (a) The robot requests the controller if it may move
     (b) The controller sends the request to the board
     (c) The board checks the request
-- Alternatives \\
+- Alternatives
+    none
 
-The "Return Normal tile" use case illustrates the Return Normal tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a normal tile has been approved. \\
+The "Return Normal tile" use case illustrates the Return Normal tile MSC in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. It handles a robot of which the move request to go to a normal tile has been approved.
 
 Return Normal tile
-- Pre-conditions: The game is initiated. And the indicated position
-    is a normal tile, move request approved.
+- Pre-conditions: The game is initiated, the indicated position
+    is a normal tile and the move request has been approved.
 - Trigger: A robot requests to move his position to a normal tile.
-- Guarantee: The robot is moved to the indicated position which
+- Guarantee: The robot is moved to the indicated position, which
     is a normal tile.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is a normal tile
+    (a) The robot is moved to the indicated position, which is a normal tile
     (b) The board notifies the controller that the move request has been approved
-    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
-- Alternatives \\
+    (c) The controller notifies the robot that his move request has been approved and
+         that the robot has been moved to the requested position
+- Alternatives
+    none
 
-The "Return Hint tile" use case illustrates the Return Hint tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a hint tile has been approved. \\
+The "Return Hint tile" use case illustrates the Return Hint tile MSC in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. It handles a robot of which the move request to go to a hint tile has been approved.
 
 Return Hint tile
-- Pre-conditions: The game is initiated. The indicated position
-    is a hint tile, move request approved.
+- Pre-conditions: The game is initiated, the indicated position
+    is a hint tile and the move request has been approved.
 - Trigger: A robot requests to move his position to a hint tile.
 - Guarantee: The robot is moved to the indicated position which
     is a hint tile and a hint is given to the robot.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is a hint tile
+    (a) The robot is moved to the indicated position, which is a hint tile
     (b) The board notifies the controller that the move request has been approved
-    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
+    (c) The controller notifies the robot that his move request has been approved
+         and that the robot has been moved to the requested position
     (d) The board generates a hint for the robot
     (e) The board notifies the controller of the hint
     (f) The controller sends the hint to the robot
-- Alternatives \\
+- Alternatives
+    none
 
-The "Return Conveyor tile" use case illustrates the Return Conveyor tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to a conveyor tile has been approved. \\
+The "Return Conveyor tile" use case illustrates the Return Conveyor tile MSC in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. It handles a robot of which the move request to go to a conveyor tile has been approved.
 
 Return Conveyor tile
-- Pre-conditions: The game is initiated. And the indicated position
-    is a conveyor tile, move request approved.
+- Pre-conditions: The game is initiated, the indicated position
+    is a conveyor tile and the move request has been approved.
 - Trigger: A robot requests to move his position to a conveyor
     belt tile or moves over a conveyor tile during the movement.
-- Guarantee: The robot is moved to the indicated position which
-    is a conveyor belt tile.
+- Guarantee: The robot is moved to the indicated position, as
+    specified by the conveyor belt.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is a conveyor tile
+    (a) The robot is moved to the indicated position, which is a conveyor tile
     (b) The board notifies the controller that the move request has been approved
-    (c) The controller notifies the robot that his move request has been approved and that the robot has been moved to the requested position
+    (c) The controller notifies the robot that his move request has been approved
+         and that the robot has been moved to the requested position
     (d) The board notifies the controller that a robot has been moved automatically
     (e) The controller notifies the robot that it has been moved automatically
-- Alternatives \\
+- Alternatives
+    none
 
-The "Return Home tile" use case illustrates the Return Home tile state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request to go to his home tile has been approved. \\
+The "Return Home tile" use case illustrates the Return Home tile MSC in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. It handles with a robot of which the move request to go to his home tile has been approved.
 
 Return Home tile
-- Pre-conditions: The game is initiated. And the indicated position
-    is its home tile, move request approved.
+- Pre-conditions: The game is initiated, the indicated position
+    is the robots home tile and the move request has been approved.
 - Trigger: A robot requests to move his position to a home tile.
 - Guarantee: The robot is moved to the indicated position which
     is its home tile.
 - Main Scenarios
-    (a) The robot is moved to the indicated position which is the robots home tile
-    (b) The board notifies the controller that the move request has been approved and the robot has won
-    (c) The controller notifies the robot that his move request has been approved, that the robot has been moved to the requested position and that the robot has won
-- Alternatives \\
+    (a) The robot is moved to the indicated position, which is the robots home tile
+    (b) The board notifies the controller that the move request has been approved and
+         the robot has won
+    (c) The controller notifies the robot that his move request has been approved, that
+         the robot has been moved to the requested position and that the robot has won
+- Alternatives
+    none
 
-The "Reject move" use case illustrates the Reject move state in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. This use case handles with a robot for which his move request has been rejected. \\
+The "Reject move" use case illustrates the Reject move MSC in the High Level Message Sequence Chart. This use case always comes after the Robot move request use case. It handles a robot of which the move request has been rejected.
 
 Reject move
-- Pre-conditions: The game is initiated. A move request of a robot is rejected.
+- Pre-conditions: The game is initiated and the move request of a robot is rejected.
 - Trigger: A robot requests to move and this move request has been rejected.
-- Guarantee: The robot remains on the same position
+- Guarantee: The robot remains on the same position.
 - Main Scenarios
     (a) The board sends the reject message to the controller
     (b) The controller sends the reject message to the robot
-- Alternatives \\
+- Alternatives
+    none
 
-The "Update viewer" use case illustrates the Update viewer state in the High Level Message Sequence Chart. Use case for updating the viewer after something on the board has changed. \\
+The "Update viewer" use case illustrates the Update viewer MSC in the High Level Message Sequence Chart. This use case illustrates how the viewer is updated, after something on 
+the board has changed.
 
 Update viewer
-- Pre-conditions: The game is initiated
-- Trigger: Notify and new snapshot by the controller
-- Guarantee: Update viewer
+- Pre-conditions: The game is initiated.
+- Trigger: The viewer receives a notify along with a new snapshot from the controller.
+- Guarantee: The viewer has been updated.
 - Main Scenarios
     (a) The board makes a snapshot
     (b) The board sends the snapshot to the controller
     (c) The controller sends the snapshot to the viewer
     (b) The viewer updates the view with the received snapshot
-- Alternatives \\
+- Alternatives
+    none
 
-The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange state in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped (no robots on it and they are normal tiles). This case corresponds with the "Ordinary exchange" MSC that can be found in the High Level Message Sequence Chart. In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. Or a conveyor belt is switched and rotated (or a combination of both). This reflects with the "Special exchange" MSC that can be found in the High Level Message Sequence Chart. Note that both the alternatives can occur simultaneously. That is, a robot on a conveyor tile could be selected. Also, two tiles with robots can be selected.\\
+The "Tiles exchange" use case illustrates both the Special exchange and the Ordinary exchange MSC in the High Level Message Sequence Chart. In the "normal" case, two tiles are swapped
+(no robots on it and they are normal tiles). This case corresponds with the "Ordinary exchange" MSC that can be found in the High Level Message Sequence Chart. In the special cases, either a robot is on a tile and needs to be notified that its position has changed and he has been rotated. A conveyor tile could also be selected; this tile is then switched and rotated. This reflects the "Special exchange" MSC that can be found in the
+High Level Message Sequence Chart. Note that both the alternatives can occur simultaneously. That is, a robot on a conveyor tile could be selected. Also, two tiles with robots can be selected.
 
 Tiles exchange
 - Pre-conditions: The game is initiated.
 - Trigger:  A robot has moved.
-- Guarantee: Two tiles are exchanged
+- Guarantee: Two tiles are exchanged.
 - Main Scenarios
     (a) The controller requests a tile exchange from the board
     (b) Two valid tiles are chosen
     (c) The chosen tiles are exchange
 - Alternatives
     (d.1) If a chosen tile contains a robot, the robot will rotate and swaps along with the tile
-    (e.1) The board notifies the controller that a robot has been swapped 
-    (f.1) The controller notifies the robot that it has been moved \\
+    (e.1) The board notifies the controller that a robot has been swapped
+    (f.1) The controller notifies the robot that it has been moved
 
-    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed \\
+    (d.2) If a chosen tile is a conveyor tile, the rotation of the conveyor tile is changed
 
-The "Notify robots" use case illustrates the Notify robots state in the High Level Message Sequence Chart. This use case should deal with robots that have been moved by the board, due to movement of another robot (e.g. a robot blocks the end of the conveyor tile you are on, moves away and you will be pushed of the conveyor tile). \\
+The "Notify robots" use case illustrates the Notify robots MSC in the High Level Message Sequence Chart. This use case deals with robots that have been moved by the board, due to movement of another robot. For example, another robot first blocks the end of a conveyer tile, then moves 
+away and causes another robot to be pushed of the conveyor belt. If the robot is moved to its 
+home tile, the controller will also notify the robot of this.
 
 Notify robots
 - Pre-conditions: The game is initiated.
-- Trigger: A robot is moved due to movement of another robot (by conveyor tile) or a tile exchange
-- Guarantee: The robot gets a message that is has been moved
+- Trigger: A robot is moved due to movement of another robot (by conveyor tile) or a tile exchange.
+- Guarantee: The robot gets a message that is has been moved.
 - Main Scenarios
     (a) Recursively check for other robots that are moved
     (b) The board sends a message to the controller, notifying it that a robot has been moved
     (c) The controller notifies the robot that it has been moved
-- Alternatives \\
+- Alternatives 
+    none
 
-The "End game" use case illustrates the End game state in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile. Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).\\
+The "End game" use case illustrates the End game MSC in the High Level Message Sequence Chart. This use case deals with ending the game once a robot has reached its home tile.
+Note that the winning robot can terminate during any of these steps, since it already has received a message that he is the winner (so the game is over).
 
 End game
 - Pre-conditions: The game is initiated.
@@ -165,7 +189,8 @@ End game
     (b) Notify the viewer that the game is over and which robot has won
     (c) The viewer displays fireworks
     (d) The viewer is removed from the controller
-    (e) All remaining objects (except for the board) can now terminate, the board resets
+    (e) All remaining objects (except for the board) can now terminate, the board receives a message that it can reset.
 - Alternatives
+    none
 
 \end{alltt}

@@ -2,18 +2,18 @@ package xtremerobotgames;
 
 public class FrameData{
 	private int framecount;
-	private BoardSnapshot snapshot;
+	private Board board;
 
-	FrameData(int _framecount, BoardSnapshot _snapshot){
+	FrameData(int _framecount, Board _board){
 		this.framecount = _framecount;
-		this.snapshot = _snapshot;
+		this.board = _board;
 	}
 
 	public String encode(){
 		String returnStr = "";
 		returnStr += "{ \"framecount\" : \"" + this.framecount + "\", ";
-		returnStr += "\"snapshot:\" : [";
-		Tile[][] tiles = snapshot.getTiles();
+		returnStr += "\"snapshot\" : [";
+		Tile[][] tiles = board.requestSnapshot().getTiles();
 		int rows = tiles.length;
 		int cols = tiles[0].length;
 		for(int i=0; i < rows; i++){
@@ -25,13 +25,16 @@ public class FrameData{
 				returnStr += "\"row\":\"" + i + "\", \"col\":\"" + j + "\", \"type\":\"" + type + "\"";
 
 				if(occupier != null){
-					returnStr += ", \"occupier\":\"" + occupier.getID() + "\"";
-				}
+                                        //System.out.println("Occup[ier");
+					returnStr += ", \"occupier\": { \"id\":\"" + occupier.getID() + "\", \"rotation\":\"" + board.getRotation(occupier) +  "\"}";
+				}else{
+                                    //System.out.println("NO occu");
+                                }
 
-				if(type.equals("HomeTile")){
+				if(type.equals("xtremerobotgames.HomeTile")){
                                         HomeTile curtile = (HomeTile) tiles[i][j];
 					returnStr += ", \"owner\": \""  +curtile.homeRobot.getID() + "\"";
-				}else if(type.equals("ConveyorTile")){
+				}else if(type.equals("xtremerobotgames.ConveyorTile")){
                                         ConveyorTile curtile = (ConveyorTile) tiles[i][j];
 					returnStr += ", \"rotation\": \"" + curtile.rot.toString()  + "\"";
 				}

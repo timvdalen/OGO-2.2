@@ -17,8 +17,8 @@ public class RobotCoord {
     public ArrayList<AbsoluteCoord> absCoords;
 
     RobotCoord(){
-        robots = null;
-        absCoords = null;
+        robots = new ArrayList<Robot>();
+        absCoords = new ArrayList<AbsoluteCoord>();
     }
 
     public void addRobot(Robot r, AbsoluteCoord abs){
