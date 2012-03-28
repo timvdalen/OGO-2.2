@@ -104,7 +104,7 @@ The clear schema is used by schemas defined in other classes to remove the curre
 occupier' = Null
 \end{schema} \\
 \begin{zpar}
-The put schema has is defined for the same reason as the clear schema. It places the given robot on the tile.
+The put schema is defined for the same reason as the clear schema. It places the given robot on the tile.
 \end{zpar}\\
 \begin{schema}{put}
 \Delta (occupier) \\
@@ -291,7 +291,7 @@ robots' = \emptyset \\
 controller' = null
 \end{schema} \\
 \begin{zpar}
-This schema creates a snapshot of the current situation of the board.
+This schema creates a snapshot of the current state of the board.
 It does so by requiring all tiles in the snapshot to have exactly the
 same state as the current state of the tiles of the board. The only
 exception is that the snapshot variable of the tiles must be true.
