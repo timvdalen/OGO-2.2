@@ -1,4 +1,10 @@
-This report has shown how the requested program has been specified in various ways. First, some use cases were written which work as a guide for the rest of the specification.\\
-Then the software has been specified by the means of multiple Message Sequence Charts and one High Level MSC to give an overview of the entire programm. Each use case has been modeled by one or more MSC's. \\
-After that a class diagram has been created to show all the functions each class can call. Then the state charts show in what states the classes can be and when they call the functions defined in the class diagram. \\
-At the end of the report the entire programm is specified in Object-Z. All these specifications have helped during the actual implementation of the programm. 
+This report has shown how the requested program has been specified in various ways. First, some use cases were written which work as a guide for the rest of the specification.
+
+Then the software has been specified by the means of multiple Message Sequence Charts and one High Level MSC to give an overview of the entire program. Each use case has been modeled by one or more MSC's.
+
+After that a class diagram has been created to show all the functions each class can call. Then the state charts show in what states the classes can be and when they call the functions defined in the class diagram.
+
+At the end of the report the entire program is specified in Object-Z. All these specifications have helped during the actual implementation of the program.
+
+
+However, the formal specification has some shortcomings. The validity of a move is determined by checking it with the 'all robots must be able to reach their home tile' invariant. This invariant doesn't allow for a robot to move to another robots home tile, while the informal specification does allow this (by making the owner of the home tile 'push' the other robot of its home tile).
