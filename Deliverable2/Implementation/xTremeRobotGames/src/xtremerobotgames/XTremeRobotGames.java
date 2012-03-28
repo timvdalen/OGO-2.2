@@ -48,6 +48,88 @@ public class XTremeRobotGames {
         v.notifyStateChange();
         b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
         v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        //10
+        b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        //20
+        b.moveRequest(new RelativeCoord(-1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        //30
+        b.moveRequest(new RelativeCoord(0,-1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,1), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        //40
+        b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
+        v.notifyStateChange();
+        b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
+        v.notifyStateChange();
 
     }
 }
