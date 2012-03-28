@@ -81,7 +81,7 @@ Coord \\
 \end{class}
 
 The Tile class is the representation of one tile on the board. The tiles are managed by the board. The class keeps track of which robot currently occupies the tile. To differentiate between different kind of tiles, the Tile class is the base class of several specializations.
- 
+
 \begin{class}{Tile}
 \upharpoonright (occupier) \\
 \begin{zpar}
@@ -140,7 +140,7 @@ occupier = Null
 \end{state}
 \end{class}
 
-A HomeTile is a tile that a (specific) robot has to visit in order to win the game. 
+A HomeTile is a tile that a (specific) robot has to visit in order to win the game.
 \begin{class}{HomeTile}
 Tile \\
 \upharpoonright (target) \\
@@ -391,7 +391,7 @@ rotate90Deg(SOUTH\_EAST) = NORTH\_EAST
 \begin{zpar}
 This schema must be called everytime something changes on the board. It makes sure that if there are robots that were previously blocked are moved to their destination. The schema that actually moves the robot is moveBlockedRobot and is described below. This schema is called first, and then the schema is called recursive. There is a schema that is nondeterministically called, but only when there is no robot left to move. If this schema is called, the recursion stops. After the recursion, the viewer is notified of the change.
 \end{zpar} \\
-moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = Null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 notifyView \\
+moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = Null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 controller.notifyView \\
 \also \also \also
 \begin{zpar}
 This schema moves one unblocked robot to its destination. It first finds two tiles for which the first tile is a conveyor tile and has an robot that occupies it. The second tile is the destination of the conveyor belt. It then moves the robot from the first tile to the second tile. If the new location of the robot is its hometile, it sends a WIN response along with the notifyAutomovement, else it sends a SUCCESS response.
@@ -408,7 +408,7 @@ be notified of the exchange. The notifyAutomovement schema of controller is alwa
 After the whole request is processed, the moveBlockedRobotRecursive schema is called to move al unblocked robots. Then the viewer is notified of the change.
 \end{zpar} \\
 requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
-\t1 [t1, t2 : Tile, response : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp notifyView \\
+\t1 [t1, t2 : Tile, response : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp controller.notifyView \\
 \znewpage
 \begin{zpar}
 The output of this schema is a pair of two tiles that can be exchanged. The schema makes sure the invariants of the board will still hold when the tiles are exchanged. A tile is valid for an exchange if it is not a HomeTile or a HintTile.
@@ -467,7 +467,7 @@ robots'(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 This schema moves a robot to a new tile. It first calls a moveWalkPre subschema. This schema determines whether the move is allowed, and where the robot should be moved. It outputs a putTile, robot, beginTile, response, and autoMovement variable. If the response is WIN or SUCCESS, the begin tile is cleared of the robot, and the robot is put on the putTile tile. Then the view is notified and the robot is notified about a possible hint.
 If the autoMovement variable is true, it means the robot has crossed a conveyor belt and should be notified. When the robot is moved, the moveBlockedRobotsRecursive schema is called to move all unblocked robots.
 \end{zpar} \\
-moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?]))) \; \; \comp \\ \t1
+moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge controller.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?]))) \; \; \comp \\ \t1
 moveBlockedRobotsRecursive \\
 \begin{zpar}
 This function is needed for the moveWalkPre schema. It rotates a sequence of relative coordinates clockwise 90 degrees.
@@ -639,15 +639,14 @@ possibleRotations : \power Rotation
 \forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
 \end{state} \\
 \end{class}
-\begin{zpar}
-\end{zpar} \\
+This is a concrete instance of Rule, representing the rules of robot type A.
 \begin{axdef}
 RuleA : Rule
 \where
 RuleA.possibleRotations = \emptyset \\
 \forall (c, s) : RuleA.possibleMoves | |c.x + c.y| = 1 \wedge s = \langle c\rangle
 \end{axdef}
-
+This is a concrete instance of Rule, representing the rules of robot type B.
 \begin{axdef}
 RuleB : Rule
 \where
@@ -655,21 +654,26 @@ RuleB.possibleRoations = \{0, 90, 180, 270\} \\
 \forall (c1, s) : RuleB.possibleMoves | c1.y = 0 \wedge 0 < c1.x \leq 3 \wedge c1.x = \#s \; \; \wedge \\ \t1 \forall (n, c2) : s | c2.y = 0 \wedge c2.x = n
 \end{axdef}
 
-A Robot has knowledge of the Controller and maintains a rule-attribute, describing the ruleset of the Robot.
 \begin{class}{Robot}
 \upharpoonright (rules) \\
+\begin{zpar}
+The robot class maintains a reference to its rule set, its controller and the hints it has received.
+\end{zpar} \\
 \begin{state}
-rules : Rule \\
-controller : Controller \\
-hints : \power Hints
+rules : Rule \cup Null \\
+controller : Controller \cup Null \\
+hints : \power Hints \cup Null
 \end{state}\\
+\begin{zpar}
+Initially every variable is blank.
+\end{zpar} \\
 \begin{schema}{Init}
-rules = Null \\
-controller = Null \\
-hints = Null
+rules = null \\
+controller = null \\
+hints = null
 \end{schema} \\
 \begin{zpar}
-The initialize of the Robot uses the parameters controller and rules. The controller-parameter is the initialized Controller; the rules-parameter is the set of rules that determine the possible moves and rotations. In the initialize, all the provided input-values are saved and the list of hints is initially empty, since the Robot has not yet received any hints.
+The initialize schema of the Robot saves a given controller and rule set.
 \end{zpar} \\
 \begin{schema}{initialize}
 \Delta (controller, rules) \\
@@ -680,10 +684,10 @@ controller' = controller? \\
 rules' = rules?
 \end{schema} \\
 \begin{zpar}
-NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its Home Tile is.
+NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its HomeTile is.
 \end{zpar} \\
 \begin{schema}{notifyAutoMovement}
-\Delta (hint)
+\Delta (hint) \\
 response? : BoardResponse
 \where
 hint' = \emptyset
@@ -697,61 +701,64 @@ newHint? : Hint
 \where
 hint' = hint \cup \{newHint?\}
 \end{schema} \\
-play \sdef [coords : RelativeCoord, r : Rotation | \\ \t2 (coords, r) \in rules.possibleMoves] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; \comp \\ \t1 play
+\znewpage
+\begin{zpar}
+The play schema is a rudimentary playing algorithm to let the robots play. It does not use the hints provided. It only retrieves a move from its rules, and then executes it. Then it recursively calls itself.
+\end{zpar} \\
+play \sdef ([coords : RelativeCoord, r : Rotation | \\ \t2 coords \in rules.possibleMoves \wedge r = null] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; [] \\ \t1
+[coords : RelativeCoord, r : Rotation | \\ \t2 r \in rules.possibleRotations \wedge coords = null] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; \comp \\ \t1 play
 \end{class}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller. The variable 'boardChanged' is used as a flag to indicate that the board has changed and the Viewer has not yet updated the view.
 \begin{class}{Viewer}
+\upharpoonright () \\
 \begin{state}
 controller : Controller \\
-boardChanged : \bool \\
 currentSnapshot : BoardSnapshot \\
 \end{state}\\
-\begin{zpar}
-In initialize, the Viewer attaches itself to the Controller, using the addViewer-method; the viewer parameter in addViewer is this Viewer. ???
-\end{zpar} \\
 \begin{schema}{Init}
-boardChanged = \false
 \end{schema}\\
 \begin{zpar}
-When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode.
+The initialize schema saves the given controller, and calls the add view schema of the given controller.
+\end{zpar} \\
+initialize \sdef [\Delta(controller), c? : Controller | controller' = c] \;\; \comp \\ \t1 controller.addViewer[viewer?/self] \\
+\begin{zpar}
+When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode. We do not model this, but just say that there is a magic method in the $\mathbb{M}$ class.
 \end{zpar} \\
 notifyGameOver \sdef \mathbb{M}.showFireworks \\
 \begin{zpar}
 With notifyStateChange, the Viewer is notified by the Controller that the Board has changed. The Viewer sets boardChanged to true, to indicate that it has not yet updated the view.
 \end{zpar} \\
 \begin{schema}{notifyStateChange}
-\Delta (boardChanged)
+\Delta (currentSnapshot) \\
+snapshot? : BoardSnapshot
 \where
-boardChanged' = \true
+currentSnapshot' = snapshot?
 \end{schema}\\
 \znewpage
 \begin{zpar}
-The updateView-method uses the value of boardChanged to update the view. If this variable is true, then the Viewer requests a new snapshot from the Board, via the Controller, and updates the view. After the update, boardChanged is set to false. If boardChanged is false, then the previous snapshot is still up-to-date and nothing is changed. Note that the variable controller in Viewer never changes here, because it is simply used to request a board snapshot.
+The updateView schema is just forwards to a magic schema in the $\mathbb{M}$ class to update the screen according to the current snapshot.
 \end{zpar} \\
-updateView \sdef ([boardChanged = \false] \;\; [] \\ \t1
-([boardChanged = \true] \wedge controller.requestBoardStatus \;\; \comp \\ \t2 [\Delta(currentSnapshot), board? : BoardSnapshot | \\ \t3 currentSnapshot' = board?])) \; \; \comp \\ \t1 \mathbb{M}.updateScreen
+updateView \sdef \mathbb{M}.updateScreen
 \end{class}
 
 The controller has knowledge about the Board and the Viewer; it also maintains a list of the robots.
 \begin{class}{Controller}
+\upharpoonright (notifyAutomovement, moveRequest, notifyHint, notifyView) \\
 \begin{state}
 board : Board \\
 robots : \power Robot \\
 viewer : Viewer
 \end{state}\\
 \begin{zpar}
-addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
+notifyAutoMovement takes the Robot has been moved as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile. If the input-parameter is null, nothing happens.
 \end{zpar} \\
-\begin{zpar}
-notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile.
-\end{zpar} \\
-notifyAutoMovement \sdef robot?.notifyAutomovement \\
+notifyAutoMovement \sdef [robot? : Robot \cup Null] \;\; [] \\\t1 robot?.notifyAutomovement \\
 \znewpage
 \begin{zpar}
-moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate.
+moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate. If the board does not respond with "WIN", a tile exchange is requested.
 \end{zpar} \\
-moveRequest \sdef board.moveRequest \comp ([output? \not = WIN] [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
+moveRequest \sdef board.moveRequest \; \; \comp \\ \t1 ([output? \not = WIN] \wedge board.requestTileExchange \; \; [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
 \begin{zpar}
 Notify the controller of an appropriate hint.
 \end{zpar} \\
@@ -781,11 +788,19 @@ robots' = robots?
 Remove a viewer (so that eventually, a new one can be added).
 \end{zpar} \\
 \begin{schema}{removeViewer}
+\Delta(viewer) \\
+\where
+viewer' = null
 \end{schema}\\
 \begin{zpar}
-Function to get a snapshot of the board.
+Add a new viewer to the controller. The viewer is only added when there is currently no viewer.
 \end{zpar} \\
-requestBoardStatus \sdef board.requestSnapshot
+\begin{schema}{addViewer}
+\Delta(viewer) \\
+viewer? : Viewer
+\where
+viewer = null \Rightarrow viewer' = viewer?
+\end{schema}
 \end{class}
 
 \end{document} 
