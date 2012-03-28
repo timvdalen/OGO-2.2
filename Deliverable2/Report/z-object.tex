@@ -17,38 +17,40 @@
 
 \section{Object-Z specification}
 In this section the game is mathematically specified using the Object-Z language. Object-Z is a strict superset of the older Z language. This means that all features in Z are also present in Object-Z. Object-Z is used instead of Z because the specification is fairly large and became a little unmanageable in Z. Object-Z provides features to embedded schemas in classes. Those classes have visibility lists and can inherit other classes. This means there is more modularity, and it is easier to adhere to the class diagram.
+Note that in the Z-specification, abbreviations are only used for dummy-variables; variables that refer to existing attributes or parameters in the class diagram are not abbreviated.
 
 We begin with a few axiomatic definitions. Then we give the long list of classes and how they are defined. The classes follow the specification in the class diagram as good as possible.
 
 \subsubsection{Basic Axiomatic definitions}
-The Rotation set is used to specify the current rotation of the robots. The reason to use numbers instead of names as we do in the class diagram is because we will have to do arithmetic with rotations in one of the schemas.
+The Rotation set is used for orientation of robots and conveyor belts. The reason it use numbers instead of names as we do in the class diagram is because we will use them for arithmetics in one of the schemas. All rotations are counter clock-wise.
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
 \end{axdef}
 
-BoardResponse is used by the Board and Controller to indicate the result of a move request. FAILED means that the requested move is illegal or impossible; SUCCESS means the move is successful executed; WIN indicates a successful move which resulted in a winning state.
+BoardResponse is used by the Board and Controller to indicate the result of a move request or (implied) movement notifications. FAILED means that the requested move is illegal or impossible; SUCCESS means the move is successful executed; WIN indicates a successful move which resulted in a winning state.
 \begin{axdef}
 BoardResponse == \{FAILED, SUCCESS, WIN\}
 \end{axdef}
 
-The Hint enumeration consists of all possible hints that can be given to a robot entering a hint tile.
+Hint is a response that a robot receives, when he visits a hint tile.
 \begin{axdef}
 Hint == \{NORTH, NORTH\_EAST, EAST, SOUTH\_EAST, \\ \t1 SOUTH, SOUTH\_WEST, WEST, NORTH\_WEST\}
 \end{axdef}
 
-The Null set is used as a set of schemas meaning nothing. A member of this set can be assigned to a variable to indicate the variable does not represent anything (the variable is null).
+For ease of use, we define a null axiomatic definition as a element from a Null set. It is used when an empty return-value is preferred.
 \begin{zed}
 [Null]
 \end{zed}
-
-For ease of use, we define a null axiomatic definition as a element from the Null set.
 \begin{axdef}
 null : Null
 \end{axdef}
 
 \subsubsection{Classes}
 
-The Coord class is the base class of two types of coordinates. It consists of two public integers representing the x and y values. There are no schemas defined because this class is functions as dataclass only.
+The Coord class is the base class of two types of coordinates. It consists of two public integers representing the x and y values.
+For sake of breviaty the Coord class is introduced in the Z-specification. It is used in both AbsoluteCoord and RelativeCoord; an absolute coordinate can now be expressed by restricting the values of x and y to values in the interval [0, BoardWidth). Note that this class is not shown in the class diagram, since that would not add any functionality to the class diagram. This specification uses computer coordinates with the y axis pointing downwards.
+
+The Coord class contains the width and height-variables from the Board; these variables are in fact the attributes of Board in the class diagram. In order to keep the Z-specification readable and easier to model, these attributes were placed in the Coord class.
 \begin{class}{Coord}
 \upharpoonright (x, y) \\
 \begin{state}
@@ -57,7 +59,7 @@ y : \num
 \end{state} \\
 \end{class}
 
-AbsoluteCoord is a specialization of the Coord class. The possible values of the AbsoluteCoord class is restricted to the dimensions of the board. This class is used to point to a specific tile on the board.
+This class is used to point to a specific tile on the board.
 \begin{class}{AbsoluteCoord}
 Coord \\
 \begin{zpar}
@@ -66,9 +68,6 @@ The BoardWith and BoardHeight variables are static and final. They specify the d
 \begin{axdef}
 BoardWith, BoardHeight : \nat
 \end{axdef} \\
-\begin{zpar}
-The only addition to the state of the class is the restriction of the x and y variables to be within the dimensions of the board.
-\end{zpar} \\
 \begin{state}
 \where
 0 \leq x < BoardWidth \\
@@ -82,20 +81,24 @@ Coord \\
 \end{class}
 
 The Tile class is the representation of one tile on the board. The tiles are managed by the board. The class keeps track of which robot currently occupies the tile. To differentiate between different kind of tiles, the Tile class is the base class of several specializations.
+ 
 \begin{class}{Tile}
 \upharpoonright (occupier) \\
 \begin{zpar}
-The occupier variable indicates which robot currently resides on this tile. If the tile is empty, the variable is Null. The isSnapshotTile variable is used to indicate wether the tile is a member of the board or a member of a snapshot. This distinction is made because the tiles of the snapshot are not supposed to change when a tile in the board is changed. Because we cannot clone a instance of a class in Z, we have the need of two different tile instances, representing exactly the same. This is done using the isSnapshotTile variable.
+The occupier variable indicates which robot currently resides on this tile. If the tile is empty, the variable is $null$. The private isSnapShotTile-member indicates that the tile is in fact a copy from a board; if the value is true, it is thus part of a BoardSnapshot-object. This distinction is convenient for the Z specification because this way it can represent clones of the board that contain different tile instances but in fact represent the same board.
 \end{zpar} \\
 \begin{state}
-occupier : Robot \cup Null \\
+occupier : Robot \cup \{null\} \\
 isSnapshotTile : \bool \\
 \end{state} \\
+\begin{zpar}
+Initially, no robots have been placed yet, so the occupied-variable has value $null$.
+\end{zpar}
 \begin{schema}{Init}
-occupier = Null
+occupier = null
 \end{schema} \\
 \begin{zpar}
-The clear schema is used by other schemas defined in other classes to remove any occupier from the tile. This schema is required because schemas can never change the state of a class on which they are not defined.
+The clear schema is used by schemas defined in other classes to remove the current occupying robot from the tile. (This schema is required because schemas can never change the state of a class on which they are not defined in object-Z)
 \end{zpar} \\
 \begin{schema}{clear}
 \Delta (occupier) \\
@@ -103,7 +106,7 @@ The clear schema is used by other schemas defined in other classes to remove any
 occupier' = Null
 \end{schema} \\
 \begin{zpar}
-The put schema has is defined for the same reason as the clear schema. It puts a given robot on the tile.
+The put schema has is defined for the same reason as the clear schema. It places the given robot on the tile.
 \end{zpar}\\
 \begin{schema}{put}
 \Delta (occupier) \\
@@ -112,24 +115,24 @@ input? : Robot
 occupier' = input?
 \end{schema} \\
 \begin{zpar}
-The rotate schema is empty. It can be seen as a abstract schema. Only a conveyor tile can actually be rotated, and the schema is overridden in ConveyorTile to actually rotate the tile. In all other types of tiles, the schema is just empty.
+The rotate schema is empty; it can be seen as a abstract schema. This schema is overridden by Conveyor Tile, since a conveyor tile is the only tile that can change its rotation. In all other types of tiles, the schema is just empty.
 \end{zpar} \\
 \begin{schema}{rotate}
 \Delta()
 \end{schema}
 \end{class}
 
-NormalTile is a subclass of Tile. It adds nothing to the base class and is only used to give it a new name.
+A NormalTile is a subclass of Tile  a tile with no special meaning.
 \begin{class}{NormalTile}
 Tile
 \end{class}
 
-The HintTile class is also a empty subclass of tile. It is only renamed to indicate the board should produce a hint when a robot occupies it.
+The HintTile class is also subclass of tile. It is only renamed to indicate the board should produce a hint when a robot occupies it.
 \begin{class}{HintTile}
 Tile
 \end{class}
 
-The BrokenRobotTile class has an additional invariant that makes sure no robot can ever occupy the tile.
+A BrokenRobotTile is a (static) tile that contains a broken robot that prohibits other robots from visiting this tile; hence, the class has an additional invariant that makes sure no robot can ever occupy this tile.
 \begin{class}{BrokenRobotTile}
 Tile \\
 \begin{state}
@@ -137,7 +140,7 @@ occupier = Null
 \end{state}
 \end{class}
 
-A HomeTile has a target variable to indicate to which robot the instance is the home tile.
+A HomeTile is a tile that a (specific) robot has to visit in order to win the game. 
 \begin{class}{HomeTile}
 Tile \\
 \upharpoonright (target) \\
@@ -146,7 +149,7 @@ target : Robot
 \end{state}
 \end{class}
 
-The ConeyorTile class has an additional variable indicating the orientation of the conveyor. When a robot enters the tile, it is transported in the directed indicated by the rotation variable.
+A ConveyorTile is a tile that automatically transports a robot to another tile, when a robot visits this tile. It may also rotate the robot.
 \begin{class}{ConveyorTile}
 Tile \\
 \upharpoonright (rotation) \\
@@ -154,7 +157,7 @@ Tile \\
 rotation : Rotation
 \end{state} \\
 \begin{zpar}
-This is the overridden schema of the base class. It changes the rotation variable. There is no invariant present in the variable, because it does not matter what the new rotation of the tile is.
+This is the overridden schema of the base class. It changes the orientation of the conveyor. There is no invariant present in the variable since the resulting orientation will in an arbitrary direction.
 \end{zpar} \\
 \begin{schema}{rotate}
 \Delta (rotation)
