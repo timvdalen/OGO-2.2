@@ -68,9 +68,6 @@ rotate is a helper-method that rotates this ConveyorTile to an arbitrary directi
 <canReset>
 canReset is a public attribute that determines whether the board can terminate.
 
-<initialize>
-
-
 <tiles>
 tiles maps every possible coordinate to a (polymorphic) tile.
 
@@ -114,7 +111,7 @@ Initially, the board has no tiles, robots and also no controller. The reset-func
 makeSnapshot is a helper-method that is used by the board to create a snapshot for the viewer. The output-variable is thus of type snapshot. The dummy-variables $c_1$ and $t_1$ describe an absolute coordinate on the board and the associated tile, respectively; the dummy-variables $c_2$ and $t_2$ describe the snapshot-coordinate of $c_1$ and the snapshot-tile of $t_1$. A snapshot simply makes a copy of each tile, hence the tile-coordinates of $c_1$ and $c_2$ are the same. Since $t_2$ contains the copy of the tile $t_1$, it has the same properties as $t_1$. For example, if $t_1$ is a normal tile, then the corresponding snapshot-tile $t_2$ is also a normal tile. Note that the occupier of a tile and its rotation, in case of a conveyor tile, are also recorded in the snapshot-tiles. 
 
 <hintMapping>
-hintMapping maps a tecti-linear unitvector that describes a direction to a hint. A tecti-linear vector in a non-Euclidean space. Hence, a pair (1, 1) does not reflect an (x, y)-coordinate pair; it is used here to map the different cardinal directions of a compass to a single pair (i, j), where i and j are both numbers in the range {-1, 0, 1}. Below, the hintMappings along with the corresponding cardinal directions (hints) are given. This function is used by getHint to obtain a hint in the appropriate direction.
+hintMapping maps a direction to a hint; it is used here to map the different cardinal directions of a compass to a single pair (i, j), where i and j are both numbers in the range {-1, 0, 1}. Below, the hintMappings along with the corresponding cardinal directions (hints) are given. This function is used by getHint to obtain a hint in the appropriate direction.
 
 <rotate90Deg>
 rotate90Deg maps a hint, which is a cardinal direction, to the cardinal direction that is obtained by a counter-clockwise rotation over 90 degrees. For example, by rotating the cardinal direction North counter-clockwise over 90 degrees, the cardinal direction West is obtained. The other rotate90Deg-mappings are given below. This helper-function is used by getHint to map the given hint to the current rotation of the robot.
