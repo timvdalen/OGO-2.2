@@ -1,11 +1,11 @@
-During the specification of this program, the following decisions have been made:\\
+During the specification of this program, the following decisions have been made:
 \begin{itemize}
-    \item Every robot must be able to reach its hometile: broken robots and conveyer tile cannot block the path.\\
-    \item If a robot tries to lock himself in, the move is denied because it must be able to reach it's hometile.\\
-    \item Robots can also be moved by a tiles exchange.\\
-    \item When a robot is on a conveyer tile and the end of the tile is blocked by another robot, the robot stays on the conveyer tile.\\
-    \item If a robot is being moved by a conveyer tile, the robot is moved to the end of the conveyor belt at once; hence, the Viewer will not show the movement of the robot on the belt as separate steps. \\
-    \item If a robot that can go do multiple steps at once and it walks over its home tile, it has won.\\
-    \item The viewer receives all the updates from other classes, it does not make requests itself.\\
-    \item A robot is notified once it has been moved, but it does not know what direction the movement had.\\
+    \item Every robot must be able to reach its hometile: broken robots and conveyer tile cannot block the path.
+    \item If a robot tries to lock himself in, the move is denied because it must be able to reach it's hometile.
+    \item Robots can also be moved by a tiles exchange.
+    \item When a robot is on a conveyer tile and the end of the tile is blocked by another robot, the robot stays on the conveyer tile.
+    \item If a robot is being moved by a conveyer tile, the robot is moved to the end of the conveyor belt at once; hence, the Viewer will not show the movement of the robot on the belt as separate steps. 
+    \item If a robot that can go do multiple steps at once and it walks over its home tile, it has won.
+    \item The viewer receives all the updates from other classes, it does not make requests itself.
+    \item A robot is notified once it has been moved, but it does not know what direction the movement had.
 \end{itemize} 
