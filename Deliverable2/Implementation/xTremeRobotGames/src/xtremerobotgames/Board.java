@@ -19,7 +19,7 @@ public class Board {
     private static int height = 10;
     private Tile[][] tiles;
     public Controller controller;
-    private RobotCoord robots;
+    public RobotCoord robots;
     private HashMap<Robot, Tile> home;
     private HashMap<Robot, Rotation> robotRotation;
 
@@ -55,6 +55,33 @@ public class Board {
 
     public void addHintTile(AbsoluteCoord abs){
         tiles[abs.getX()][abs.getY()] = new HintTile();
+    }
+
+    public void exchangeTiles(AbsoluteCoord abs, AbsoluteCoord abs1){
+        Tile help = tiles[abs.getX()][abs.getY()];
+        tiles[abs.getX()][abs.getY()] = tiles[abs1.getX()][abs1.getY()];
+        tiles[abs1.getX()][abs1.getY()] = help;
+        if(tiles[abs.getX()][abs.getY()].occupier != null){
+            saveLocation(abs, tiles[abs.getX()][abs.getY()].occupier);
+        }
+        if(tiles[abs1.getX()][abs1.getY()].occupier != null){
+            saveLocation(abs1, tiles[abs1.getX()][abs1.getY()].occupier);
+        }
+        if(tiles[abs.getX()][abs.getY()].getClass() == ConveyorTile.class){
+            ConveyorTile conv = (ConveyorTile) tiles[abs.getX()][abs.getY()];
+            int i = (int) (Math.random() * 4);
+            if(i == 0){
+                conv.changeRot(Rotation.R0DEG);
+            } else if(i == 1){
+                conv.changeRot(Rotation.R90DEG);
+            } else if(i == 2){
+                conv.changeRot(Rotation.R180DEG);
+            } else {
+                conv.changeRot(Rotation.R270DEG);
+            }
+
+        }
+
     }
     
     //might be a better way to solve this
@@ -96,6 +123,7 @@ public class Board {
             } else if (tiles[position.getX()][position.getY()].getClass() == HomeTile.class){
                 HomeTile ht = (HomeTile) tiles[position.getX()][position.getY()];
                     if(ht.homeRobot == r){
+                        saveLocation(position ,r);
                         return BoardResponse.WIN;
                     } else {
                     saveLocation(position, r);
