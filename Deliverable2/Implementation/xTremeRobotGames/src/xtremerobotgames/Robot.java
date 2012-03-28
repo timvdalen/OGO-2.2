@@ -28,6 +28,7 @@ public class Robot{
 	public void notifyHint(Hint h){
 		hints.add(h);
 	}
+        
 
 	public void terminate(){
 		//No clean-up code needed yet and Java has no methods to terminate.

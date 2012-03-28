@@ -63,9 +63,39 @@ public class Board {
         tiles[abs1.getX()][abs1.getY()] = help;
         if(tiles[abs.getX()][abs.getY()].occupier != null){
             saveLocation(abs, tiles[abs.getX()][abs.getY()].occupier);
+            Robot r = tiles[abs.getX()][abs.getY()].occupier;
+            int i = (int) (Math.random() * 4);
+            if(i == 0){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R0DEG);
+            } else if(i == 1){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R90DEG);
+            } else if(i == 2){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R180DEG);
+            } else {
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R270DEG);
+            }
         }
         if(tiles[abs1.getX()][abs1.getY()].occupier != null){
             saveLocation(abs1, tiles[abs1.getX()][abs1.getY()].occupier);
+            Robot r = tiles[abs1.getX()][abs1.getY()].occupier;
+            int i = (int) (Math.random() * 4);
+            if(i == 0){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R0DEG);
+            } else if(i == 1){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R90DEG);
+            } else if(i == 2){
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R180DEG);
+            } else {
+                robotRotation.remove(r);
+                robotRotation.put(r, Rotation.R270DEG);
+            }
         }
         if(tiles[abs.getX()][abs.getY()].getClass() == ConveyorTile.class){
             ConveyorTile conv = (ConveyorTile) tiles[abs.getX()][abs.getY()];
