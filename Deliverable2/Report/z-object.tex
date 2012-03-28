@@ -127,7 +127,7 @@ A NormalTile is a subclass of Tile  a tile with no special meaning.
 Tile
 \end{class}
 
-The HintTile class is also subclass of tile. It is only renamed to indicate the board should produce a hint when a robot occupies it.
+The HintTile class is also subclass of tile. It is just renamed to indicate the board should produce a hint when a robot occupies it.
 \begin{class}{HintTile}
 Tile
 \end{class}
@@ -164,12 +164,12 @@ This is the overridden schema of the base class. It changes the orientation of t
 \end{schema}
 \end{class}
 
-The Board class maintains is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
+The Board class is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
 \begin{class}{Board}
 \upharpoonright (Init, initialize, requestTilesExchange, canReset, initialize) \\
 \begin{nobottomstate}
 \begin{zpar}
-The tiles variable if a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
+The tiles variable is a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
 \end{zpar} \\
 tiles : \power (AbsoluteCoord \fun \: \downarrow \! Tile) \\
 \also \also \also
