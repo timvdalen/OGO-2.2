@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{oz-nolines}
 \usepackage{listings, a4wide}
 \lstset{breaklines=true, numbers=left}
@@ -13,15 +13,13 @@
 
 \begin{document}
 
-\maketitle
-
 \section{Object-Z specification}
 In this section the game is mathematically specified using the Object-Z language. Object-Z is a strict superset of the older Z language. This means that all features in Z are also present in Object-Z. Object-Z is used instead of Z because the specification is fairly large and became a little unmanageable in Z. Object-Z provides features to embedded schemas in classes. Those classes have visibility lists and can inherit other classes. This means there is more modularity, and it is easier to adhere to the class diagram.
 Note that in the Z-specification, abbreviations are only used for dummy-variables; variables that refer to existing attributes or parameters in the class diagram are not abbreviated.
 
 We begin with a few axiomatic definitions. Then we give the long list of classes and how they are defined. The classes follow the specification in the class diagram as good as possible.
 
-\subsubsection{Basic Axiomatic definitions}
+\subsection{Basic Axiomatic definitions}
 The Rotation set is used for orientation of robots and conveyor belts. The reason it use numbers instead of names as we do in the class diagram is because we will use them for arithmetics in one of the schemas. All rotations are counter clock-wise.
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
@@ -45,7 +43,7 @@ For ease of use, we define a null axiomatic definition as a element from a Null 
 null : Null
 \end{axdef}
 
-\subsubsection{Classes}
+\subsection{Classes}
 
 The Coord class is the base class of two types of coordinates. It consists of two public integers representing the x and y values.
 For sake of breviaty the Coord class is introduced in the Z-specification. It is used in both AbsoluteCoord and RelativeCoord; an absolute coordinate can now be expressed by restricting the values of x and y to values in the interval [0, BoardWidth). Note that this class is not shown in the class diagram, since that would not add any functionality to the class diagram. This specification uses computer coordinates with the y axis pointing downwards.
@@ -178,7 +176,7 @@ The robots function assigns a rotation to every robot in the game.
 \end{zpar} \\
 robots : \power (Robot \pfun Rotation) \\
 \also \also \also
-controller : Controller \\
+controller : Controller \cup Null \\
 \also \also \also
 \begin{zpar}
 The occupied variable is a set of all coordinates in the board currently occupied by either a living robot or a broken robot.
@@ -240,8 +238,8 @@ This invariant requires every robot to have a reachable HomeTile.
 The transitive closure on the union between the adjacent relation and the conveyorDest function
 provides a relation between every reachable pair of coordinates. The invariant maintains that the coordinatepair of every robot and its HomeTile are reachable.
 \end{zpar} \\
-\forall r : robots | \exists c, d : \dom tiles @  \\ \t1 tiles(c) \in HomeTile \wedge tiles(c).target = r \; \; \wedge \\ \t1
-d.occupier = r \wedge (c, d) \in (adjacent \cup conveyorDest)\star
+\forall r : robots | \exists c1, c2 : \dom tiles @  \\ \t1 tiles(c1) \in HomeTile \wedge tiles(c1).target = r \; \; \wedge \\ \t1
+c2.occupier = r \wedge (c1, c2) \in (adjacent \cup conveyorDest)\star
 \also \also \also
 \begin{zpar}
 There should be a minimum of two robots, and at least one robot with rule set A and one robot with rule set B
@@ -272,9 +270,9 @@ The internal initializer makes sure the variables of board are initialized to so
 \begin{schema}{internalInit}
 \Delta (tiles, robots, controller)
 \where
-tiles' \not = Null \\
-robots' \not = Null \\
-controller' \not = Null
+tiles' \not = \emptyset \\
+robots' \not = \emptyset \\
+controller' \not = null
 \end{schema} \\
 \znewpage
 \begin{zpar}
@@ -288,9 +286,9 @@ When the Board resets itself, the tiles, the controller and the robots are set t
 \begin{schema}{reset}
 \Delta (tiles, robots. controller)
 \where
-tiles' = Null \\
-robots' = Null \\
-controller' = Null
+tiles' = \emptyset \\
+robots' = \emptyset \\
+controller' = null
 \end{schema} \\
 \begin{zpar}
 This schema creates a snapshot of the current situation of the board.
@@ -391,15 +389,15 @@ rotate90Deg(SOUTH\_EAST) = NORTH\_EAST
 \begin{zpar}
 This schema must be called everytime something changes on the board. It makes sure that if there are robots that were previously blocked are moved to their destination. The schema that actually moves the robot is moveBlockedRobot and is described below. This schema is called first, and then the schema is called recursive. There is a schema that is nondeterministically called, but only when there is no robot left to move. If this schema is called, the recursion stops. After the recursion, the viewer is notified of the change.
 \end{zpar} \\
-moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = Null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 controller.notifyView \\
+moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 controller.notifyView \\
 \also \also \also
 \begin{zpar}
 This schema moves one unblocked robot to its destination. It first finds two tiles for which the first tile is a conveyor tile and has an robot that occupies it. The second tile is the destination of the conveyor belt. It then moves the robot from the first tile to the second tile. If the new location of the robot is its hometile, it sends a WIN response along with the notifyAutomovement, else it sends a SUCCESS response.
 \end{zpar} \\
-moveBlockedRobot \sdef [c1, c2 : \dom tiles, r : \dom robots, \\ \t1 response : BoardResponse | \\ \t1 tiles(c1) \in ConveyorTile \wedge tiles(c1).occupier = r \; \; \wedge \\ \t1 conveyorDest(c1) \not = c1 \wedge conveyorDest(c1) = c2 \; \; \wedge \\ \t1
+moveBlockedRobot \sdef [c1, c2 : \dom tiles, r : \dom robots, \\ \t1 response? : BoardResponse | \\ \t1 tiles(c1) \in ConveyorTile \wedge tiles(c1).occupier = r \; \; \wedge \\ \t1 conveyorDest(c1) \not = c1 \wedge conveyorDest(c1) = c2 \; \; \wedge \\ \t1
 (\IF tiles(c2) \in HomeTile \wedge tiles(c2).target = r \\ \t1
-\THEN response = WIN \\ \t1
-\ELSE response = SUCCESS)] @ \\ \t2 c1.clear \wedge c2.put[input?/r] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/r] \\
+\THEN response? = WIN \\ \t1
+\ELSE response? = SUCCESS)] @ \\ \t2 c1.clear \wedge c2.put[input?/r] \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/r] \\
 \also \also \also
 \begin{zpar}
 This schema processes a request to exchange two tiles using the getValidTiles schema. It first requests two valid tiles, then it actually exchanges those tiles using the exchangeTiles schema.
@@ -408,7 +406,7 @@ be notified of the exchange. The notifyAutomovement schema of controller is alwa
 After the whole request is processed, the moveBlockedRobotRecursive schema is called to move al unblocked robots. Then the viewer is notified of the change.
 \end{zpar} \\
 requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
-\t1 [t1, t2 : Tile, response : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp controller.notifyView \\
+\t1 [t1, t2 : Tile, response? : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response? = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp controller.notifyView \\
 \znewpage
 \begin{zpar}
 The output of this schema is a pair of two tiles that can be exchanged. The schema makes sure the invariants of the board will still hold when the tiles are exchanged. A tile is valid for an exchange if it is not a HomeTile or a HintTile.
@@ -467,7 +465,7 @@ robots'(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 This schema moves a robot to a new tile. It first calls a moveWalkPre subschema. This schema determines whether the move is allowed, and where the robot should be moved. It outputs a putTile, robot, beginTile, response, and autoMovement variable. If the response is WIN or SUCCESS, the begin tile is cleared of the robot, and the robot is put on the putTile tile. Then the view is notified and the robot is notified about a possible hint.
 If the autoMovement variable is true, it means the robot has crossed a conveyor belt and should be notified. When the robot is moved, the moveBlockedRobotsRecursive schema is called to move all unblocked robots.
 \end{zpar} \\
-moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge controller.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/robot?]))) \; \; \comp \\ \t1
+moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge controller.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement))) \; \; \comp \\ \t1
 moveBlockedRobotsRecursive \\
 \begin{zpar}
 This function is needed for the moveWalkPre schema. It rotates a sequence of relative coordinates clockwise 90 degrees.
@@ -587,21 +585,21 @@ This invariant rotates the relative path to the rotation of the robot and checks
 \IF relativePath \not = null \; \; \wedge \\ \t1 rotatePath^{numRotations}(relativePath) \in \dom relativeToAbsolute \\
 \THEN absolutePath = relativeToAbsolute(
 rotatePath^{numRotations}(relativePath)) \\
-\ELSE absolutePath = Null
+\ELSE absolutePath = null
 \also \also \also
 \begin{zpar}
 This invariant maintains the validMove function. It checks whether there exists a board for which every variable is equal to the present variable, but the robot is moved from the beginTile to the given tile.
 \end{zpar} \\
 \forall t : Tile | validMove(t) = \exists b : Board | \\ \t2
-    b.robots = robots \wedge b.tiles = tiles \; \; \wedge \\ \t1 b.tiles(beginTile!).occupier = Null \wedge b.tiles(t).occupier = robot? \; \; \wedge \\ \t1 \forall t : (\ran tiles) \setminus \{beginTile!, t\} | \\ \t2 t.occupier = tiles(b.tiles^{-1}(t)).occupier \; \; \wedge \\ \t2 t \in HomeTile \Rightarrow t.target = tiles(b.tiles^{-1}(t)).target
+    b.robots = robots \wedge b.tiles = tiles \; \; \wedge \\ \t1 b.tiles(beginTile!).occupier = null \wedge b.tiles(t).occupier = robot? \; \; \wedge \\ \t1 \forall t : (\ran tiles) \setminus \{beginTile!, t\} | \\ \t2 t.occupier = tiles(b.tiles^{-1}(t)).occupier \; \; \wedge \\ \t2 t \in HomeTile \Rightarrow t.target = tiles(b.tiles^{-1}(t)).target
 \end{nobothschema}
 \znewpage
 \begin{notopschema}
 \begin{zpar}
-This invariants determines whether the move is valid, where the robot should be put and if there occurs an auto movement. If the path is blocked, and there is no conveyor before the block, the move is invalid. If there is a conveyor on the path, the move is valid, and there is auto movement. If there is no block and no conveyor tile the move is valid, and there has not been auto movement. In all other cases, the move is not valid.
+This invariant determines whether the move is valid, where the robot should be put and if there occurs an auto movement. If the path is blocked, and there is no conveyor before the block, the move is invalid. If there is a conveyor on the path, the move is valid, and there is auto movement. If there is no block and no conveyor tile the move is valid, and there has not been auto movement. In all other cases, the move is not valid.
 \end{zpar} \\
 \IF absolutePath = null \vee (pathBlockedOn(absoltePath) \not = -1 \; \;\wedge \\ \t1 (firstConveyor(absolutePath) = -1 \; \; \vee \\ \t2 firstConveyor(absolutePath) > pathBlockedOn(absolutePath)) \\
-\THEN moveValid = \false \; \; \wedge putTile! = Null \wedge autoMovement! = \false \\
+\THEN moveValid = \false \wedge putTile! = null \wedge autoMovement! = \false \\
 \ELSE \IF firstConveyor(absolutePath) \not = -1 \; \; \wedge \\ \t1 validMove(conveyorDest(firstConveyor(absolutePath))) \\
 \THEN moveValid = \true \wedge autoMovement! = \true \;\; \wedge \\ \t1 putTile! = conveyorDest(firstConveyor(absolutePath) \\
 \ELSE \IF validMove(absolutePath(\#absolutePath - 1)) \\
