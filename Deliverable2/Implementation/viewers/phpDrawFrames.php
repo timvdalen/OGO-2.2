@@ -1,4 +1,5 @@
 <?php
+ini_set('memory_limit', '512M');
 	//Player settings
 	$colors = array("blue", "red", "yellow");
 
@@ -50,6 +51,7 @@
 						$conveyor = new Imagick('images/conveyor.png');
 						$conveyor->rotateImage(new ImagickPixel('none'), $rot);
                                         	$draw->composite(imagick::COMPOSITE_DEFAULT, $cellid * 50 + 1, $rowid * 50 + 1, 49, 49, $conveyor);
+						break;
 				}
 
 				if(isset($cell->occupier)){
