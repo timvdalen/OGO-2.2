@@ -14,7 +14,7 @@ Note that in the Z-specification, abbreviations are only used for dummy-variable
 Rotation is used for the orientation of robots and conveyor belts.
 
 <BoardResponse>
-BoardResponse is a response to move requests or (implied) movement notifications. In an (implied) movement notification, WIN indicates that the recipient has won the game.
+BoardResponse is a response to move requests or (implied) movement notifications. In an (implied) movement notification, WIN indicates that the recipient has won the game; this notification in the scenario where a robot "accidentally" ends up on his home tile. That is, if the end of a conveyor belt is blocked by another robot and this robot moves away, the robot on the conveyor belt is pushed off the conveyor belt and lands on his home tile.
 
 <Hint>
 Hint is a response that a robot receives, when he visits a hint tile.
