@@ -73,9 +73,6 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
         v.notifyStateChange();
 
-        b.exchangeTiles(new AbsoluteCoord(6,6), new AbsoluteCoord(4,4)); //switch
-        v.notifyStateChange();
-
         b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
         v.notifyStateChange();
 
@@ -120,6 +117,9 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(-1,0), r2, Rotation.R0DEG);
         v.notifyStateChange();
 
+        b.exchangeTiles(new AbsoluteCoord(6,6), new AbsoluteCoord(4,4)); //switch
+        v.notifyStateChange();
+
         b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
         v.notifyStateChange();
 
@@ -154,10 +154,8 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(0,1), r1, Rotation.R0DEG);
         v.notifyStateChange();
 
-        System.out.println(b.robots.getAbsoluteCoord(r3).getX() + " " + b.robots.getAbsoluteCoord(r3).getY());
         b.exchangeTiles(new AbsoluteCoord(9,8), new AbsoluteCoord(4,0));    //switch
         v.notifyStateChange();
-        System.out.println(b.robots.getAbsoluteCoord(r3).getX() + " " + b.robots.getAbsoluteCoord(r3).getY());
 
         b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
         v.notifyStateChange();

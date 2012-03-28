@@ -17,7 +17,7 @@ public class Board {
 
     private static int width = 10;
     private static int height = 10;
-    private Tile[][] tiles;
+    public Tile[][] tiles;
     public Controller controller;
     public RobotCoord robots;
     private HashMap<Robot, Tile> home;
@@ -58,13 +58,14 @@ public class Board {
     }
 
     public void exchangeTiles(AbsoluteCoord abs, AbsoluteCoord abs1){
+        Random rand = new Random();
         Tile help = tiles[abs.getX()][abs.getY()];
         tiles[abs.getX()][abs.getY()] = tiles[abs1.getX()][abs1.getY()];
         tiles[abs1.getX()][abs1.getY()] = help;
         if(tiles[abs.getX()][abs.getY()].occupier != null){
             saveLocation(abs, tiles[abs.getX()][abs.getY()].occupier);
             Robot r = tiles[abs.getX()][abs.getY()].occupier;
-            int i = (int) (Math.random() * 4);
+            int i = rand.nextInt(4);
             if(i == 0){
                 robotRotation.remove(r);
                 robotRotation.put(r, Rotation.R0DEG);
@@ -82,7 +83,7 @@ public class Board {
         if(tiles[abs1.getX()][abs1.getY()].occupier != null){
             saveLocation(abs1, tiles[abs1.getX()][abs1.getY()].occupier);
             Robot r = tiles[abs1.getX()][abs1.getY()].occupier;
-            int i = (int) (Math.random() * 4);
+            int i = rand.nextInt(4);
             if(i == 0){
                 robotRotation.remove(r);
                 robotRotation.put(r, Rotation.R0DEG);
@@ -99,7 +100,7 @@ public class Board {
         }
         if(tiles[abs.getX()][abs.getY()].getClass() == ConveyorTile.class){
             ConveyorTile conv = (ConveyorTile) tiles[abs.getX()][abs.getY()];
-            int i = (int) (Math.random() * 4);
+            int i = rand.nextInt(4);
             if(i == 0){
                 conv.changeRot(Rotation.R0DEG);
             } else if(i == 1){
@@ -109,6 +110,22 @@ public class Board {
             } else {
                 conv.changeRot(Rotation.R270DEG);
             }
+            tiles[abs.getX()][abs.getY()] = conv;
+
+        }
+        if(tiles[abs1.getX()][abs1.getY()].getClass()== ConveyorTile.class){
+            ConveyorTile conv = (ConveyorTile) tiles[abs1.getX()][abs1.getY()];
+            int i = rand.nextInt(4);
+            if(i == 0){
+                conv.changeRot(Rotation.R0DEG);
+            } else if(i == 1){
+                conv.changeRot(Rotation.R90DEG);
+            } else if(i == 2){
+                conv.changeRot(Rotation.R180DEG);
+            } else {
+                conv.changeRot(Rotation.R270DEG);
+            }
+            tiles[abs1.getX()][abs1.getY()] = conv;
 
         }
 
