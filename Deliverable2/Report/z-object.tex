@@ -63,10 +63,10 @@ This class is used to point to a specific tile on the board.
 \begin{class}{AbsoluteCoord}
 Coord \\
 \begin{zpar}
-The BoardWith and BoardHeight variables are static and final. They specify the dimensions of the board.
+The BoardWidth and BoardHeight variables are static and final. They specify the dimensions of the board.
 \end{zpar} \\
 \begin{axdef}
-BoardWith, BoardHeight : \nat
+BoardWidth, BoardHeight : \nat
 \end{axdef} \\
 \begin{state}
 \where
@@ -88,12 +88,12 @@ The Tile class is the representation of one tile on the board. The tiles are man
 The occupier variable indicates which robot currently resides on this tile. If the tile is empty, the variable is $null$. The private isSnapShotTile-member indicates that the tile is in fact a copy from a board; if the value is true, it is thus part of a BoardSnapshot-object. This distinction is convenient for the Z specification because this way it can represent clones of the board that contain different tile instances but in fact represent the same board.
 \end{zpar} \\
 \begin{state}
-occupier : Robot \cup \{null\} \\
+occupier : Robot \cup Null \\
 isSnapshotTile : \bool \\
 \end{state} \\
 \begin{zpar}
 Initially, no robots have been placed yet, so the occupied-variable has value $null$.
-\end{zpar}
+\end{zpar} \\
 \begin{schema}{Init}
 occupier = null
 \end{schema} \\
