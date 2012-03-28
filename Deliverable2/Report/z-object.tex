@@ -626,7 +626,7 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 \end{state}
 \end{class}
 
-A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board.
+A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. The coordinates are relative to the rotation of the robot. For example, when a robot is rotated 90 degrees, and has a rule to move forward, it moves to the right.
 \begin{class}{Rule}
 \upharpoonright (possibleMoves, possibleRotations) \\
 \begin{state}
@@ -636,7 +636,8 @@ possibleRotations : \power Rotation
 \forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
 \end{state} \\
 \end{class}
-
+\begin{zpar}
+\end{zpar} \\
 \begin{axdef}
 RuleA : Rule
 \where
