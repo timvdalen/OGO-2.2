@@ -33,6 +33,7 @@ public class Viewer {
     }
 
     private void updateView(){
+        boardsnapshot = controller.requestBoardSnapshot();
         FrameData data = new FrameData(this.frameid, board);
 	System.out.println(data.encode());
 	this.frameid++;

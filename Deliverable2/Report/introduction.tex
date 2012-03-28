@@ -1,10 +1,6 @@
 This document describes a formal specification on the informal one given in "Informele Specificatie" by OGO 2.2 group 2 (see appendix~\ref{appendix:informal}).
 It will formalize the core points of the given informal specification in order to remove all ambiguity.
 
-The major objective is to specify a game played by robots. These robots are in search of their home tiles on the board. When a robot finds his home tiles, he has won and the rest has lost. Though, many obstacles lie in the way of the robots, such as tiles filled with broken robots and conveyor tiles, which will move and rotate the robot. After being moved on such a conveyor tile, the orientation of the robot is lost. Also, a robot might be swapped to another tile by the board. 
+The document follows the structure of the specification. First, the use cases will be discussed and a diagram of how they work together will be shown. Then, the message sequence charts will be given, along with a high level sequence chart that shows how they fit together. In the design section, the class diagram and class descriptions will be given. After that the state charts will be given to describe the changes in the state space of the model. In the last section the resulting formal specification in Object-Z will be given.
 
-In his quest to find his home tile, the robot has one object that might help him: the hint tile. This tile gives him a hint on in what direction his home tile lies. 
-
-When one robot has won, the others are destroyed and fireworks are shown.
-
-In the following document, a formal description will be given by the problem sketched here.
+The document will end with a conclusion.

@@ -12,7 +12,7 @@ Normally the board now goes to the RequestedRobotMoved state from which it will 
 \\
 If the requested move would mean that other robots will get moved the board goes to the RequestedRobotMoved state with the Controller.notifyAutoMovement() function which means that the other robot will receive a notifyAutoMovement to let him know that he has been moved, all the other functions called are the same as with the regular move.\\
 \\
-When a robot moves to it's homeTile, the boardResponse will be WIN and the game ends, then the board goes to the Game Over state and it can terminate or start a new game, note the choice between termination or new game is nondeterministic.\\
+When a robot moves to it's homeTile, the boardResponse will be WIN and the game ends, then the board goes to the Game\_Over state and it can terminate or start a new game.\\
 \\
 Every time a robot has made a move, the controller requests a tile-exchange via the requestTilesExchange() function, this exchange is performed by the board.\\
 	
@@ -33,7 +33,7 @@ After every successful move and tile exchange the controller also calls the View
 \\
 At the end of the game the viewer is terminated.\\
 	
-	\includegraphics[width=\linewidth]{statecharts/view.pdf}
+	\includegraphics[width=\linewidth]{statecharts/viewer.pdf}
 
 	\subsubsection{Robot}
 	The robot class gets initialized by the controller, it starts at a randomly picked spot, which can be a normal tile, a hint tile or a conveyer tile. Depending on the tile the robot goes to the OnHintTile state or the OnRegularOrConveyorTile state.\\

@@ -10,7 +10,7 @@ public class Robot{
 
 	private ArrayList<Hint> hints;
 
-	Robot(int _id, Controller _c, Rule _r){
+	Robot(int _id, Controller _c, Rule _r, AbsoluteCoord abscoord){
 		this.id = _id;
 		this.c = _c;
 		this.r = _r;
@@ -28,7 +28,6 @@ public class Robot{
 	public void notifyHint(Hint h){
 		hints.add(h);
 	}
-        
 
 	public void terminate(){
 		//No clean-up code needed yet and Java has no methods to terminate.

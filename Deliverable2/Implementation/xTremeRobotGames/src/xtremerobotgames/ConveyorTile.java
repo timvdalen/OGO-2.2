@@ -31,20 +31,4 @@ public class ConveyorTile extends Tile{
         return relCoord;
     }
 
-    public void changeRot(Rotation r){
-        if(r == Rotation.R0DEG){
-            relCoord = new RelativeCoord( -1, 0);
-            rot = r;
-        } else if(r == Rotation.R90DEG){
-            relCoord = new RelativeCoord( 0, 1);
-            rot = r;
-        } else if(r == Rotation.R180DEG){
-            relCoord = new RelativeCoord( 1, 0);
-            rot = r;
-        } else {
-            relCoord = new RelativeCoord( 0, -1);
-            rot = r;
-        }
-    }
-
 }

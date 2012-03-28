@@ -17,28 +17,25 @@ public class Board {
 
     private static int width = 10;
     private static int height = 10;
-    public Tile[][] tiles;
-    public Controller controller;
-    public RobotCoord robots;
+    private Tile[][] tiles;
+    private Controller controller;
+    private RobotCoord robots;
     private HashMap<Robot, Tile> home;
     private HashMap<Robot, Rotation> robotRotation;
 
     //TO DO constructor
-    public Board(){
+    Board(HashMap<Robot, Tile> hometiles){
         tiles = new Tile[width][height];
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 tiles[i][j] = new NormalTile();
             }
         }
-        robots = new RobotCoord();
-        home = new HashMap<Robot, Tile>();
-        robotRotation = new HashMap<Robot, Rotation>();
         controller = new Controller();
+        home = hometiles;
     }
 
     public void addRobot(Robot r, AbsoluteCoord abs, AbsoluteCoord hometile, Rotation rot){
-        tiles[abs.getX()][abs.getY()].occupier = r;
         robots.addRobot(r, abs);
         tiles[hometile.getX()][hometile.getY()] = new HomeTile(r);
         home.put(r, tiles[hometile.getX()][hometile.getY()]);
@@ -55,80 +52,6 @@ public class Board {
 
     public void addHintTile(AbsoluteCoord abs){
         tiles[abs.getX()][abs.getY()] = new HintTile();
-    }
-
-    public void exchangeTiles(AbsoluteCoord abs, AbsoluteCoord abs1){
-        Random rand = new Random();
-        Tile help = tiles[abs.getX()][abs.getY()];
-        tiles[abs.getX()][abs.getY()] = tiles[abs1.getX()][abs1.getY()];
-        tiles[abs1.getX()][abs1.getY()] = help;
-        if(tiles[abs.getX()][abs.getY()].occupier != null){
-            saveLocation(abs, tiles[abs.getX()][abs.getY()].occupier);
-            Robot r = tiles[abs.getX()][abs.getY()].occupier;
-            int i = rand.nextInt(4);
-            if(i == 0){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R0DEG);
-            } else if(i == 1){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R90DEG);
-            } else if(i == 2){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R180DEG);
-            } else {
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R270DEG);
-            }
-        }
-        if(tiles[abs1.getX()][abs1.getY()].occupier != null){
-            saveLocation(abs1, tiles[abs1.getX()][abs1.getY()].occupier);
-            Robot r = tiles[abs1.getX()][abs1.getY()].occupier;
-            int i = rand.nextInt(4);
-            if(i == 0){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R0DEG);
-            } else if(i == 1){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R90DEG);
-            } else if(i == 2){
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R180DEG);
-            } else {
-                robotRotation.remove(r);
-                robotRotation.put(r, Rotation.R270DEG);
-            }
-        }
-        if(tiles[abs.getX()][abs.getY()].getClass() == ConveyorTile.class){
-            ConveyorTile conv = (ConveyorTile) tiles[abs.getX()][abs.getY()];
-            int i = rand.nextInt(4);
-            if(i == 0){
-                conv.changeRot(Rotation.R0DEG);
-            } else if(i == 1){
-                conv.changeRot(Rotation.R90DEG);
-            } else if(i == 2){
-                conv.changeRot(Rotation.R180DEG);
-            } else {
-                conv.changeRot(Rotation.R270DEG);
-            }
-            tiles[abs.getX()][abs.getY()] = conv;
-
-        }
-        if(tiles[abs1.getX()][abs1.getY()].getClass()== ConveyorTile.class){
-            ConveyorTile conv = (ConveyorTile) tiles[abs1.getX()][abs1.getY()];
-            int i = rand.nextInt(4);
-            if(i == 0){
-                conv.changeRot(Rotation.R0DEG);
-            } else if(i == 1){
-                conv.changeRot(Rotation.R90DEG);
-            } else if(i == 2){
-                conv.changeRot(Rotation.R180DEG);
-            } else {
-                conv.changeRot(Rotation.R270DEG);
-            }
-            tiles[abs1.getX()][abs1.getY()] = conv;
-
-        }
-
     }
     
     //might be a better way to solve this
@@ -148,8 +71,6 @@ public class Board {
 
     //DONE for the move..
     public BoardResponse moveRequest(RelativeCoord loc, Robot r, Rotation rot){
-       /**
-
         if(rot != Rotation.R0DEG){                  //rulecheck
             if(r.r.possibleRotations.contains(rot)){
                 robotRotation.remove(r);
@@ -161,36 +82,29 @@ public class Board {
         } else if(!r.r.possibleMoves.contains(loc)){    //rulecheck
             return BoardResponse.FAILED;
         } else {
-        *
-        */
-
-            AbsoluteCoord position = addAbstoRel(robots.getAbsoluteCoord(r), loc);
+            AbsoluteCoord position = calculateNewLocation(loc, r);
             if(position == null){
                 return BoardResponse.FAILED;
             } else if (tiles[position.getX()][position.getY()].getClass() == HomeTile.class){
                 HomeTile ht = (HomeTile) tiles[position.getX()][position.getY()];
                     if(ht.homeRobot == r){
-                        saveLocation(position ,r);
                         return BoardResponse.WIN;
                     } else {
                     saveLocation(position, r);
                     return BoardResponse.SUCCESS;
                     }
             } else {
-                /*
-                 if(tiles[position.getX()][position.getY()].getClass() == ConveyorTile.class){
+                if(tiles[position.getX()][position.getY()].getClass() == ConveyorTile.class){
                     AbsoluteCoord nposition = conveyorMove(position, r);
                     if(nposition != position){
                         position = nposition;
                         r.notifyAutoMovement();
                     }
                 }
-                 * 
-                 */
                 saveLocation(position, r);
                 return BoardResponse.SUCCESS;
             }
-        
+        }
     }
 
     //DONE
@@ -504,7 +418,6 @@ public class Board {
         tiles[coord.getX()][coord.getY()].occupier = null;
         tiles[abs.getX()][abs.getY()].occupier = r;
         robots.changePosition(r, abs);
-        //System.out.println("Savend");
     }
 
     //function to add relative to absolute Coordinate, returns null if absCoord is not on the board
