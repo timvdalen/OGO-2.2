@@ -184,3 +184,5 @@ notifyViewer is used by the board to notify the viewer of a state change; it cor
 
 <removeViewer>
 removeViewer corresponds to the public method in the Controller class. Removing a viewer boils down to clearing the current viewer-attribute.
+
+hoi
