@@ -17,7 +17,7 @@
 In this section the game is mathematically specified using the Object-Z language. Object-Z is a strict superset of the older Z language. This means that all features in Z are also present in Object-Z. Object-Z is used instead of Z because the specification is fairly large and became a little unmanageable in Z. Object-Z provides features to embedded schemas in classes. Those classes have visibility lists and can inherit other classes. This means there is more modularity, and it is easier to adhere to the class diagram.
 Note that in the Z-specification, abbreviations are only used for dummy-variables; variables that refer to existing attributes or parameters in the class diagram are not abbreviated.
 
-We begin with a few axiomatic definitions. Then we give the long list of classes and how they are defined. The classes follow the specification in the class diagram as good as possible.
+We begin with a few axiomatic definitions. Then we give the long list of classes and how they are defined. The name of the dummy variables in the invariants is the begin letter of the name of the type.
 
 \subsection{Basic Axiomatic definitions}
 The Rotation set is used for orientation of robots and conveyor belts. The reason it use numbers instead of names as we do in the class diagram is because we will use them for arithmetics in one of the schemas. All rotations are counter clock-wise.
@@ -78,6 +78,31 @@ The RelativeCoord class is a specialization of the Coord class. There are restri
 Coord \\
 \end{class}
 
+A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. The coordinates are relative to the rotation of the robot. For example, when a robot is rotated 90 degrees, and has a rule to move forward, it moves to the right.
+\begin{class}{Rule}
+\upharpoonright (possibleMoves, possibleRotations) \\
+\begin{state}
+possibleMoves : \power (RelativeCoord \pfun \seq RelativeCoord) \\
+possibleRotations : \power Rotation
+\where
+\forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
+\end{state} \\
+\end{class}
+This is a concrete instance of Rule, representing the rules of robot type A. Robot A can move one step in all directions, but can not rotate.
+\begin{axdef}
+RuleA : Rule
+\where
+RuleA.possibleRotations = \emptyset \\
+\forall (c, s) : RuleA.possibleMoves | ~ |c.x + c.y| = 1 \wedge s = \langle c\rangle
+\end{axdef}
+This is a concrete instance of Rule, representing the rules of robot type B. Robot B can move foreward three steps or less, and can rotate in every direction.
+\begin{axdef}
+RuleB : Rule
+\where
+RuleB.possibleRoations = \{0, 90, 180, 270\} \\
+\forall (c1, s) : RuleB.possibleMoves | c1.y = 0 \wedge 0 < c1.x \leq 3 \wedge c1.x = \#s \; \; \wedge \\ \t1 \forall (n, c2) : s | c2.y = 0 \wedge c2.x = n
+\end{axdef}
+
 The Tile class is the representation of one tile on the board. The tiles are managed by the board. The class keeps track of which robot currently occupies the tile. To differentiate between different kind of tiles, the Tile class is the base class of several specializations.
 
 \begin{class}{Tile}
@@ -103,6 +128,7 @@ The clear schema is used by schemas defined in other classes to remove the curre
 \where
 occupier' = Null
 \end{schema} \\
+\znewpage
 \begin{zpar}
 The put schema has is defined for the same reason as the clear schema. It places the given robot on the tile.
 \end{zpar}\\
@@ -134,7 +160,8 @@ A BrokenRobotTile is a (static) tile that contains a broken robot that prohibits
 \begin{class}{BrokenRobotTile}
 Tile \\
 \begin{state}
-occupier = Null
+\where
+occupier = null
 \end{state}
 \end{class}
 
@@ -164,7 +191,7 @@ This is the overridden schema of the base class. It changes the orientation of t
 
 The Board class maintains is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
 \begin{class}{Board}
-\upharpoonright (Init, initialize, requestTilesExchange, canReset, initialize) \\
+\upharpoonright (initialize, requestTilesExchange, canReset, moveRequest) \\
 \begin{nobottomstate}
 \begin{zpar}
 The tiles variable if a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
@@ -193,7 +220,9 @@ adjacent : \power (AbsoluteCoord \rel AbsoluteCoord) \\
 This function relates all coordinates with a conveyor tile to the destination of that tile (not the destination of the whole conveyor).
 \end{zpar} \\
 conveyorUnitDest : \power (AbsoluteCoord \pinj AbsoluteCoord) \\
-\also \also \also
+\end{nobottomstate}
+\znewpage
+\begin{notopstate}
 \begin{zpar}
 The conveyorDest function gives the destination of a whole conveyor belt.
 \end{zpar} \\
@@ -209,9 +238,7 @@ This is the invariant of the occupied variable.
 \end{zpar} \\
 occupied = \{c : AbsoluteCoord | \\ \t1 tiles(c) \in BrokenRobotTile \vee
 tiles(c).occupier \not = Null\} \\
-\end{nobottomstate} \\
-\znewpage
-\begin{notopstate}
+\also \also \also
 \begin{zpar}
 The invariant for the conveyorUnitDest function.
 \end{zpar} \\
@@ -247,10 +274,10 @@ There should be a minimum of two robots, and at least one robot with rule set A 
 \exists r : \dom robots | r.rule = RuleA \\
 \exists r : \dom robots | r.rule = RuleB
 \end{notopstate} \\
+\znewpage
 \begin{schema}{Init}
 reset
 \end{schema} \\
-\znewpage
 \begin{zpar}
 Initialize is called from the outside world, when a new game has to be
 started. The method first calls an internal initializer. This initializes every variable.
@@ -274,7 +301,6 @@ tiles' \not = \emptyset \\
 robots' \not = \emptyset \\
 controller' \not = null
 \end{schema} \\
-\znewpage
 \begin{zpar}
 CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot.
 \end{zpar} \\
@@ -290,6 +316,7 @@ tiles' = \emptyset \\
 robots' = \emptyset \\
 controller' = null
 \end{schema} \\
+\znewpage
 \begin{zpar}
 This schema creates a snapshot of the current situation of the board.
 It does so by requiring all tiles in the snapshot to have exactly the
@@ -298,10 +325,11 @@ exception is that the snapshot variable of the tiles must be true.
 This way, we make sure the instances of the tiles of the snapshot are different from
 the instances from the tiles of the board.
 \end{zpar} \\
-\begin{schema}{requestSnapShot}
+\begin{schema}{makeSnapshot}
+\Delta() \\
 snapshot! : BoardSnapshot
 \where
-\forall (c1,t1) : tiles | \exists (c2,t2) : snapshot! | c1 = c2 \: \wedge \\ \t2
+\forall (c1,t1) : tiles | \exists (c2,t2) : snapshot! | c1 = c2 \wedge t2.isSnapshotTile \: \wedge \\ \t2
 t1.occupier = t2.occupier \: \wedge \\ \t2
 t1 \in NormalTile \Rightarrow t2 \in NormalTile \: \wedge \\ \t2
 t1 \in HintTile \Rightarrow t2 \in HintTile \: \wedge \\ \t2
@@ -309,7 +337,6 @@ t1 \in BrokenRobotTile \Rightarrow t2 \in BrokenRobotTile \: \wedge \\ \t2
 t1 \in HomeTile \Rightarrow (t2 \in HomeTile \wedge t1.target = t2.target) \: \wedge \\ \t2
 t1 \in ConveyorTile \Rightarrow \\ \t3 (t2 \in ConveyorTile \wedge t2.rotation = t2.rotation)
 \end{schema} \\
-\znewpage
 \begin{zpar}
 sendPossibleHint is used by other Z schemas to sent a hint whenever
 a move request is completed. It checks whether the robot it receives in its
@@ -322,10 +349,12 @@ eliminating the nondeterminism.
 \end{zpar} \\
 sendPossibleHint \sdef [robot? : Robot | \\ \t2 \neg \exists c : \ran tiles | c \in HintTile \wedge c.occupier = robot?] \; \; [] \\ \t1
 [robot? : Robot | \exists c : \ran tiles | c \in HintTile \wedge c.occupier = robot?] \; \; \wedge \\ \t1 (getHint \comp controller.notifyHint) \\
+\znewpage
 \begin{zpar}
 This schema retrieves a hint for a given robot.
 \end{zpar} \\
 \begin{schema}{getHint}
+\Delta() \\
 robot? : Robot \\
 output!: Hint \\
 \delta x : \{-1, 0, 1\} \\
@@ -353,7 +382,6 @@ until it conforms with the direction the robot faces.
  h \in robot.hintMapping(\delta x, \delta y) \; \; \wedge \\ \t1
  output! = rotate90Deg^{numRatations}(h)
 \end{schema} \\
-\znewpage
 \begin{zpar}
 This axiomatic function maps a (manhattan) direction to a set of suitable
 hints.
@@ -370,6 +398,7 @@ hintMapping(1, -1) = \{NORTH\_EAST, NORTH, EAST\} \\
 hintMapping(1, 0) = \{EAST\} \\
 hintMapping(1, 1) = \{SOUTH\_EAST, SOUTH, EAST\} \\
 \end{axdef} \\
+\znewpage
 \begin{zpar}
 This axiomatic function rotates a given hint 90 degrees.
 \end{zpar} \\
@@ -385,11 +414,10 @@ rotate90Deg(NORTH\_WEST) = SOUTH\_WEST \\
 rotate90Deg(SOUTH\_WEST) = SOUTH\_EAST \\
 rotate90Deg(SOUTH\_EAST) = NORTH\_EAST
 \end{axdef} \\
-\znewpage
 \begin{zpar}
 This schema must be called everytime something changes on the board. It makes sure that if there are robots that were previously blocked are moved to their destination. The schema that actually moves the robot is moveBlockedRobot and is described below. This schema is called first, and then the schema is called recursive. There is a schema that is nondeterministically called, but only when there is no robot left to move. If this schema is called, the recursion stops. After the recursion, the viewer is notified of the change.
 \end{zpar} \\
-moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 controller.notifyView \\
+moveBlockedRobotsRecursive \sdef ((moveBlockedRobot \; \; \comp \\ \t1 moveBlockedRobotsRecursive) \; \; [] \\ \t1 [\neg \exists (c,t) : tiles | \\ \t2 t \in ConveyorTile \wedge t.occupier \not = null \wedge conveyorDest(c) = c]) \; \; \comp \\ \t1 notifyView \\
 \also \also \also
 \begin{zpar}
 This schema moves one unblocked robot to its destination. It first finds two tiles for which the first tile is a conveyor tile and has an robot that occupies it. The second tile is the destination of the conveyor belt. It then moves the robot from the first tile to the second tile. If the new location of the robot is its hometile, it sends a WIN response along with the notifyAutomovement, else it sends a SUCCESS response.
@@ -398,7 +426,7 @@ moveBlockedRobot \sdef [c1, c2 : \dom tiles, r : \dom robots, \\ \t1 response? :
 (\IF tiles(c2) \in HomeTile \wedge tiles(c2).target = r \\ \t1
 \THEN response? = WIN \\ \t1
 \ELSE response? = SUCCESS)] @ \\ \t2 c1.clear \wedge c2.put[input?/r] \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/r] \\
-\also \also \also
+\znewpage
 \begin{zpar}
 This schema processes a request to exchange two tiles using the getValidTiles schema. It first requests two valid tiles, then it actually exchanges those tiles using the exchangeTiles schema.
 This schema returns the two tiles is has exchanged. The returned tiles are then rotated. If there are robots present, they should
@@ -406,8 +434,7 @@ be notified of the exchange. The notifyAutomovement schema of controller is alwa
 After the whole request is processed, the moveBlockedRobotRecursive schema is called to move al unblocked robots. Then the viewer is notified of the change.
 \end{zpar} \\
 requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
-\t1 [t1, t2 : Tile, response? : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response? = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp controller.notifyView \\
-\znewpage
+\t1 [t1, t2 : Tile, response? : BoardResponse | \\ \t1 t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1 \; \; \wedge \\ \t1 response? = SUCCESS] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[robot?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp controller.notifyViewer \\
 \begin{zpar}
 The output of this schema is a pair of two tiles that can be exchanged. The schema makes sure the invariants of the board will still hold when the tiles are exchanged. A tile is valid for an exchange if it is not a HomeTile or a HintTile.
 Tho check whether the invariants of the board still hold when the tiles
@@ -416,6 +443,7 @@ except for the exchanged tiles. To make sure this board has the same state, not 
 needs to be checked, but also the states of the instances every variable references.
 \end{zpar} \\
 \begin{schema}{getValidTiles}
+\Delta() \\
 tilePair! : Tile \cross Tile
 \where
 \exists b : Board, (c1, t1), (c2, t2) : tiles | \\ \t1
@@ -427,11 +455,12 @@ t2 \not \in HomeTile \wedge t2 \not \in HintTile \; \; \wedge \\ \t1
 \forall t : \ran tiles | \\ \t2 t.occupier = tiles(b.tiles^{-1}(t)).occupier \; \; \wedge \\ \t2 t \in HomeTile \Rightarrow t.target = tiles(b.tiles^{-1}(t)).target \;\; \wedge \\\t1
 tilePair! = (t1, t2)
 \end{schema} \\
+\znewpage
 \begin{zpar}
 This method exchanges two given tiles, and outputs the tiles it has exchanged for further processing. It first finds the coordinates corresponding to the tiles. Then it exchanges the tiles by removing the old coordinate/tile pairs from the tiles variable and adding new pairs where the tiles are exchanged.
 \end{zpar} \\
 \begin{schema}{exchangeTiles}
-\Delta(tiles, robots) \\
+\Delta(tiles) \\
 tilePair? : Tile \cross Tile \\
 exchangedPair! : Tile \cross Tile \\
 \where
@@ -440,7 +469,6 @@ tilePair? = exchangedPair! \\
 \exists c1, c2 : \dom tiles | tiles(c1) = tilePair?.0 \wedge tiles(c2) = tilePair?.1 \; \; \wedge \\ \t1
 tiles' = tiles \setminus \{(c1, tilePair?.0),(c2, tilePair?.1)\} \cup \\ \t2 \{(c1, tilePair?.1),(c2, tilePair?.0)\}
 \end{schema} \\
-\znewpage
 \begin{zpar}
 This schema processes a move request. It calls either moveRotate or moveWalk, depending on whether the rotation parameter or the localCoords parameter is null.
 \end{zpar} \\
@@ -465,7 +493,7 @@ robots'(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 This schema moves a robot to a new tile. It first calls a moveWalkPre subschema. This schema determines whether the move is allowed, and where the robot should be moved. It outputs a putTile, robot, beginTile, response, and autoMovement variable. If the response is WIN or SUCCESS, the begin tile is cleared of the robot, and the robot is put on the putTile tile. Then the view is notified and the robot is notified about a possible hint.
 If the autoMovement variable is true, it means the robot has crossed a conveyor belt and should be notified. When the robot is moved, the moveBlockedRobotsRecursive schema is called to move all unblocked robots.
 \end{zpar} \\
-moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge controller.notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement))) \; \; \comp \\ \t1
+moveWalk \sdef moveWalkPre \; \; \comp \\ \t1 (([response? = FAILED] \; \; [] \\ \t2 [response? = SUCCESS \vee response? = WIN] \;\; \wedge \\ \t2 begintTile?.clear \; \; \wedge \\ \t2 putTile?.put[input?/robot?] \wedge notifyView \wedge sendPossibleHint) \; \; \wedge \\ \t1 ([autoMovement? = \false] \; \; [] \\ \t2 ([autoMovement? = \true] \; \; \wedge \\ \t2 controller.notifyAutomovement))) \; \; \comp \\ \t1
 moveBlockedRobotsRecursive \\
 \begin{zpar}
 This function is needed for the moveWalkPre schema. It rotates a sequence of relative coordinates clockwise 90 degrees.
@@ -480,6 +508,7 @@ s(n).x = c.y \wedge s(n).y = -c.x
 This schema is a helper of the moveWalk schema. It calculates whether a move is allowed, and on which tile the robot would be placed when the move would be executed. It is a very long and difficult schema.
 \end{zpar} \\
 \begin{nobottomschema}{moveWalkPre}
+\Delta() \\
 \begin{zpar}
 The relative coordinates the robot should be moved to.
 \end{zpar} \\
@@ -555,7 +584,9 @@ This is the invariant maintaining the pathBlockedOn function. If there is a coor
  \THEN \exists (n1, c1) : s | n1 = pathBlockedOn(s) \wedge occupied(c) \; \; \wedge \\ \t6
  (\neg \exists (n2, c2) : s | occupied(c) \wedge n2 < n1) \\ \t1
  \ELSE pathBlockedOn(s) = -1
-\also \also \also
+\end{nobothschema}
+\znewpage
+\begin{nobothschema}
 \begin{zpar}
 The invariant of the firstConveyor. If there is a conveyor tile in the sequence that is not occupied and there is no other unoccupied conveyor tile with a smaller sequence number, the firstConveyor function should output the sequence number of that tile. If there is no conveyor tile, it outputs minus one.
 \end{zpar} \\
@@ -563,10 +594,8 @@ The invariant of the firstConveyor. If there is a conveyor tile in the sequence 
  \IF \exists (n,c) : s | c \in ConveyorTile \wedge \neg occupied(c) \\ \t1
  \THEN \exists (n1,c1) : s | n1 = firstConveyor(s) \; \; \wedge \\ \t6 c1 \in ConveyorTile \wedge \neg occupied(c1) \; \; \wedge \\ \t6
  (\neg \exists (n2,c2) : s | c2 \in ConveyorTile \; \; \wedge \\ \t9 \t1 \neg occupied(c2) \wedge c2 < c1) \\ \t1
- \ELSE firstConveyor(s) = -1
-\end{nobothschema}
-\znewpage
-\begin{nobothschema}
+ \ELSE firstConveyor(s) = -1 \\
+\also \also \also
 \begin{zpar}
 The invariant for the relativeToAbsolute function. It simply adds the begintTile coordinate to all of the relative coordinates creating a sequence of absolute coordinates.
 \end{zpar} \\
@@ -615,6 +644,10 @@ This invariant determines the value of the response.
 \THEN response! = SUCCESS \\
 \ELSE response! = FAILED
 \end{notopschema} \\
+\begin{zpar}
+This schema creates a snapshot of the current board, and sends a notify to the controller.
+\end{zpar} \\
+notifyView \sdef makeSnapshot \comp notifyView
 \end{class}
 
 A BoardSnapshot is simply a copy of the current state of the board; therefore, the BoardSnapshot maintains a mapping of absolute coordinates to the tiles. The only invariant it maintains is that every tile should be a snapshot tile in order to differentiate between normal tiles.
@@ -626,31 +659,6 @@ tiles : \power (AbsoluteCoord \fun Tile) \\
 \forall t \ran tiles | t.isSnapshotTile
 \end{state}
 \end{class}
-
-A Rule consists of a list of possible moves and a list of possible rotations. The possible moves are described in terms of local coordinates, since a robot does not know its exact location on the board. The coordinates are relative to the rotation of the robot. For example, when a robot is rotated 90 degrees, and has a rule to move forward, it moves to the right.
-\begin{class}{Rule}
-\upharpoonright (possibleMoves, possibleRotations) \\
-\begin{state}
-possibleMoves : \power (RelativeCoord \pfun \seq RelativeCoord) \\
-possibleRotations : \power Rotation
-\where
-\forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
-\end{state} \\
-\end{class}
-This is a concrete instance of Rule, representing the rules of robot type A.
-\begin{axdef}
-RuleA : Rule
-\where
-RuleA.possibleRotations = \emptyset \\
-\forall (c, s) : RuleA.possibleMoves | |c.x + c.y| = 1 \wedge s = \langle c\rangle
-\end{axdef}
-This is a concrete instance of Rule, representing the rules of robot type B.
-\begin{axdef}
-RuleB : Rule
-\where
-RuleB.possibleRoations = \{0, 90, 180, 270\} \\
-\forall (c1, s) : RuleB.possibleMoves | c1.y = 0 \wedge 0 < c1.x \leq 3 \wedge c1.x = \#s \; \; \wedge \\ \t1 \forall (n, c2) : s | c2.y = 0 \wedge c2.x = n
-\end{axdef}
 
 \begin{class}{Robot}
 \upharpoonright (rules) \\
@@ -705,11 +713,17 @@ The play schema is a rudimentary playing algorithm to let the robots play. It do
 \end{zpar} \\
 play \sdef ([coords : RelativeCoord, r : Rotation | \\ \t2 coords \in rules.possibleMoves \wedge r = null] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; [] \\ \t1
 [coords : RelativeCoord, r : Rotation | \\ \t2 r \in rules.possibleRotations \wedge coords = null] @ \\ \t1 controller.moveRequest[robot?/self, localCoords?/coords, rotation?/r] \; \; \comp \\ \t1 play
+\begin{zpar}
+\end{zpar} \\
+\begin{zpar}
+This is the magic terminate schema.
+\end{zpar} \\
+terminate \sdef \mathbb{M}.terminate
 \end{class}
 
 The Viewer has no knowledge of the Board; every change of the Board must be communicated to the Viewer via the Controller. The variable 'boardChanged' is used as a flag to indicate that the board has changed and the Viewer has not yet updated the view.
 \begin{class}{Viewer}
-\upharpoonright () \\
+\upharpoonright (notifyStateChange, notifyGameOver, updateView, initialize) \\
 \begin{state}
 controller : Controller \\
 currentSnapshot : BoardSnapshot \\
@@ -742,7 +756,7 @@ updateView \sdef \mathbb{M}.updateScreen
 
 The controller has knowledge about the Board and the Viewer; it also maintains a list of the robots.
 \begin{class}{Controller}
-\upharpoonright (notifyAutomovement, moveRequest, notifyHint, notifyView) \\
+\upharpoonright (notifyAutomovement, moveRequest, notifyHint, notifyViewer, addViewer, \\ \t1 moveRequest, preInitialize, postInitialize, removeViewer) \\
 \begin{state}
 board : Board \\
 robots : \power Robot \\
@@ -752,9 +766,8 @@ viewer : Viewer
 notifyAutoMovement takes the Robot has been moved as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile. If the input-parameter is null, nothing happens.
 \end{zpar} \\
 notifyAutoMovement \sdef [robot? : Robot \cup Null] \;\; [] \\\t1 robot?.notifyAutomovement \\
-\znewpage
 \begin{zpar}
-moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate. If the board does not respond with "WIN", a tile exchange is requested.
+The moveRequest schema takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate. If the board does not respond with "WIN", a tile exchange is requested.
 \end{zpar} \\
 moveRequest \sdef board.moveRequest \; \; \comp \\ \t1 ([output? \not = WIN] \wedge board.requestTileExchange \; \; [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
 \begin{zpar}
@@ -764,13 +777,15 @@ notifyHint \sdef robot?.notifyHint \\
 \begin{zpar}
 Notify the viewer that the board has changed.
 \end{zpar} \\
-notifyView \sdef requestSnapshot \comp view.notifyStateChange
-\znewpage
+notifyViewer \sdef view.notifyStateChange \\
+\also \also \also
 \begin{zpar}
 Initialize the controller so that it can be referred to.
 \end{zpar} \\
 \begin{schema}{preInitialize}
+\Delta()
 \end{schema}\\
+\znewpage
 \begin{zpar}
 The real initialization of the controller, giving it a board and robots.
 \end{zpar} \\
@@ -800,7 +815,11 @@ viewer? : Viewer
 \IF viewer = null \\
 \THEN viewer' = viewer? \\
 \ELSE viewer' = viewer
-\end{schema}
+\end{schema} \\
+\begin{zpar}
+This is the magic terminate schema.
+\end{zpar} \\
+terminate \sdef \mathbb{M}.terminate
 \end{class}
 
 \end{document} 
