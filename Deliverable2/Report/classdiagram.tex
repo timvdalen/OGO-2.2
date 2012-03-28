@@ -32,7 +32,7 @@ RelativeCoord [label="{RelativeCoord|+ x : int\l+ y : int\l|}"]
 Rule [label="{\<\<Rule\>\>|- possibleMoves : RelativeCoordList\l- possibleRotations : RotataionList\l|}"]
 Rotation [label="{[Rotation]| 0DEG\l 90DEG\l 180DEG\l 270DEG\l}"]
 /**/
-Board->Controller [taillabel=1, headlabel="0..*"]
+Board->Controller [taillabel=1, headlabel=1, arrowhead=none]
 Board->Tile [arrowtail=diamond,dir=both, taillabel=1,headlabel="*"]
 Board->Robot [taillabel=1, headlabel="2..*"]
 /**/
