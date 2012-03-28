@@ -81,7 +81,7 @@ Coord \\
 \end{class}
 
 The Tile class is the representation of one tile on the board. The tiles are managed by the board. The class keeps track of which robot currently occupies the tile. To differentiate between different kind of tiles, the Tile class is the base class of several specializations.
- 
+
 \begin{class}{Tile}
 \upharpoonright (occupier) \\
 \begin{zpar}
@@ -93,7 +93,7 @@ isSnapshotTile : \bool \\
 \end{state} \\
 \begin{zpar}
 Initially, no robots have been placed yet, so the occupied-variable has value $null$.
-\end{zpar}
+\end{zpar} \\
 \begin{schema}{Init}
 occupier = null
 \end{schema} \\
@@ -140,7 +140,7 @@ occupier = Null
 \end{state}
 \end{class}
 
-A HomeTile is a tile that a (specific) robot has to visit in order to win the game. 
+A HomeTile is a tile that a (specific) robot has to visit in order to win the game.
 \begin{class}{HomeTile}
 Tile \\
 \upharpoonright (target) \\
