@@ -22,11 +22,12 @@
             \item initialize(): The public method to initialize the board (and with this, also the controller and the robots).
             \item moveRequest(): The public method which handles move requests forwarded by the controller. This method first checks if the move is valid (otherwise, return the BoardResponse FAILED), next it calls calculateNewLocation() to calculate the new location of the robot. After that, saveLocation is called to save the location and the proper board response is returned. Sometimes the board also sends a hint or a notification of an automovement.
             \item requestTilesExchange(): This public method handles with the tiles exchange after a robot has made his move. First it calls getValidTiles() to make sure that the invariant still holds after the exchange. Next it swaps the tiles and handles possible robot replacements or movements.
-            \item getHint(): This private method gets an appropriate hint for the robot.
             \item calculateNewLocation(): This private method (used in moveRequest()) calculates the new location of a robot, according to his current position and the position he wants to move to. It also deals with conveyor tiles and broken robot tiles.
+            \item getHint(): This private method gets an appropriate hint for the robot.
             \item getValidTiles(): This private method is used to get two tiles that can be switched, hereby not violating the invariant.
             \item reset(): This private method is used to reset the board. canReset() should return true in order for this function to be called. The board then makes the other components terminate and can initiate new components (e.g. controller, robots) in order to start a new game.
             \item saveLocation(): This private method is used to save the new location of a robot; it is called in moveRequest().
+            \item terminate(): This private method is used when the board decides to terminate itself.
         \end{description}
 		\item[Controller] This class represents the controller, which is used as mostly used as communication device between the board and other components. The controller has a viewer, as shown on the undirected association between Controller and Viewer. The controller has the following functions:
         \begin{description}
