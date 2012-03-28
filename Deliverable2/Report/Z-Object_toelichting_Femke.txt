@@ -1,5 +1,5 @@
 TOELICHTING:
-Ik heb mijn opmerkingen opgedeeld op dezelfde manier als in het Object-Z document. Boven elk stukje commentaar heb ik tussen <>-haken gezet op welk attribuut of op welke functie/methode het commentaar van toepassing is.
+Ik heb mijn opmerkingen opgedeeld op dezelfde manier als in het Object-Z document. Het onderscheid tussen de verschillende klassen wordt gemaakt met -NaamClasse-; alles wat daarna komt is van toepassing op die klasse. Boven elk stukje commentaar heb ik tussen <>-haken gezet op welk attribuut of op welke functie/methode het commentaar van toepassing is. 
 Als ik '+ inleiding' heb gezet, moet het commentaar bij de inleiding van die class, dus niet in classe zelf.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,7 +105,7 @@ The conveyorDest-function is used in the following invariant to express the outc
 The following invariant states that all tiles, referred to as the dummy-variable $t$, of the board are not snapshot tiles. A snapshot tile is simply a copy of the original tile, which cannot be mutated. The board must however be able to change all the tiles it has; hence, all tiles in the range of the tiles-mapping cannot be snapshot tiles.
 
 <Invariant met adjacent>
-The following invariant describes when two tiles are reachable. Here, the dummy-variable $c$ describes the absolute coordinate of the tile $d$. Two tiles are adjacent if their coordinates differ at most 1 unit and if the tile $d$ is not occupied, either by a broken robot or by a playing robot.
+The following invariant describes when all tiles that are reachable. Here, the dummy-variable $c$ describes the absolute coordinate of the tile $d$. Two tiles are adjacent if their coordinates differ at most 1 unit and if the tile $d$ is not occupied, either by a broken robot or by a playing robot.
 
 <Init>
 Initially, the board has no tiles, robots and also no controller. The reset-function can thus be called here.
@@ -125,9 +125,6 @@ The value of numRotations is obtained by dividing the current rotation of the ro
 
 <getValidTiles>
 getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile. The dummy-variable $b$ represents the board and $(c_1, t_1)$ and $(c_2, t_2)$ represent the coordinates and the tiles of the two tiles that are going to be exchanged. Exchanging two tiles means that the coordinates of the tiles are switched; hence tile $t_1$ obtains the coordinates $c_2$ of tile $t_2$ and vice versa. Note that the properties of the tiles and the robots of the board remain the same. 
-
-<exchangeTiles>
-
 
 -Robot-
 <rule & controller & hints>
