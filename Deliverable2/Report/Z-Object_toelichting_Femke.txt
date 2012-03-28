@@ -1,0 +1,88 @@
++ bij inleiding:
+Note that in the Z-specification, abbreviations are only used for dummy-variables; variables that refer to existing attributes or parameters in the class diagram are not abbreviated.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1.0.1 Basic Axiomatic Definitions
+
+Rotation is used for the orientation of robots and conveyor belts.
+
+BoardResponse is a response to move requests or (implied) movement notifications. In an (implied) movement notification, WIN indicates that the recipient has won the game.
+
+Hint is a response that a robot receives, when he visits a hint tile.
+
+Null is an axiomatic null object that is used when an empty return-value is preferred.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.0.2 classes
+
+-Coord-
+For sake of breviaty, the Coord class is introduced in the Z-specification, so it can be used in both AbsoluteCoord and RelativeCoord; an absolute coordinate can now be expressed by restricting the values of x and y to values in the interval [0, BoardWidth). Note that this class is not shown in the class diagram, since that would not add any functionality to the class diagram. 
+The Coord class contains the width and height-variables from the Board; these variables are in fact the attributes of Board in the class diagram. In order to keep the Z-specification readable and easier to model, these attributes were placed in the Coord class.
+
+-Tile-
+
+The private isSnapShotTile-member indicates that the tile is in fact a copy from a board; if the value is true, it is thus part of a BoardSnapshot-object. 
+
+Initially, no robots have been placed yet, so the occupied-variable has value Null.
+
+clear is a helper-method that clears the occupies-variable of a Tile. Hence, the occupier-variable is set to Null.
+
+put is a helper-method that takes a robot as input-variable and sets the occupies-variable of a Tile to this robot. 
+
+Rotate is an abstract method that is overridden by Conveyor Tile, since a conveyor tile is the only tile that can change its rotation.
+
+-NormalTile-
+A NormalTile is a tile with no special meaning.
+
+-HintTile-
+A HintTile is a tile that returns a hint as to where the robot's home tile is, whenever a robot visits the tile.
+
+-BrokenRobotTile-
+A BrokenRobotTile is a tile that contain (static) broken robots that probihit other robots from visiting this tile; hence, the occupied-variable of this tile is always Null.
+
+-HomeTile-
+A HomeTile is a tile that a (specific) robot has to visit, in order to win the game. 
+
+-ConveyorTile-
+A ConveyorTile is a tile that automatically transports a robot to another tile, when a robot visits this tile.
+
+rotate is a helper-method that rotates this ConveyorTile to an arbitrary direction; the predicate is thus empty, since a random rotation is selected.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-Board-
+tiles maps every possible coordinate to a (polymorphic) tile.
+
+robots maps a set of robots to a rotation. The domain of this function is used to store the robots that are currently playing.
+
+controller links the board to the controller, so the board can send messages to the controller.
+
+occupied is a set of coordinates that are currently occupied.
+
+adjacent is a relation that indicates which adjacent tiles are reachable.
+
+conveyorUnitDest is a helper-function that returns the destination of a single conveyor tile.
+
+conveyorDest is a helper-function that returns the end destination of a path of conveyor tiles.
+
+The occupied-set is used to express the following invariant: "each element ($c$) in occupied is either a BrokenRobotTile or a tile that is currently occupied by a (playing) robot". The occupied-set contains namely all coordinates of those tiles that are currently occupied, which also includes the broken robots. 
+
+The following invariant describes the direction in which a robot is to be transported, whenever it steps on a single conveyor tile. The dummy-variable $c_1$ is the conveyor tile that a robot moved to and $c_2$ is the destination tile that is reached because of the conveyor tile $c_1$. Hence, conveyerUnitDest describes all tiles $c_2$ that are reached from $c_1$. This means that $c_2$ must not be occupied in the first place; otherwise it is not reachable. If the rotation is 0 degrees, the robot is transported one step into the positive x-direction. If the rotation is 90 degrees, the robot is transported one step into the negative y-direction. If the rotation is 180 degrees, the robot is transported one step into the negative x-direction. If the rotation is 270 degrees, the robot is transported one step into the positive y-direction. Note that a conveyor tile will always transport a robot either in the x- or in the y-direction, but never simultaneously.
+
+The conveyorDest-function is used in the following invariant to express the outcome of a path of conveyor tiles. The dummy-variable $c_1$ is again the original conveyor tile and $c_2$ is the destination tile. Now, the end-destination is returned, so the destination tile $c_2$ can either be a conveyor-tile or a non-conveyor-tile. In the latter case, the end of the conveyor belt is blocked, so the robot has to be transported to the far-most conveyor-tile. Note that this last case implies that the reflexive-transitive closure is calculated, because a robot can immediately be blocked if it steps onto the conveyor tile $c_1$; this means that $c_1$ and $c_2$ are the same.
+ 
+The following invariant states that all tiles, referred to as the dummy-variable $t$, of the board are not snapshot tiles. A snapshot tile is simply a copy of the original tile, which cannot be mutated. The board must however be able to change all the tiles it has; hence, all tiles in the range of the tiles-mapping cannot be snapshot tiles.
+
+<Init>
+Initially, the board has no tiles, robots and also no controller. The reset-function can thus be called here.
+
+makeSnapshot is a helper-method that is used by the board to create a snapshot for the viewer. The output-variable is thus of type snapshot. The dummy-variables $c_1$ and $t_1$ describe an absolute coordinate on the board and the associated tile, respectively; the dummy-variables $c_2$ and $t_2$ describe the snapshot-coordinate of $c_1$ and the snapshot-tile of $t_1$. A snapshot simply makes a copy of each tile, hence the tile-coordinates of $c_1$ and $c_2$ are the same. Since $t_2$ contains the copy of the tile $t_1$, it has the same properties as $t_1$. For example, if $t_1$ is a normal tile, then the corresponding snapshot-tile $t_2$ is also a normal tile. Note that the occupier of a tile and its rotation, in case of a conveyor tile, are also recorded in the snapshot-tiles. 
+
+hintMapping maps a tecti-linear unitvector that describes a direction to a hint. A tecti-linear vector in a non-Euclidean space. Hence, a pair (1, 1) does not reflect an (x, y)-coordinate pair; it is used here to map the different cardinal directions of a compass to a single pair (i, j), where i and j are both numbers in the range {-1, 0, 1}. Below, the hintMappings along with the corresponding cardinal directions (hints) are given. This function is used by getHint to obtain a hint in the appropriate direction.
+
+rotate90Deg maps a hint, which is a cardinal direction, to the cardinal direction that is obtained by rotating over 90 degrees. For example, by rotating the cardinal direction North over 90 degrees, the cardinal direction West is obtained. The other rotate90Deg-mappings are given below. This function is also used by getHint to obtain the appropriate direction for a hint. 
+
+<getHint>
+getHint takes a robot as input-parameter and uses hint as an output-parameter to provide the hint to the robot. The 
+$\delta x$ and $\delta y$ contain the horizontal and vertical direction of the robot's home tile, respectively. These are expressed in a similar way to the domain of hintMapping. numRotations is used to determine the robots current rotation, with respect to the initial 0 degrees orientation. \\
+The value of numRotations is obtained by dividing the current rotation of the robot by 90 degrees. Now, the dummy-variables $c_1$, $c_2$ and $h$ are used to calculate the direction of the hint. Here, $c_1$ is the home tile of the robot, $c_2$ is the tile on which the robot is currently standing. The $\delta x$ and $\delta y$-variables are now calculated, using the difference in x- and y-coordinates. These differences are mapped to numbers in the range {-1, 0, 1}, by dividing the difference by the lenght of the difference. The appropriate hint for the direction of the home tile is obtained by a call to hintMapping. Now, the hint has to be mapped to the current rotation of the robot; this is accomplished by a call to rotate90Deg 'numRotations' times.

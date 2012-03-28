@@ -15,49 +15,55 @@
 
 \maketitle
 
-\subsubsection{Basic Axiomatic definitions}
-We define several attributes that we will use in later definitions in our Z schemas. Since some returned objects in our class diagram may contain null values, we have defined it as a separate set. \\
-In our class diagram, we use several enumerators: Hint, BoardResponse and Rotation. Below, we have given the Z specification of these enumerators.
+\section{Object-Z specification}
+In this section the game is mathematically specified using the Object-Z language. Object-Z is a strict superset of the older Z language. This means that all features in Z are also present in Object-Z. Object-Z is used instead of Z because the specification is fairly large and became a little unmanageable in Z. Object-Z provides features to embedded schemas in classes. Those classes have visibility lists and can inherit other classes. This means there is more modularity, and it is easier to adhere to the class diagram.
 
+We begin with a few axiomatic definitions. Then we give the long list of classes and how they are defined. The classes follow the specification in the class diagram as good as possible.
+
+\subsubsection{Basic Axiomatic definitions}
+The Rotation set is used to specify the current rotation of the robots. The reason to use numbers instead of names as we do in the class diagram is because we will have to do arithmetic with rotations in one of the schemas.
 \begin{axdef}
 Rotation == \{0, 90, 180, 270\}
 \end{axdef}
 
+BoardResponse is used by the Board and Controller to indicate the result of a move request. FAILED means that the requested move is illegal or impossible; SUCCESS means the move is successful executed; WIN indicates a successful move which resulted in a winning state.
 \begin{axdef}
 BoardResponse == \{FAILED, SUCCESS, WIN\}
 \end{axdef}
 
+The Hint enumeration consists of all possible hints that can be given to a robot entering a hint tile.
 \begin{axdef}
 Hint == \{NORTH, EAST, SOUTH, WEST, NORTH\_EAST, \\ \t1 SOUTH\_EAST, SOUTH\_WEST, NORTH\_WEST\}
 \end{axdef}
 
+The Null set is used as a empty set. A member of this set can be assigned to a variable to indicate the variable does not represent anything (the variable is null).
 \begin{zed}
 [Null]
 \end{zed}
 
 \subsubsection{Classes}
-We distinguish between two types of coordinates: absolute coordinates and relative coordinates. The absolute coordinates describe the coordinates of individual tiles on the Board; these coordinates have an x- and y-value, which are both natural numbers. The relative coordinates are used by Robots to make a move request; the relative coordinates also have an x- and y-value, but these numbers are integers. Since the move requests are communicated to the Board, the Board itself will determine the absolute coordinates that belong to these relative coordinates.
 
+The Coord class is the base class of two types of coordinates. It consists of two public integers representing the x and y values. There are no schemas defined because this class is functions as dataclass only.
 \begin{class}{Coord}
 \upharpoonright (x, y) \\
 \begin{state}
 x : \num \\
 y : \num
 \end{state} \\
-\begin{schema}{add}
-\Delta (x, y) \\
-coord? : Coord
-\where
-x' = coord?.x + x \\
-y' = coord?.y + y
-\end{schema}
 \end{class}
 
+AbsoluteCoord is a specialization of the Coord class. The possible values of the AbsoluteCoord class is restricted to the dimensions of the board. This class is used to point to a specific tile on the board.
 \begin{class}{AbsoluteCoord}
 Coord \\
+\begin{zpar}
+The BoardWith and BoardHeight variables are static and final. They specify the dimensions of the board.
+\end{zpar} \\
 \begin{axdef}
 BoardWith, BoardHeight : \nat
 \end{axdef} \\
+\begin{zpar}
+The only addition to the state of the class is the restriction of the x and y variables to be within the dimensions of the board.
+\end{zpar} \\
 \begin{state}
 \where
 0 \leq x < BoardWidth \\
@@ -65,13 +71,17 @@ BoardWith, BoardHeight : \nat
 \end{state}
 \end{class}
 
+The RelativeCoord class is a specialization of the Coord class. There are restrictions nor additions to the base class. It is effectively only a rename. This class is used to specify a location on the board relative to a AbsoluteCoord.
 \begin{class}{RelativeCoord}
 Coord \\
 \end{class}
 
-Tile class has five specializations: NormalTile, HomeTile, HintTile, ConveyerTile and BrokenRobotTile. A Tile has a type, which is either of the above specializations, and a field 'occupier', which describes the robot that currently occupies the tile. Note that a tile does not necessarily have to be occupied by a robot, so occupies can also be null. All the specializations of Tile inherit the characteristics of Tile.
+The Tile class is the representation of one tile on the board. The tiles are managed by the board. The class keeps track of which robot currently occupies the tile. To differentiate between different kind of tiles, the Tile class is the base class of several specializations.
 \begin{class}{Tile}
 \upharpoonright (occupier) \\
+\begin{zpar}
+The occupier variable indicates which robot currently resides on this tile. If the tile is empty, the variable is Null. The isSnapshotTile variable is used to indicate wether the tile is a member of the board or a member of a snapshot. This distinction is made because the tiles of the snapshot are not supposed to change when a tile in the board is changed. Because we cannot clone a instance of a class in Z, we have the need of two different tile instances, representing exactly the same. This is done using the isSnapshotTile variable.
+\end{zpar} \\
 \begin{state}
 occupier : Robot \cup Null \\
 isSnapshotTile : \bool \\
@@ -79,92 +89,129 @@ isSnapshotTile : \bool \\
 \begin{schema}{Init}
 occupier = Null
 \end{schema} \\
-\begin{classcom}
-clearTile is a help-method that clears the occupies variable of a Tile.
-\end{classcom} \\
+\begin{zpar}
+The clear schema is used by other schemas defined in other classes to remove any occupier from the tile. This schema is required because schemas can never change the state of a class on which they are not defined.
+\end{zpar} \\
 \begin{schema}{clear}
 \Delta (occupier) \\
 \where
 occupier' = Null
 \end{schema} \\
-\begin{classcom}
-put is a help-method that takes a robot as input-variable and sets the occupies-variable of a Tile to this robot.
-\end{classcom}\\
+\begin{zpar}
+The put schema has is defined for the same reason as the clear schema. It puts a given robot on the tile.
+\end{zpar}\\
 \begin{schema}{put}
 \Delta (occupier) \\
 input? : Robot
 \where
 occupier' = input?
 \end{schema} \\
+\begin{zpar}
+The rotate schema is empty. It can be seen as a abstract schema. Only a conveyor tile can actually be rotated, and the schema is overridden in ConveyorTile to actually rotate the tile. In all other types of tiles, the schema is just empty.
+\end{zpar} \\
 \begin{schema}{rotate}
 \Delta()
 \end{schema}
 \end{class}
 
+NormalTile is a subclass of Tile. It adds nothing to the base class and is only used to give it a new name.
 \begin{class}{NormalTile}
 Tile
 \end{class}
 
+The HintTile class is also a empty subclass of tile. It is only renamed to indicate the board should produce a hint when a robot occupies it.
 \begin{class}{HintTile}
 Tile
 \end{class}
 
+The BrokenRobotTile class has an additional invariant that makes sure no robot can ever occupy the tile.
 \begin{class}{BrokenRobotTile}
-Tile
+Tile \\
+\begin{state}
+occupier = Null
+\end{state}
 \end{class}
 
+A HomeTile has a target variable to indicate to which robot the instance is the home tile.
 \begin{class}{HomeTile}
 Tile \\
 \upharpoonright (target) \\
-\begin{classcom}
-A HomeTile always belongs to one specific Robot, the target robot.
-\end{classcom} \\
 \begin{state}
 target : Robot
 \end{state}
 \end{class}
 
+The ConeyorTile class has an additional variable indicating the orientation of the conveyor. When a robot enters the tile, it is transported in the directed indicated by the rotation variable.
 \begin{class}{ConveyorTile}
 Tile \\
 \upharpoonright (rotation) \\
-\begin{classcom}
-A ConveyerTile has a certain rotation, which influences the direction in which a robot is transported.
-\end{classcom} \\
 \begin{state}
 rotation : Rotation
 \end{state} \\
-\begin{classcom}
-Left empty on purpose.
-\end{classcom} \\
+\begin{zpar}
+This is the overridden schema of the base class. It changes the rotation variable. There is no invariant present in the variable, because it does not matter what the new rotation of the tile is.
+\end{zpar} \\
 \begin{schema}{rotate}
 \Delta (rotation)
 \end{schema}
 \end{class}
 
-The Board class maintains several invariants and has a variety of methods, since it is one of the major components of the game.
-
+The Board class maintains is the biggest class. It maintains most of the global invariants and handles all of the requests by the other classes.
 \begin{class}{Board}
-\upharpoonright (canReset, initialize) \\
+\upharpoonright (Init, initialize, requestTilesExchange, canReset, initialize) \\
 \begin{state}
+\begin{zpar}
+The tiles variable if a function from all possible absolute coordinates of the board to a tile or one of its subclasses.
+\end{zpar} \\
 tiles : \power (AbsoluteCoord \fun \: \downarrow \! Tile) \\
-robots : \power (Robot \fun Rotation) \\
+\also \also \also
+\begin{zpar}
+The robots function assigns a rotation to every robot in the game.
+\end{zpar} \\
+robots : \power (Robot \pfun Rotation) \\
 \also \also \also
 controller : Controller \\
+\also \also \also
+\begin{zpar}
+The occupied variable is a set of all coordinates in the board currently occupied by either a living robot or a broken robot.
+\end{zpar} \\
 occupied : \power AbsoluteCoord \\
+\also \also \also
+\begin{zpar}
+The adjacent relation relates all coordinates in the board directly adjacent to each other. In case the second coordinate is occupied, it does not relate to any variable.
+This means the relation is asymmetric. This is done to relate all free adjacent tiles tiles to a robot.
+\end{zpar} \\
 adjacent : \power (AbsoluteCoord \rel AbsoluteCoord) \\
+\also \also \also
+\begin{zpar}
+This function relates all coordinates with a conveyor tile to the destination of that tile (not the destination of the whole conveyor).
+\end{zpar} \\
 conveyorUnitDest : \power (AbsoluteCoord \pinj AbsoluteCoord) \\
+\also \also \also
+\begin{zpar}
+The conveyorDest function gives the destination of a whole conveyor band.
+\end{zpar} \\
 conveyorDest : \power (AbsoluteCoord \pinj AbsoluteCoord)
 \where
+\begin{zpar}
+Enforce that none of the tiles are snapshot tiles.
+\end{zpar} \\
 \forall t : \ran tiles | \neg t.isSnaphotTile
-\also \also \also \also
-\forall c : occupied | tiles(c) \in BrokenRobotTile \vee
-tiles(c).occupier \not = Null \\
-\also \also \also \also
-\forall (c, d) : conveyorUnitDest | d \not \in occupied \; \wedge tiles(c) \in ConveyorTile \; \; \wedge \\ \t1
-        tiles(c).rotation = 0 \Rightarrow (c.x = d.x + 1 \wedge c.y = d.y) \; \; \wedge \\ \t1
-        tiles(c).rotation = 90 \Rightarrow (c.x = d.x \wedge c.y = d.y - 1) \; \; \wedge \\ \t1
-        tiles(c).rotation = 180 \Rightarrow (c.x = d.x - 1 \wedge c.y = d.y) \; \; \wedge \\ \t1
-        tiles(c).rotation = 270 \Rightarrow (c.x = d.x \wedge c.y = d.y + 1) \; \; \\
+\also \also \also
+\begin{zpar}
+This is the invariant of the occupied variable. It simply states that a that all coordinates in the board for which the tile is occupied by a robot or the tile is a broken robot tile, the coordinate is in the occupied set. 
+\end{zpar} \\
+occupied = \{c : AbsoluteCoord | \\ \t1 tiles(c) \in BrokenRobotTile \vee
+tiles(c).occupier \not = Null\} \\
+\also \also \also
+\begin{zpar}
+The invariant for the conveyorUnitDest function.
+\end{zpar} \\
+conveyorUnitDest = \{(c1, c2) : AbsoluteCoord \times AbsoluteCoord | \\ \t1 c2 \not \in occupied \wedge tiles(c1) \in ConveyorTile \; \; \wedge \\ \t1
+        tiles(c1).rotation = 0 \Rightarrow (c1.x = c2.x + 1 \wedge c1.y = c2.y) \; \; \wedge \\ \t1
+        tiles(c1).rotation = 90 \Rightarrow (c1.x = c2.x \wedge c1.y = c2.y - 1) \; \; \wedge \\ \t1
+        tiles(c1).rotation = 180 \Rightarrow (c1.x = c2.x - 1 \wedge c1.y = c2.y) \; \; \wedge \\ \t1
+        tiles(c1).rotation = 270 \Rightarrow (c1.x = c2.x \wedge c.y = c2.y + 1)\}
 \also \also \also \also
 \forall (c,d) : conveyorDest | (c,d) \in conveyorUnitDest \star \; \; \wedge \\ \t1 (tiles(d) \not \in ConveyorTile \vee conveyorUnitDest(d) = d)
 \also \also \also \also
@@ -172,10 +219,13 @@ tiles(c).occupier \not = Null \\
 \also \also \also \also
 \forall r : robots | \exists c, d : \dom tiles @  \\ \t1 tiles(c) \in HomeTile \wedge tiles(c).target = r \; \; \wedge \\ \t1
 d.occupier = r \wedge (c, d) \in (adjacent \cup conveyorDest)\star
+\also \also \also \also
+\exists r : \dom robots | r.rule = RuleA \\
+\exists r : \dom robots | r.rule = RuleB
 \end{state} \\
-\begin{classcom}
+\begin{zpar}
 Initialize is called from the outside world, when a new game has to be started. Note that the tiles and robots in this method are read from an input file. After the tiles and robots have been initiated, the Board pre-initializes the Controller and initializes all the robots. Finally, the Board post-initializes the Controller with the initialized Robots and the Board.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{Init}
 reset
 \end{schema} \\
@@ -186,21 +236,21 @@ tiles' \not = Null \\
 robots' \not = Null \\
 controller' \not = Null
 \end{schema} \\
-initialize \sdef internalInit \; \comp \\ \t1
-[c : Controller | c = controller] @ \bigwedge_{r : dom Robots} robots.initialize \; \comp \\ \t1
-[r : \power Robots | r = \dom Robots] @ controller.initialize \\
+initialize \sdef internalInit \comp controller.preInitialize \; \comp \\ \t1
+[rule? : Rule | rule? \in \{RuleA, RuleB\}] @ \\ \t3 \bigwedge_{r : dom Robots} r.initialize[controller?/controller] \; \comp \\ \t1
+controller.postInitialize[board?/self, robots?/\dom robots] \\
 \znewpage
-\begin{classcom}
+\begin{zpar}
 CanReset is used by the Controller to let the Board know that the game has ended and that the Board can reset. The Board can reset whenever there is HomeTile on the Board that is occupied by the target robot.
-\end{classcom} \\
-\begin{classcom}
+\end{zpar} \\
+\begin{zpar}
 Uitleg waarom init leeg is.
-\end{classcom} \\
+\end{zpar} \\
 canReset \sdef [\exists t : \ran tiles | t \in HomeTileTiles @ \\
 \t1 t.target = t.occupier] \wedge reset \\
-\begin{classcom}
+\begin{zpar}
 When the Board resets itself, the tiles, the controller and the robots are deleted.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{reset}
 \Delta (tiles, robots. controller)
 \where
@@ -208,9 +258,9 @@ tiles' = Null \\
 robots' = Null \\
 controller' = Null
 \end{schema} \\
-\begin{classcom}
+\begin{zpar}
 We make a snapshot by copying all the tiles and adding a mapping (same as for the original board). Next, with this snapshot the view can display the board.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{requestSnapShot}
 snapshot? : BoardSnapshot
 \where
@@ -223,9 +273,9 @@ t1 \in HomeTile \Rightarrow (t2 \in HomeTile \wedge t1.target = t2.target) \: \w
 t1 \in ConveyorTile \Rightarrow \\ \t3 (t2 \in ConveyorTile \wedge t2.rotation = t2.rotation)
 \end{schema} \\
 \znewpage
-\begin{classcom}
+\begin{zpar}
 GetHint is used by the Board to generate a hint. It takes the robot that requested a move as input-parameter. It checks where the HomeTile of the robot is and according to that gives the appropiate hint.
-\end{classcom} \\
+\end{zpar} \\
 \begin{axdef}
 hintMapping : \power ((\{-1, 0, 1\} \cross \{-1, 0, 1\}) \pfun \power Hint)
 \where
@@ -268,9 +318,9 @@ numRotations = \frac{robots(robot?)}{90} \\
  output! = rotate90Deg^{numRatations}(h)
 \end{schema} \\
 \znewpage
-\begin{classcom}
+\begin{zpar}
 getValidTiles corresponds to the private method in Board. The output is a pair of two valid tiles. A tile is valid for an exchange if it is not a HomeTile or a HintTile. Off course, the invariant also holds for this function.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{getValidTiles}
 tilePair! : Tile \cross Tile
 \where
@@ -282,9 +332,9 @@ t1 \not \in HomeTile \wedge t1 \not \in HintTile \; \; \wedge \\ \t1
 t2 \not \in HomeTile \wedge t2 \not \in HintTile \; \; \wedge \\ \t1
 tilePair! = (t1, t2)
 \end{schema} \\
-\begin{classcom}
+\begin{zpar}
 Method to exchange the positions of two tiles on the board. These tiles should be valid. If a robot is on one of the tiles, it moves along.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{exchangeTiles}
 \Delta(tiles, robots) \\
 tilePair? : Tile \cross Tile \\
@@ -303,13 +353,13 @@ moveBlockedRobotsRecursive \sdef (moveBlockedRobot \; \; \comp \\ \t1 moveBlocke
 \znewpage
 requestTilesExchange \sdef (getValidTiles \comp exchangeTiles \; \; \comp \\
 \t1 [t1, t2 : Tile | t1 = exchangedPair?.0 \wedge t2 = exchangedPair?.1] @ \\ \t2 t1.rotate \wedge t2.rotate \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t1.occupier] \; \; \wedge \\ \t2 controller.notifyAutomovement[r?/t2.occupier]) \; \; \comp \\ \t1 moveBlockedRobotRecursive \comp board.notifyView \\
-\begin{classcom}
+\begin{zpar}
 This functions deals with the moveRequest of the controller
-\end{classcom} \\
+\end{zpar} \\
 moveRequest \sdef moveWalk \; \; \comp \\ \t1 ([output? = SUCCESS \vee output? = WIN] \wedge moveRotate \; \; [] \\ \t1 [output! : \bool | output? = FAILED \wedge output! = FAILED]) \\
-\begin{classcom}
+\begin{zpar}
 Used to deal with rotations a robot wants to make.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{moveRotate}
 \Delta(robots) \\
 localCoords? : RelativeCoord \\
@@ -323,9 +373,9 @@ output! : BoardResponse
 robots'(robot?) = (robots(robot?) + rotation?) \mod 360 \\
 \ELSE output! = FAILED \wedge robots' = robots
 \end{schema} \\
-\begin{classcom}
+\begin{zpar}
 Used to deal with other movements a robot wants to make.
-\end{classcom} \\
+\end{zpar} \\
 \znewpage
 \begin{schema}{moveWalkPre}
 localCoords? : RelativeCoord \\
@@ -393,18 +443,32 @@ A Rule consists of a list of possible moves and a list of possible rotations. Th
 \begin{class}{Rule}
 \upharpoonright (possibleMoves, possibleRotations) \\
 \begin{state}
-possibleMoves : \power ((RelativeCoord \times Rotation) \psurj \\ \t1 \seq RelativeCoord) \\
+possibleMoves : \power (RelativeCoord \pfun \seq RelativeCoord) \\
 possibleRotations : \power Rotation
 \where
 \forall (c, r) : \dom possibleMoves | \\ \t1 possibleMoves(c,r)(\#possibleMoves(c, r) - 1) = c
 \end{state} \\
 \end{class}
 
+\begin{axdef}
+RuleA : Rule
+\where
+RuleA.possibleRotations = \emptyset \\
+\forall (c, s) : RuleA.possibleMoves | |c.x + c.y| = 1 \wedge s = \langle c\rangle
+\end{axdef}
+
+\begin{axdef}
+RuleB : Rule
+\where
+RuleB.possibleRoations = \{0, 90, 180, 270\} \\
+\forall (c1, s) : RuleB.possibleMoves | c1.y = 0 \wedge 0 < c1.x \leq 3 \wedge c1.x = \#s \; \; \wedge \\ \t1 \forall (n, c2) : s | c2.y = 0 \wedge c2.x = n
+\end{axdef}
+
 A Robot has knowledge of the Controller and maintains a rule-attribute, describing the ruleset of the Robot.
 \begin{class}{Robot}
 \upharpoonright (rules) \\
 \begin{state}
-rules : Rules \\
+rules : Rule \\
 controller : Controller \\
 hints : \power Hints
 \end{state}\\
@@ -413,9 +477,9 @@ rules = Null \\
 controller = Null \\
 hints = Null
 \end{schema} \\
-\begin{classcom}
+\begin{zpar}
 The initialize of the Robot uses the parameters controller and rules. The controller-parameter is the initialized Controller; the rules-parameter is the set of rules that determine the possible moves and rotations. In the initialize, all the provided input-values are saved and the list of hints is initially empty, since the Robot has not yet received any hints.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{initialize}
 \Delta (controller, rules) \\
 controller? : Controller \\
@@ -424,17 +488,17 @@ rules? : Rules
 controller' = controller? \\
 rules' = rules?
 \end{schema} \\
-\begin{classcom}
+\begin{zpar}
 NotifyAutoMovement is used by the Controller to notify that the Robot was moved, because of a conveyor belt. Note that the Robot could be rotated by a conveyor belt, so the list of hints is cleared; the Robot has now no idea where its Home Tile is.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{notifyAutoMovement}
 \Delta (hint)
 \where
 hint' = \emptyset
 \end{schema}\\
-\begin{classcom}
+\begin{zpar}
 NotifyHint is used by the Controller to pass the hint of the Board to the Robot. Since each Robot may store a list with all the hints it has received, the new hint is simply added to the list of hints.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{notifyHint}
 \Delta (hint) \\
 newHint? : Hint
@@ -451,28 +515,28 @@ controller : Controller \\
 boardChanged : \bool \\
 currentSnapshot : BoardSnapshot \\
 \end{state}\\
-\begin{classcom}
+\begin{zpar}
 In initialize, the Viewer attaches itself to the Controller, using the addViewer-method; the viewer parameter in addViewer is this Viewer. ???
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{Init}
 boardChanged = \false
 \end{schema}\\
-\begin{classcom}
+\begin{zpar}
 When the game has ended, the Viewer is notified by the Controller via notifyGameOver. The Viewer will now show an animation of fireworks and all robots that have not won the game will explode.
-\end{classcom} \\
+\end{zpar} \\
 notifyGameOver \sdef \mathbb{M}.showFireworks \\
-\begin{classcom}
+\begin{zpar}
 With notifyStateChange, the Viewer is notified by the Controller that the Board has changed. The Viewer sets boardChanged to true, to indicate that it has not yet updated the view.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{notifyStateChange}
 \Delta (boardChanged)
 \where
 boardChanged' = \true
 \end{schema}\\
 \znewpage
-\begin{classcom}
+\begin{zpar}
 The updateView-method uses the value of boardChanged to update the view. If this variable is true, then the Viewer requests a new snapshot from the Board, via the Controller, and updates the view. After the update, boardChanged is set to false. If boardChanged is false, then the previous snapshot is still up-to-date and nothing is changed. Note that the variable controller in Viewer never changes here, because it is simply used to request a board snapshot.
-\end{classcom} \\
+\end{zpar} \\
 updateView \sdef ([boardChanged = \false] \;\; [] \\ \t1
 ([boardChanged = \true] \wedge controller.requestBoardStatus \;\; \comp \\ \t2 [\Delta(currentSnapshot), board? : BoardSnapshot | \\ \t3 currentSnapshot' = board?])) \; \; \comp \\ \t1 \mathbb{M}.updateScreen
 \end{class}
@@ -484,35 +548,35 @@ board : Board \\
 robots : \power Robot \\
 viewer : Viewer
 \end{state}\\
-\begin{classcom}
+\begin{zpar}
 addViewer corresponds to the public method in Controller. It takes a viewer as an input variable; this is the Viewer that wants to attach itself to the controller. If the Controller did not have a Viewer attached to it yet, then the Controller saves the Viewer and returns itself to the Viewer. The Viewer will then be able to address the controller, for board snapshot requests. If the Controller already had a Viewer attached to it, then the add-request is simply ignored.
-\end{classcom} \\
-\begin{classcom}
+\end{zpar} \\
+\begin{zpar}
 notifyAutoMovement corresponds to the public method in Controller. It takes the Robot that requested a move as input-parameter. This method is used by the Board to let the Robot know that it has been moved by a conveyor tile.
-\end{classcom} \\
+\end{zpar} \\
 notifyAutoMovement \sdef robot?.notifyAutomovement \\
 \znewpage
-\begin{classcom}
+\begin{zpar}
 moveRequest corresponds to the public method in Controller. It takes local coordinates, the Robot that requested the move and a rotation as input-parameters. The Controller forwards the move request of the robot, along with the specified attributes to the Board. If the Board then responds with "WIN", then the Controller must terminate all robots, notify the Viewer that the game has ended and terminate.
-\end{classcom} \\
+\end{zpar} \\
 moveRequest \sdef board.moveRequest \comp ([output? \not = WIN] [] \\ \t2 ([output? = WIN] \wedge (\bigwedge_{r : robots} r.terminate) \wedge board.canReset \; \; \wedge \\ \t2 viewer.notifyGameOver)) \\
-\begin{classcom}
+\begin{zpar}
 Notify the controller of an appropriate hint.
-\end{classcom} \\
+\end{zpar} \\
 notifyHint \sdef robot?.notifyHint \\
-\begin{classcom}
+\begin{zpar}
 Notify the viewer that the board has changed.
-\end{classcom} \\
+\end{zpar} \\
 notifyView \sdef view.notifyStateChange
 \znewpage
-\begin{classcom}
+\begin{zpar}
 Initialize the controller so that it can be referred to.
-\end{classcom} \\
-\begin{schema}{Init}
+\end{zpar} \\
+\begin{schema}{preInitialize}
 \end{schema}\\
-\begin{classcom}
+\begin{zpar}
 The real initialization of the controller, giving it a board and robots.
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{postInitialize}
 \Delta (board, robots) \\
 board? : Board \\
@@ -521,14 +585,14 @@ robots? : \power Robot
 board' = board \\
 robots' = robots?
 \end{schema}\\
-\begin{classcom}
+\begin{zpar}
 Remove a viewer (so that eventually, a new one can be added).
-\end{classcom} \\
+\end{zpar} \\
 \begin{schema}{removeViewer}
 \end{schema}\\
-\begin{classcom}
+\begin{zpar}
 Function to get a snapshot of the board.
-\end{classcom} \\
+\end{zpar} \\
 requestBoardStatus \sdef board.requestSnapshot
 \end{class}
 
