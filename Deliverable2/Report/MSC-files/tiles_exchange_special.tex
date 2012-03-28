@@ -18,8 +18,8 @@ b rbox b [label="getValidTiles()"];
 b rbox b [label="exchange two valid tiles"];
 b rbox b [label="rotate robot1 and rotate tiles"];
 b>>c [label="done"];
-b->c [label="notifyAutoMovement(robot)"];
-c->p1 [label="notifyAutoMovement()"];
+b->c [label="notifyAutoMovement(robot, boardresponse)"];
+c->p1 [label="notifyAutoMovement(boardresponse)"];
 
 |||;
 
