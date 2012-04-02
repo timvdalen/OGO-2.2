@@ -195,5 +195,7 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(0,-1), r2, Rotation.R0DEG);
         v.notifyStateChange();
 
+        v.notifyGameOver(r2);
+
     }
 }
