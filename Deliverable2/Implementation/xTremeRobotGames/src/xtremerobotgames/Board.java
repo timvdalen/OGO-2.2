@@ -34,6 +34,7 @@ public class Board {
                 warshall[i][j] = false;
             }
         }
+        location = new HashMap<Tile, AbsoluteCoord>();
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 tiles[i][j] = new NormalTile();
@@ -50,6 +51,7 @@ public class Board {
         tiles[abs.getX()][abs.getY()].occupier = r;
         robots.addRobot(r, abs);
         tiles[hometile.getX()][hometile.getY()] = new HomeTile(r);
+        location.put(tiles[hometile.getX()][hometile.getY()], hometile);
         home.put(r, tiles[hometile.getX()][hometile.getY()]);
         robotRotation.put(r, rot);
     }
@@ -190,32 +192,32 @@ public class Board {
     public ArrayList<Tile> getAdjacent(Tile t){
         ArrayList<Tile> adjacent = new ArrayList<Tile>();
         AbsoluteCoord loc = location.get(t);
-        if((loc.getX() + 1) < width){
-            if(tiles[loc.getX()+1][loc.getY()].getClass() == ConveyorTile.class){
-                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()+1][loc.getY()]));
-            } else {
-                adjacent.add(tiles[loc.getX()+1][loc.getY()]);
-            }
-        }
         if((loc.getX() - 1) > -1){
             if(tiles[loc.getX()-1][loc.getY()].getClass() == ConveyorTile.class){
                 adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()-1][loc.getY()]));
-            } else {
+            } else if(tiles[loc.getX()-1][loc.getY()].getClass() != BrokenRobotTile.class){
                 adjacent.add(tiles[loc.getX()-1][loc.getY()]);
+            }
+        }          
+        if((loc.getY() - 1) > -1){
+            if(tiles[loc.getX()][loc.getY()-1].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()][loc.getY()-1]));
+            } else if(tiles[loc.getX()][loc.getY()-1].getClass() != BrokenRobotTile.class){
+                adjacent.add(tiles[loc.getX()][loc.getY()-1]);
             }
         }
         if((loc.getY() + 1) < height){
-            if(tiles[loc.getY()][loc.getY()+1].getClass() == ConveyorTile.class){
+            if(tiles[loc.getX()][loc.getY()+1].getClass() == ConveyorTile.class){
                 adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()][loc.getY()+1]));
-            } else {
+            } else if(tiles[loc.getX()][loc.getY()+1].getClass() != BrokenRobotTile.class){
                 adjacent.add(tiles[loc.getX()][loc.getY()+1]);
             }
         }
-        if((loc.getY() - 1) > -1){
-            if(tiles[loc.getY()][loc.getY()-1].getClass() == ConveyorTile.class){
-                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()][loc.getY()-1]));
-            } else {
-                adjacent.add(tiles[loc.getX()][loc.getY()-1]);
+        if((loc.getX() + 1) < width){
+            if(tiles[loc.getX()+1][loc.getY()].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()+1][loc.getY()]));
+            } else if(tiles[loc.getX()+1][loc.getY()].getClass() != BrokenRobotTile.class){
+                adjacent.add(tiles[loc.getX()+1][loc.getY()]);
             }
         }
         return adjacent;
