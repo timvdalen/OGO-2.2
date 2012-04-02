@@ -22,13 +22,22 @@ public class Board {
     public RobotCoord robots;
     private HashMap<Robot, Tile> home;
     private HashMap<Robot, Rotation> robotRotation;
+    private HashMap<Tile, AbsoluteCoord> location;
+    public boolean[][] warshall;
 
     //TO DO constructor
     public Board(){
         tiles = new Tile[width][height];
+        warshall = new boolean[width*height][width*height];
+        for(int i = 0; i < (width*height); i++){
+            for(int j = 0; j < (width*height); j++){
+                warshall[i][j] = false;
+            }
+        }
         for(int i = 0; i < width; i++){
             for(int j = 0; j < height; j++){
                 tiles[i][j] = new NormalTile();
+                location.put(tiles[i][j], new AbsoluteCoord(i,j));
             }
         }
         robots = new RobotCoord();
@@ -47,14 +56,17 @@ public class Board {
 
     public void addConveyorTile(AbsoluteCoord abs, Rotation rot){
         tiles[abs.getX()][abs.getY()] = new ConveyorTile(rot);
+        location.put(tiles[abs.getX()][abs.getY()], abs);
     }
 
     public void addBrokenRobotTile(AbsoluteCoord abs){
         tiles[abs.getX()][abs.getY()] = new BrokenRobotTile();
+        location.put(tiles[abs.getX()][abs.getY()], abs);
     }
 
     public void addHintTile(AbsoluteCoord abs){
         tiles[abs.getX()][abs.getY()] = new HintTile();
+        location.put(tiles[abs.getX()][abs.getY()], abs);
     }
 
     public void exchangeTiles(AbsoluteCoord abs, AbsoluteCoord abs1){
@@ -62,6 +74,8 @@ public class Board {
         Tile help = tiles[abs.getX()][abs.getY()];
         tiles[abs.getX()][abs.getY()] = tiles[abs1.getX()][abs1.getY()];
         tiles[abs1.getX()][abs1.getY()] = help;
+        location.put(tiles[abs1.getX()][abs1.getY()], abs);
+        location.put(tiles[abs.getX()][abs.getY()], abs1);
         if(tiles[abs.getX()][abs.getY()].occupier != null){
             saveLocation(abs, tiles[abs.getX()][abs.getY()].occupier);
             Robot r = tiles[abs.getX()][abs.getY()].occupier;
@@ -130,6 +144,98 @@ public class Board {
         }
 
     }
+
+    public boolean checkBoard(){
+        adjacentWarShall();
+        for(Robot r: robots.robots){
+            if( !checkReachable(robots.getAbsoluteCoord(r), home.get(r))){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkReachable(AbsoluteCoord abs, Tile t){
+        Tile t1 = tiles[abs.getX()][abs.getY()];
+        return warshall[mapping(t1)][mapping(t)];
+    }
+    
+    public int mapping(Tile t){
+        return (location.get(t).getX()*height) + location.get(t).getY();
+    }
+
+    public Tile reverseMapping(int i){
+        int y = i % height;
+        int x = (i - y) / height;
+        return tiles[x][y];
+    }
+    
+    public void adjacentWarShall(){
+        for(int m = 0; m < (width*height); m++){
+            ArrayList<Tile> adjacent = getAdjacent(reverseMapping(m));
+            for(Tile t: adjacent){
+                warshall[m][mapping(t)] = true;
+            }            
+        }
+        for(int k = 0; k < (width*height); k++){
+            for(int i = 0; i < (width*height); i++){
+                for(int j = 0; j < (width*height); j++){
+                    warshall[i][j] = warshall[i][j] || (warshall[i][k] && warshall[k][j]);
+                }
+                
+            }
+        }
+    }
+
+    public ArrayList<Tile> getAdjacent(Tile t){
+        ArrayList<Tile> adjacent = new ArrayList<Tile>();
+        AbsoluteCoord loc = location.get(t);
+        if((loc.getX() + 1) < width){
+            if(tiles[loc.getX()+1][loc.getY()].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()+1][loc.getY()]));
+            } else {
+                adjacent.add(tiles[loc.getX()+1][loc.getY()]);
+            }
+        }
+        if((loc.getX() - 1) > -1){
+            if(tiles[loc.getX()-1][loc.getY()].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()-1][loc.getY()]));
+            } else {
+                adjacent.add(tiles[loc.getX()-1][loc.getY()]);
+            }
+        }
+        if((loc.getY() + 1) < height){
+            if(tiles[loc.getY()][loc.getY()+1].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()][loc.getY()+1]));
+            } else {
+                adjacent.add(tiles[loc.getX()][loc.getY()+1]);
+            }
+        }
+        if((loc.getY() - 1) > -1){
+            if(tiles[loc.getY()][loc.getY()-1].getClass() == ConveyorTile.class){
+                adjacent.add(adjacentViaConveyor((ConveyorTile) tiles[loc.getX()][loc.getY()-1]));
+            } else {
+                adjacent.add(tiles[loc.getX()][loc.getY()-1]);
+            }
+        }
+        return adjacent;
+    }
+    
+    public Tile adjacentViaConveyor(ConveyorTile t){
+        AbsoluteCoord destination = addAbstoRel(location.get(t), t.getRelativeCoord());
+        if(destination == null || tiles[destination.getX()][destination.getY()].getClass() == BrokenRobotTile.class || tiles[destination.getX()][destination.getY()].occupier != null){
+            return t;
+        } else {
+            if(tiles[destination.getX()][destination.getY()].getClass() != ConveyorTile.class){
+                return tiles[destination.getX()][destination.getY()];
+            } else {
+                Tile help = adjacentViaConveyor((ConveyorTile) tiles[destination.getX()][destination.getY()]);
+                return help; 
+            }
+            
+        }
+    }
+
     
     //might be a better way to solve this
     public boolean canReset(){
