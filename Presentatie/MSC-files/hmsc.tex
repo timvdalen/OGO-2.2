@@ -1,7 +1,8 @@
 \digraph[scale=0.25]{HMSC}{
-/*begin2 [label="",shape="invtriangle"];
+compound=true
+begin2 [label="",shape="invtriangle"];
 end2 [label="",shape="triangle"];
-initview [label="Initialize viewer",shape="Mrecord"];
+/*initview [label="Initialize viewer",shape="Mrecord"];
 updateview [label="Update viewer",shape="Mrecord"];
 begin2->initview;
 initview->updateview;
@@ -35,7 +36,7 @@ spcex [label="Special exchange",shape="Mrecord"];
 p7 [label="Update viewer",shape="Mrecord"];
 uv [label="Update viewer",shape="Mrecord"];
 endgame [label="End game",shape="Mrecord"];
-{rank=same uv endgame}
+/*{rank=same uv endgame}*/
 notrob1 [label="Notify robots",shape="Mrecord"];
 notrob2 [label="Notify robots",shape="Mrecord"];
 begin->p1;
@@ -54,7 +55,9 @@ p4->retmt;
 retnt->p5;
 retht->p5;
 retct->p5;
-p5->p55;
+p5->notrob1 [lhead=cluster_tail];
+subgraph cluster_tail {
+begin2->p55;
 p55->p66;
 p66->p6;
 p55->notrob1;
@@ -65,9 +68,11 @@ ordex->p7;
 spcex->p7;
 p7->p77;
 p77->p22;
-p22->p2 [tailport=e];
 p77->notrob2;
 notrob2->p22;
+p22->end2;
+}
+notrob2->p2 [ltail=cluster_tail];
 retmt->uv
 uv->endgame;
 endgame->p8;
