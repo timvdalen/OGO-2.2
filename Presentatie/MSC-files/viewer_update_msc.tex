@@ -1,0 +1,26 @@
+\begin{msc}
+msc {
+
+b [label="Board"],
+c [label="Controller"],
+d [label="Viewer"];
+
+b box b [label=""],
+d box d [label=""],
+c box c [label=""];
+
+|||;
+
+b rbox b [label="make snapshot"];
+b -> c [label="notifyViewer(snapshot)"];
+c -> d [label="notifyStateChange(snapshot)"];
+d rbox d [label="updateView()"];
+
+|||;
+
+d box d [label="", textbgcolor="black"],
+c box c [label="", textbgcolor="black"],
+b box b [label="", textbgcolor="black"];
+
+}
+\end{msc}
