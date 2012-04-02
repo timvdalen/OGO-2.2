@@ -2,8 +2,6 @@
 rankdir=LR;
 p5 [label="Update viewer",shape="Mrecord",style=filled];
 p6 [label="",shape="point"];
-p55 [label="",shape="point"];
-p66 [label="",shape="point"];
 retnt [label="Return Normal tile",shape="Mrecord"];
 retct [label="Return Conveyor tile",shape="Mrecord"];
 retht [label="Return Hint tile",shape="Mrecord"];
@@ -12,9 +10,7 @@ spcex [label="Special exchange",shape="Mrecord"];
 retnt->p5;
 retct->p5;
 retht->p5;
-p5->p55;
-p55->p66;
-p66->p6;
+p5->p6;
 p6->ordex;
 p6->spcex;
-}
+} 

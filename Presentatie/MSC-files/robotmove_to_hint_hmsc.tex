@@ -3,7 +3,6 @@ rankdir=LR;
 p3 [label="",shape="point"];
 p4 [label="",shape="point"];
 p5 [label="Update viewer",shape="Mrecord"];
-p55 [label="",shape="point"];
 mvreq [label="Robot move request",shape="Mrecord"];
 mvrej [label="Reject move",shape="Mrecord"];
 retht [label="Return Hint tile",shape="Mrecord",style=filled];
@@ -12,5 +11,4 @@ p3->mvrej;
 p3->p4;
 p4->retht;
 retht->p5;
-p5->p55;
 }
