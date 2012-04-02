@@ -51,6 +51,7 @@ public class Board {
         tiles[abs.getX()][abs.getY()].occupier = r;
         robots.addRobot(r, abs);
         tiles[hometile.getX()][hometile.getY()] = new HomeTile(r);
+        location.put(tiles[hometile.getX()][hometile.getY()], hometile);
         home.put(r, tiles[hometile.getX()][hometile.getY()]);
         robotRotation.put(r, rot);
     }
