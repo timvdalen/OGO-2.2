@@ -1,0 +1,12 @@
+\digraph[scale=0.3]{HMSC_upview1}{
+rankdir=LR;
+p5 [label="Update viewer",shape="Mrecord",style=filled];
+p6 [label="",shape="point"];
+retht [label="Return Hint tile",shape="Mrecord"];
+ordex [label="Ordinary exchange",shape="Mrecord"];
+spcex [label="Special exchange",shape="Mrecord"];
+retht->p5;
+p5->p6;
+p6->ordex;
+p6->spcex;
+} 
