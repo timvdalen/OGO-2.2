@@ -43,7 +43,7 @@ public class BoardTest {
      * Test of checkBoard method, of class Board.
      */
     @Test
-    public void testCheckBoard() {
+    public void testCheckBoard1() {
         System.out.println("checkBoard");
         Board instance = new Board();
         Rule rule = new RuleA();
@@ -62,6 +62,31 @@ public class BoardTest {
         instance.addBrokenRobotTile(new AbsoluteCoord(3,2));
         instance.addBrokenRobotTile(new AbsoluteCoord(3,1));
         assertFalse(instance.checkBoard());
+    }
+
+    /**
+     * Test of checkBoard method, of class Board.
+     */
+    @Test
+    public void testCheckBoard2() {
+        System.out.println("checkBoard");
+        Board instance = new Board();
+        Rule rule = new RuleA();
+        Robot r = new Robot(0, instance.controller, rule);
+        instance.addRobot(r, new AbsoluteCoord(5,5), new AbsoluteCoord(1,1), Rotation.R0DEG);
+        instance.addBrokenRobotTile(new AbsoluteCoord(0,0));
+        instance.addBrokenRobotTile(new AbsoluteCoord(1,0));
+        instance.addBrokenRobotTile(new AbsoluteCoord(2,0));
+        instance.addBrokenRobotTile(new AbsoluteCoord(3,0));
+        instance.addBrokenRobotTile(new AbsoluteCoord(0,1));
+        instance.addBrokenRobotTile(new AbsoluteCoord(0,2));
+        instance.addBrokenRobotTile(new AbsoluteCoord(0,3));
+        instance.addBrokenRobotTile(new AbsoluteCoord(1,3));
+        instance.addConveyorTile(new AbsoluteCoord(2,3), Rotation.R270DEG);
+        instance.addBrokenRobotTile(new AbsoluteCoord(3,3));
+        instance.addBrokenRobotTile(new AbsoluteCoord(3,2));
+        instance.addBrokenRobotTile(new AbsoluteCoord(3,1));
+        assertTrue(instance.checkBoard());
     }
 
 
