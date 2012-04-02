@@ -25,7 +25,22 @@ public class Viewer {
     }
 
     public void notifyGameOver(Robot r){
-        //doe iets met r?
+        FrameData w1 = new FrameData(this.frameid, board, r, 1);
+	this.frameid++;
+        FrameData w2 = new FrameData(this.frameid, board, r, 2);
+	this.frameid++;
+        FrameData w3 = new FrameData(this.frameid, board, r, 3);
+	this.frameid++;
+        FrameData w4 = new FrameData(this.frameid, board, r, 4);
+	this.frameid++;
+        FrameData w5 = new FrameData(this.frameid, board, r, 5);
+
+	System.out.println(w1.encode());
+	System.out.println(w2.encode());
+	System.out.println(w3.encode());
+	System.out.println(w4.encode());
+	System.out.println(w5.encode());
+	System.out.println("EOF");
     }
 
     public void notifyStateChange(){
