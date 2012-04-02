@@ -53,10 +53,8 @@ public class XTremeRobotGames {
         v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
-        v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
-        v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(1,0), r2, Rotation.R0DEG);
         v.notifyStateChange();
@@ -89,10 +87,16 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
         v.notifyStateChange();
 
+        b.exchangeTiles(new AbsoluteCoord(6,7), new AbsoluteCoord(7,7)); //switch
+        v.notifyStateChange();
+
         b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
         v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
+        v.notifyStateChange();
+
+        b.exchangeTiles(new AbsoluteCoord(5,9), new AbsoluteCoord(4,9)); //switch
         v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(1,0), r1, Rotation.R0DEG);
@@ -135,6 +139,9 @@ public class XTremeRobotGames {
         b.moveRequest(new RelativeCoord(-1,0), r1, Rotation.R0DEG);
         v.notifyStateChange();
 
+        b.exchangeTiles(new AbsoluteCoord(6,5), new AbsoluteCoord(5,7)); //switch
+        v.notifyStateChange();
+
         b.moveRequest(new RelativeCoord(0,1), r3, Rotation.R0DEG);
         v.notifyStateChange();
 
@@ -158,6 +165,9 @@ public class XTremeRobotGames {
         v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
+        v.notifyStateChange();
+
+        b.exchangeTiles(new AbsoluteCoord(3,4), new AbsoluteCoord(9,1)); //switch
         v.notifyStateChange();
 
         b.moveRequest(new RelativeCoord(-1,0), r3, Rotation.R0DEG);
