@@ -46,6 +46,7 @@ public class BoardTest {
     public void testCheckBoard1() {
         System.out.println("checkBoard1");
         Board instance = new Board();
+        Viewer v = new Viewer(instance.controller, instance);
         Rule rule = new RuleA();
         Robot r = new Robot(0, instance.controller, rule);
         instance.addRobot(r, new AbsoluteCoord(1,1), new AbsoluteCoord(5,5), Rotation.R0DEG);
@@ -61,6 +62,7 @@ public class BoardTest {
         instance.addBrokenRobotTile(new AbsoluteCoord(3,3));
         instance.addBrokenRobotTile(new AbsoluteCoord(3,2));
         instance.addBrokenRobotTile(new AbsoluteCoord(3,1));
+        v.notifyStateChange();
         assertFalse(instance.checkBoard());
     }
 
@@ -71,6 +73,7 @@ public class BoardTest {
     public void testCheckBoard2() {
         System.out.println("checkBoard2");
         Board b = new Board();
+        Viewer v = new Viewer(b.controller, b);
         Rule rule = new RuleA();
         Robot r = new Robot(0, b.controller, rule);
         b.addRobot(r, new AbsoluteCoord(5,5), new AbsoluteCoord(1,1), Rotation.R0DEG);
@@ -86,6 +89,7 @@ public class BoardTest {
         b.addBrokenRobotTile(new AbsoluteCoord(3,3));
         b.addBrokenRobotTile(new AbsoluteCoord(3,2));
         b.addBrokenRobotTile(new AbsoluteCoord(3,1));
+        v.notifyStateChange();
         assertTrue(b.checkBoard());
     }
 
