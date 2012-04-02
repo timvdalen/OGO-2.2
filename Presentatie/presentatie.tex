@@ -1,6 +1,6 @@
 \documentclass{beamer}
 
-\usepackage{msctexen,graphviz,graphicx,xmpmulti}
+\usepackage{msctexen,graphviz,graphicx,xmpmulti,tikz}
 
 \title{xTremeRobotGames\\\small OGO 2.2 project}
 \author{Tim van Dalen, Tony Nan, Ferry Timmers,\\ 
@@ -12,7 +12,7 @@
 \AtBeginSection[]
 {
   \begin{frame}
-    \frametitle{Table of Contents}
+    \frametitle{Inhoudsopgave}
     \tableofcontents[currentsection]
   \end{frame}
 }
@@ -21,28 +21,28 @@
 	\frame{\titlepage}
 	
 	\begin{frame}
-	    \frametitle{Table of Contents}
+	    \frametitle{Inhoudsopgave}
     		\tableofcontents
   	\end{frame}
 
 	\section{Use cases}
 	\begin{frame}
 		\frametitle{Use cases}
-		\framesubtitle{Some use cases for the game}
-		Contents here
+		\framesubtitle{Gebruik van het systeem}
+		
 	\end{frame}
 
 	\section{Message Sequence Charts}
 	\begin{frame}
 		\frametitle{Message Sequence Charts}
-		\framesubtitle{Formally modelling use cases}
+		\framesubtitle{Formeel weergeven van de use cases}
 		Een paar mscs op deze en volgende slides
 	\end{frame}
 	
 	\subsection{High level}
 	\begin{frame}
 		\frametitle{High level Message Sequence Chart}
-		\framesubtitle{The main game flow}
+		\framesubtitle{De flow van het spel}
 		\input{MSC-files/hmsc.tex}
 	\end{frame}
 	\subsection{Use case level}
@@ -83,29 +83,32 @@
 	\section{Class diagram}
 	\begin{frame}
 		\frametitle{Class diagram}
-		\framesubtitle{Fitting the pieces together}
+		\framesubtitle{De puzzel invullen}
 		\input{CD-files/classdiagram.tex}
 	\end{frame}
 
 	\section{Test cases}
 	\begin{frame}
 		\frametitle{Test cases}
-		\framesubtitle{Showing the specification works}
-
-		Nu switchen naar andere virtual desktop, test case draaien.
-
+		\framesubtitle{De specificatie testen}
+		
+		\begin{itemize}[<+->]
+			\item Ingesloten robot
+			\item Andere
+		\end{itemize}
 	\end{frame}
 
-	\section{Implementation}
+	\section{Implementatie}
 	\begin{frame}
-		\frametitle{Implementation}
-		\framesubtitle{Making it work}
-		Arena whatever, fireworks uitleg.
+		\frametitle{Implementatie}
+		\framesubtitle{Het werkende programma}
+		\begin{itemize}[<+->]
+                        \item Hoofdprogramma
+                        \item Viewers
+                \end{itemize}
 	\end{frame}
-	\subsection{Game report}
+	\subsection{Game verslag}
 	\begin{frame}
-		\frametitle{Game report}
-		\framesubtitle{Report of semifinal for the World Cup}
-		\multiinclude[format=png,graphics={width=0.6\linewidth}]{IMP-files/frames}
+		\multiinclude[format=png,graphics={width=\paperwidth}]{IMP-files/frames}
 	\end{frame}
 \end{document}
