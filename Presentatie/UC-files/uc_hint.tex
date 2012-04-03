@@ -1,20 +1,20 @@
-\begin{alltt}
-
-Return Hint tile
-- Pre-conditions: The game is initiated, the indicated position
-    is a hint tile and the move request has been approved.
-- Trigger: A robot requests to move his position to a hint tile.
-- Guarantee: The robot is moved to the indicated position which
-    is a hint tile and a hint is given to the robot.
-- Main Scenarios
-    (a) The robot is moved to the indicated position, which is a hint tile
-    (b) The board notifies the controller that the move request has been approved
-    (c) The controller notifies the robot that his move request has been approved
-         and that the robot has been moved to the requested position
-    (d) The board generates a hint for the robot
-    (e) The board notifies the controller of the hint
-    (f) The controller sends the hint to the robot
-- Alternatives
-    none
-    
-\end{alltt}
+{\footnotesize
+\begin{tabbing}
+Return \= Hint \= tile \\
+- Pre-conditions: The game is initiated, the indicated position\\
+\>is a hint tile and the move request has been approved.\\
+- Trigger: A robot requests to move his position to a hint tile.\\
+- Guarantee: The robot is moved to the indicated position which\\
+\>is a hint tile and a hint is given to the robot.\\
+- Main Scenarios\\
+\>(a) The robot is moved to the indicated position, which is a hint tile\\
+\>(b) The board notifies the controller that the move request has been approved\\
+\>(c) The controller notifies the robot that his move request has been approved\\
+\>\> and that the robot has been moved to the requested position\\
+\>(d) The board generates a hint for the robot\\
+\>(e) The board notifies the controller of the hint\\
+\>(f) The controller sends the hint to the robot\\
+- Alternatives\\
+\>none\\
+\end{tabbing}
+}

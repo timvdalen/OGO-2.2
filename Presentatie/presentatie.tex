@@ -1,6 +1,10 @@
-\documentclass{beamer}
+\documentclass[handout,notes=only]{beamer}
 
-\usepackage{msctexen,graphviz,graphicx,xmpmulti,tikz}
+\usepackage{msctexen,graphviz,graphicx,xmpmulti,tikz,alltt,movie15}
+\usepackage{textpos}
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+
 
 \title{xTremeRobotGames\\\small OGO 2.2 project}
 \author{Tim van Dalen, Tony Nan, Ferry Timmers,\\
@@ -24,48 +28,50 @@
 	    \frametitle{Inhoudsopgave}
     		\tableofcontents
   	\end{frame}
+	\note{
+		Aan de hand van een deel van de programmaflow gaan we ons model uitleggen.
+	}
 
 	\section{Use cases}
 	\begin{frame}
 		\frametitle{Use cases}
 		\framesubtitle{Gebruik van het systeem}
-		\input{UC-files/uc_move_request.tex}
+		{\small
+			\input{UC-files/uc_move_request.tex}
+		}
+	\end{frame}
+	\note{
+		Niet zo heel boeiend, even programmaflow uitleggen.
+	}
+
+    \begin{frame}
+		\frametitle{Use cases}
+		\framesubtitle{Some use cases for the game}
+		{\small
+			\input{UC-files/uc_hint.tex}
+		}
 	\end{frame}
 
     \begin{frame}
 		\frametitle{Use cases}
 		\framesubtitle{Some use cases for the game}
-		\input{UC-files/uc_hint.tex}
-	\end{frame}
-
-    \begin{frame}
-		\frametitle{Use cases}
-		\framesubtitle{Some use cases for the game}
-		\input{UC-files/uc_update_viewer.tex}
+		{\small
+			\input{UC-files/uc_update_viewer.tex}
+		}
 	\end{frame}
 
 	\section{Message Sequence Charts}
-	\begin{frame}
-		\frametitle{Message Sequence Charts}
-		\framesubtitle{Formeel weergeven van de use cases}
-		Een paar mscs op deze en volgende slides
-	\end{frame}
-	
 	\subsection{High level}
 	\begin{frame}
 		\frametitle{High level Message Sequence Chart}
 		\framesubtitle{De flow van het spel}
 		\input{MSC-files/hmsc.tex}
 	\end{frame}
+	\note{
+		Volgorde/loops in het programma uitleggen.
+	}
+	
 	\subsection{Use case level}
-	%\begin{frame}
-	%	\frametitle{Use case level Message Sequence Charts}
-	%	\framesubtitle{Game initialize}
-	%	\scalebox{0.6}{
-	%		\input{MSC-files/initialize_msc.tex}
-	%	}
-	%	\input{MSC-files/initialize_hmsc.tex}
-	%\end{frame}
 
 	\begin{frame}
 		\frametitle{Use case level Message Sequence Charts}
@@ -75,6 +81,9 @@
 		}
 		\input{MSC-files/robotmove_request_hmsc.tex}
 	\end{frame}
+	\note{
+		Uitleggen dat het grootste probleem dat we gehad hebben is hoe we messages doorsturen.
+	}
 	\begin{frame}
 		\frametitle{Use case level Message Sequence Charts}
 		\framesubtitle{Hint move}
@@ -95,20 +104,34 @@
 	\section{Class diagram}
 	\begin{frame}
 		\frametitle{Class diagram}
-		\framesubtitle{De puzzel invullen}
+		\framesubtitle{Hoe de onderdelen samenwerken}
 		\input{CD-files/classdiagram.tex}
 	\end{frame}
+	\note{
+		Kort aangeven wie de baas is etc.
+	}
 
 	\section{Test cases}
 	\begin{frame}
 		\frametitle{Test cases}
 		\framesubtitle{De specificatie testen}
-		
-		\begin{itemize}[<+->]
-			\item Ingesloten robot
-			\item Andere
+		\begin{itemize}
+			\item<1,3,5>{Ingesloten robot}
+			\item<3,5>{Ingesloten home tile}
 		\end{itemize}
+		
+		\only<2>{\begin{textblock}{5}(0, -4)\includegraphics[width=0.8\paperheight]{frame-testcase1.png}\end{textblock}}
+		\only<4>{\begin{textblock}{5}(0, -4)\includegraphics[width=0.8\paperheight]{frame-testcase2.png}\end{textblock}}
 	\end{frame}
+	\note{
+		In ons spel is het heel belangrijk dat elke robot ten alle tijde zijn hometile kan bereiken, anders zou dat niet eerlijk zijn voor robots die dat niet kunnen. Daarom hebben wij een functie gemaakt die kijkt of dit ook werkelijk zo is, om ervoor te zorgen dat situaties waarbij robots hun hometile niet kunnen bereiken niet voorkomen. Deze functie definieert paden tussen tegels, rekening houdende met obstakels als Conveyor tiles en Broken Robot tiles. Als een robot zijn hometile kan bereiken, betekent dat in dit geval simpelweg dat er een pad is van de robot naar zijn hometile (omgekeerd hoeft dat niet het geval te zijn). Omdat dit heel belangrijk is in ons spel en de stakeholder ook meerdere testcases hiervan heeft aangeleverd hebben wij besloten deze functie te testen en zullen nu 2 testcases laten zien.
+	}
+	\note{
+		Testcase 1: In deze testcase tekenen wij het bord, met hierop een robot en bijbehorende hometile. Echter, deze robot is ingesloten door BrokenRobot tiles en kan zijn hometile dus nooit bereiken. (Zie plaatje, gemaakt door onze viewer). Deze situatie moet dus onmogelijk zijn, onze check functie moet false retourneren (en dat gebeurt ook).
+		}
+	\note{ 
+		Testcase 2: In deze testcase tekenen wij een bord met hierop een robot en bijbehorende hometile. De hometile is ingesloten door BrokenRobot tiles, behalve 1 tile, dat is een conveyor tile. De robot is niet ingesloten, maar staat ernaast (zie plaatje). De robot kan via de Conveyor tile, die richting de hometile gaat, nog steeds zijn hometile bereiken. De check functie moet dus true retourneren (en dat gebeurt ook). Deze testcase dient er vooral voor om te checken of onze check functie ook rekening houdt met Conveyor tiles en ze niet alleen ziet als (mogelijk) obstakel.
+	}
 
 	\section{Implementatie}
 	\begin{frame}
@@ -119,8 +142,15 @@
                         \item Viewers
                 \end{itemize}
 	\end{frame}
+	\note{
+		Hoofdprogramma in java geimplementeerd, meerdere mogelijke viewer ontwikkeld (\'e\'en tegelijk). Hier laten we er \'e\'en zien die een top-down video genereert.
+	}
 	\subsection{Game verslag}
 	\begin{frame}
-		\multiinclude[format=png,graphics={height=\paperheight}]{IMP-files/frames}
+		\includemovie[poster,autoplay]{10cm}{10cm}{movie.avi}
+	\end{frame}
+
+	\begin{frame}
+
 	\end{frame}
 \end{document}
