@@ -13,7 +13,16 @@
 	//Draw frames
 	foreach($input as $frame){
 		$object = json_decode($frame);
-		print_r($object);
+		//print_r($object);
+
+
+		if(isset($object->won)){
+			$won = $object->won;
+			$winner = $won->winner;
+			$winframe = $won->frame;
+		}
+
+
 		$snapshot = $object->snapshot;
 		$frameid = $object->framecount;
 		$norows = count($snapshot);
@@ -53,7 +62,25 @@
 				}
 
 				if(isset($cell->occupier)){
-					$robot = new Imagick('images/robot.png');
+					$deadbot = false;
+					$explosion = false;
+					$crown = false;
+					if(isset($object->won)){
+						if($cell->occupier->id != $winner){
+							if($winframe > 1){
+								$deadbot = true;
+							}else{
+								$explosion = true;
+							}
+						}else{
+							$crown  = true;
+						}
+					}
+					if($deadbot){
+						$robot = new Imagick('images/broken.png');
+					}else{
+						$robot = new Imagick('images/robot.png');
+					}
 					//Draw eyes
 					$rdraw = new ImagickDraw();
 					$rdraw->setStrokeColor($colors[$cell->occupier->id]);
@@ -64,6 +91,14 @@
 					$rdraw->line(26, 15, 30, 15);
 					$rdraw->line(17, 16, 21, 16);
 					$rdraw->line(26, 16, 30, 16);
+					if($explosion){
+						$exp = new Imagick('images/explosie.png');
+						$rdraw->composite(imagick::COMPOSITE_DEFAULT, 0, 0, 49, 49, $exp);
+					}
+					if($crown){
+						$crown = new Imagick('images/kroon.png');
+						$rdraw->composite(imagick::COMPOSITE_DEFAULT, 0, 0, 49, 49, $crown);
+					}
 					$robot->drawImage($rdraw);
 					$rot = substr($cell->occupier->rotation, 1, -3);
 					$robot->rotateImage(new ImagickPixel('none'), 180);
@@ -88,18 +123,28 @@
 		$drawIm->setFontSize(33);
 		$drawIm->annotation(290, 110, "Turn #$frameid");
 		$drawIm->setFontSize(22);
-		$drawIm->annotation(290, 135, "This match is brought to you by:");
-		$drawIm->annotation(290, 155, "Sanders Frozen Fishstick Company");
+		$drawIm->annotation(260, 135, "Deze wedstrijd wordt gesponsord door:");
+		$drawIm->annotation(260, 155, "Van der Vos delicatessen");
 		$drawIm->setFontSize(17);
-		$drawIm->annotation(290, 180, "Keeping it fine, since '09!");
+		$drawIm->annotation(260, 180, "Het beste dolfijnenvlees!");
+
+		if(isset($object->won)){
+			if($winframe > 2){
+				$vuurwerk = new Imagick('images/vuurwerk/' . ($winframe-2) . '.png');
+				echo 'images/vuurwerk/' . ($winframe-2) . '.png';
+				$drawIm->composite(imagick::COMPOSITE_DEFAULT, 0, 0, 900, 900, $vuurwerk);
+			}
+
+		}
+
+
 		$image->drawImage($drawIm);
 
 		$image->setImageFormat("png");
+		if($frameid < 10){
+			$frameid = "0" . $frameid;
+		}
 		file_put_contents("frames/frame$frameid.png", $image);
 
-		if(isset($object->won)){
-			$won = $object->won;
-			
-		}
 	}
 ?>
