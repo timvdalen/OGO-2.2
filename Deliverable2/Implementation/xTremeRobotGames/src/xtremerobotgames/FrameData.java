@@ -3,15 +3,31 @@ package xtremerobotgames;
 public class FrameData{
 	private int framecount;
 	private Board board;
+	Robot won;
+	int winframe;
 
 	FrameData(int _framecount, Board _board){
 		this.framecount = _framecount;
 		this.board = _board;
+		this.won = null;
+		this.winframe = -1;
+	}
+
+	FrameData(int _framecount, Board _board, Robot _won, int _winframe){
+		this.framecount = _framecount;
+                this.board = _board;
+		this.won = _won;
+		this.winframe = _winframe;
 	}
 
 	public String encode(){
 		String returnStr = "";
 		returnStr += "{ \"framecount\" : \"" + this.framecount + "\", ";
+
+		if(this.won != null){
+			returnStr += "\"won\": { \"winner\":\"" + this.won.getID() + "\", \"frame\":\"" + this.winframe + "\"  },";
+		}
+
 		returnStr += "\"snapshot\" : [";
 		Tile[][] tiles = board.requestSnapshot().getTiles();
 		int rows = tiles.length;
