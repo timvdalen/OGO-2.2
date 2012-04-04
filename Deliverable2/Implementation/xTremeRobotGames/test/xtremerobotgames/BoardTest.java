@@ -62,7 +62,6 @@ public class BoardTest {
         instance.addBrokenRobotTile(new AbsoluteCoord(3,3));
         instance.addBrokenRobotTile(new AbsoluteCoord(3,2));
         instance.addBrokenRobotTile(new AbsoluteCoord(3,1));
-        v.notifyStateChange();
         assertFalse(instance.checkBoard());
     }
 
@@ -89,7 +88,6 @@ public class BoardTest {
         b.addBrokenRobotTile(new AbsoluteCoord(3,3));
         b.addBrokenRobotTile(new AbsoluteCoord(3,2));
         b.addBrokenRobotTile(new AbsoluteCoord(3,1));
-        v.notifyStateChange();
         assertTrue(b.checkBoard());
     }
 
